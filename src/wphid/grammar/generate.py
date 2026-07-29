@@ -10,7 +10,7 @@ from wphid.types import Candidate
 
 
 _MAX_SUPPORTED_ORDER = 3
-_DISPLAY_ORDER = {"arr(T)": 0, "pO2": 1, "sigma": 2, "Df": 3, "sat(Df)": 4}
+_DISPLAY_ORDER = {"pO2": 1, "sigma": 2, "Df": 3, "sat(Df)": 4}
 
 
 @dataclass(frozen=True)
@@ -33,13 +33,22 @@ def _add_dimensions(dimensions: Sequence[tuple[int, ...]]) -> tuple[int, ...]:
     return tuple(sum(exponents) for exponents in zip(*dimensions, strict=True))
 
 
+def _is_arrhenius(candidate: Candidate) -> bool:
+    return candidate.name.startswith("arr(T;theta=")
+
+
 def _display_key(node: _Node) -> tuple[int, str, tuple[str, ...]]:
-    return (_DISPLAY_ORDER.get(node.candidate.name, len(_DISPLAY_ORDER)), node.candidate.name, node.canonical_key)
+    rank = 0 if _is_arrhenius(node.candidate) else _DISPLAY_ORDER.get(
+        node.candidate.name, len(_DISPLAY_ORDER)
+    )
+    return (rank, node.candidate.name, node.canonical_key)
 
 
 def _product_evaluator(nodes: tuple[_Node, ...]):
     def evaluate(states: Mapping[str, np.ndarray]) -> np.ndarray:
-        values = [np.asarray(node.candidate.evaluate(states), dtype=float) for node in nodes]
+        values = [
+            np.asarray(node.candidate.evaluate(states), dtype=float) for node in nodes
+        ]
         return np.prod(values, axis=0)
 
     return evaluate
@@ -48,7 +57,7 @@ def _product_evaluator(nodes: tuple[_Node, ...]):
 def _is_admissible(nodes: tuple[_Node, ...]) -> bool:
     # An Arrhenius modulation is a single temperature-dependent factor, never
     # an arbitrary repeated nonlinear transformation.
-    return sum(node.candidate.name == "arr(T)" for node in nodes) <= 1
+    return sum(_is_arrhenius(node.candidate) for node in nodes) <= 1
 
 
 def _group(order: int) -> str:
@@ -56,7 +65,9 @@ def _group(order: int) -> str:
 
 
 def generate_candidates(
-    atoms: Iterable[Candidate], target_dimension: tuple[int, ...], max_order: int = _MAX_SUPPORTED_ORDER
+    atoms: Iterable[Candidate],
+    target_dimension: tuple[int, ...],
+    max_order: int = _MAX_SUPPORTED_ORDER,
 ) -> list[Candidate]:
     """Generate admissible products up to ``max_order`` at one exact dimension.
 
@@ -70,9 +81,15 @@ def generate_candidates(
 
     nodes = sorted(
         (_Node(candidate, _canonical_key(candidate)) for candidate in atoms),
-        key=lambda node: (node.canonical_key, node.candidate.dimension, node.candidate.name),
+        key=lambda node: (
+            node.canonical_key,
+            node.candidate.dimension,
+            node.candidate.name,
+        ),
     )
-    if nodes and any(len(node.candidate.dimension) != len(target_dimension) for node in nodes):
+    if nodes and any(
+        len(node.candidate.dimension) != len(target_dimension) for node in nodes
+    ):
         raise ValueError("target_dimension must use the candidates' dimension basis")
 
     generated: dict[tuple[tuple[str, ...], ...], Candidate] = {}
@@ -80,7 +97,8 @@ def generate_candidates(
         for selection in combinations_with_replacement(nodes, order):
             if not _is_admissible(selection):
                 continue
-            if _add_dimensions([node.candidate.dimension for node in selection]) != tuple(target_dimension):
+            dimensions = [node.candidate.dimension for node in selection]
+            if _add_dimensions(dimensions) != tuple(target_dimension):
                 continue
 
             tree = tuple(sorted((node.canonical_key for node in selection)))
@@ -99,5 +117,9 @@ def generate_candidates(
 
     return sorted(
         generated.values(),
-        key=lambda candidate: (len(candidate.parents), candidate.name, candidate.parents),
+        key=lambda candidate: (
+            len(candidate.parents),
+            candidate.name,
+            candidate.parents,
+        ),
     )

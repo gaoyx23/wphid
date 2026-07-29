@@ -13,6 +13,13 @@ from wphid.weak.time import project_time_weak
 _DEFAULT_WINDOW = 81
 _DEFAULT_STRIDE = 20
 _SPARSITY_PENALTY = 1.0e-3
+_NORMALIZED_RMSE_DEFINITION = "RMS(residual)/RMS(target)"
+
+
+def _effective_weak_settings(trajectory: Trajectory) -> tuple[int, int]:
+    window = min(_DEFAULT_WINDOW, trajectory.t.size)
+    stride = min(_DEFAULT_STRIDE, max(1, window - 1))
+    return window, stride
 
 
 def _condition_matrix(
@@ -27,8 +34,7 @@ def _condition_matrix(
             )
         features.append(values)
 
-    window = min(_DEFAULT_WINDOW, trajectory.t.size)
-    stride = min(_DEFAULT_STRIDE, max(1, window - 1))
+    window, stride = _effective_weak_settings(trajectory)
     return project_time_weak(
         trajectory.t,
         np.asarray(trajectory.states["Do"], dtype=float),
@@ -53,6 +59,10 @@ def _select_trajectories(
 ) -> tuple[list[Trajectory], list[Trajectory]]:
     if not train_ids or not validation_ids:
         raise ValueError("train_ids and validation_ids must both be non-empty")
+    if len(set(train_ids)) != len(train_ids):
+        raise ValueError("train_ids must contain unique condition IDs")
+    if len(set(validation_ids)) != len(validation_ids):
+        raise ValueError("validation_ids must contain unique condition IDs")
     if set(train_ids) & set(validation_ids):
         raise ValueError("training and validation condition IDs must be disjoint")
 
@@ -104,6 +114,20 @@ def discover_closed(
         for trajectory in training + validation
     }
     train_matrix = np.vstack([matrices[name][0] for name in training_ids])
+    weak_settings = {
+        trajectory.condition_id: _effective_weak_settings(trajectory)
+        for trajectory in training + validation
+    }
+    weak_window_by_condition = {
+        name: settings[0] for name, settings in weak_settings.items()
+    }
+    weak_stride_by_condition = {
+        name: settings[1] for name, settings in weak_settings.items()
+    }
+    unique_windows = set(weak_window_by_condition.values())
+    unique_strides = set(weak_stride_by_condition.values())
+    weak_window = next(iter(unique_windows)) if len(unique_windows) == 1 else None
+    weak_stride = next(iter(unique_strides)) if len(unique_strides) == 1 else None
     train_target = np.concatenate([matrices[name][1] for name in training_ids])
     validation_matrix = np.vstack([matrices[name][0] for name in held_out_ids])
     validation_target = np.concatenate([matrices[name][1] for name in held_out_ids])
@@ -150,8 +174,11 @@ def discover_closed(
         "sparsity_penalty_per_term": _SPARSITY_PENALTY,
         "train_ids": training_ids,
         "validation_ids": held_out_ids,
-        "weak_window": _DEFAULT_WINDOW,
-        "weak_stride": _DEFAULT_STRIDE,
+        "weak_window": weak_window,
+        "weak_stride": weak_stride,
+        "weak_window_by_condition": weak_window_by_condition,
+        "weak_stride_by_condition": weak_stride_by_condition,
+        "normalized_rmse_definition": _NORMALIZED_RMSE_DEFINITION,
         "weak_rows_by_condition": {
             name: matrix.shape[0] for name, (matrix, _) in matrices.items()
         },

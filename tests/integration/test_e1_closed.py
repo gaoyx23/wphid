@@ -1,58 +1,24 @@
 import json
 
 import numpy as np
+import pytest
 
 from wphid.pipeline import discover_closed
 from wphid.truth.aging_ode import simulate_named_condition
-from wphid.types import Candidate
+from wphid.types import Trajectory
 
 
 EXPECTED_SUPPORT = {
-    "arr(T)*pO2",
-    "arr(T)*pO2*sigma",
-    "arr(T)*pO2*Df",
+    "arr(T;theta=1800)*pO2",
+    "arr(T;theta=1800)*pO2*sigma",
+    "arr(T;theta=1800)*pO2*Df",
 }
 
 
 def _closed_candidate_library():
-    def arrhenius(states):
-        return np.exp(-1800.0 / states["T"])
+    from experiments.e1_closed_library import closed_candidate_library
 
-    return [
-        Candidate(
-            "arr(T)*pO2",
-            lambda states: arrhenius(states) * states["pO2"],
-            (),
-            "G2",
-        ),
-        Candidate(
-            "arr(T)*pO2*sigma",
-            lambda states: arrhenius(states) * states["pO2"] * states["sigma"],
-            (),
-            "G3",
-        ),
-        Candidate(
-            "arr(T)*pO2*Df",
-            lambda states: arrhenius(states) * states["pO2"] * states["Df"],
-            (),
-            "G3",
-        ),
-        Candidate("pO2", lambda states: states["pO2"], (), "F"),
-        Candidate(
-            "pO2*sigma",
-            lambda states: states["pO2"] * states["sigma"],
-            (),
-            "G2",
-        ),
-        Candidate(
-            "arr(T)*pO2*sat(Df)",
-            lambda states: arrhenius(states)
-            * states["pO2"]
-            / (1.0 - states["Df"]),
-            (),
-            "G3",
-        ),
-    ]
+    return closed_candidate_library()
 
 
 def test_closed_pipeline_recovers_three_oxidation_terms_without_spurious_support():
@@ -71,6 +37,41 @@ def test_closed_pipeline_recovers_three_oxidation_terms_without_spurious_support
     selected_names = {result.names[index] for index in result.support}
     assert selected_names == EXPECTED_SUPPORT
     assert result.validation_error < 0.03
+    assert result.diagnostics["normalized_rmse_definition"] == "RMS(residual)/RMS(target)"
+
+
+def test_closed_pipeline_rejects_duplicate_training_condition_ids():
+    """Repeating a training ID would silently overweight one condition."""
+    trajectories = [
+        simulate_named_condition(name)
+        for name in ("thermal_hold", "fatigue_rich", "oxygen_rich")
+    ]
+
+    with pytest.raises(ValueError, match="train_ids must contain unique"):
+        discover_closed(
+            trajectories=trajectories,
+            candidates=_closed_candidate_library(),
+            train_ids=("thermal_hold", "thermal_hold"),
+            validation_ids=("oxygen_rich",),
+            thresholds=(0.01,),
+        )
+
+
+def test_closed_pipeline_rejects_duplicate_validation_condition_ids():
+    """Repeating a validation ID would silently overweight held-out error."""
+    trajectories = [
+        simulate_named_condition(name)
+        for name in ("thermal_hold", "fatigue_rich", "oxygen_rich")
+    ]
+
+    with pytest.raises(ValueError, match="validation_ids must contain unique"):
+        discover_closed(
+            trajectories=trajectories,
+            candidates=_closed_candidate_library(),
+            train_ids=("thermal_hold", "fatigue_rich"),
+            validation_ids=("oxygen_rich", "oxygen_rich"),
+            thresholds=(0.01,),
+        )
 
 
 def test_e1_experiment_writes_fixed_configuration_metrics(tmp_path):
@@ -89,3 +90,58 @@ def test_e1_experiment_writes_fixed_configuration_metrics(tmp_path):
     assert metrics["configuration"]["validation_ids"] == ["oxygen_rich"]
     assert set(metrics["support"]) == EXPECTED_SUPPORT
     assert metrics["validation_normalized_rmse"] < 0.03
+    assert metrics["configuration"]["sparsity_penalty_per_term"] == 0.001
+    assert metrics["configuration"]["normalized_rmse_definition"] == (
+        "RMS(residual)/RMS(target)"
+    )
+
+
+def test_e1_library_uses_shared_parameterized_arrhenius_identity():
+    """A local generic arr(T) evaluator would conflate distinct physics."""
+    from experiments.e1_closed_library import closed_candidate_library
+
+    names = {candidate.name for candidate in closed_candidate_library()}
+
+    assert {
+        "arr(T;theta=1800)*pO2",
+        "arr(T;theta=1800)*pO2*sigma",
+        "arr(T;theta=1800)*pO2*Df",
+    } <= names
+    assert all(name != "arr(T)" and not name.startswith("arr(T)*") for name in names)
+
+
+def test_closed_pipeline_reports_effective_short_trajectory_weak_settings():
+    """Reporting defaults would hide reduced weak windows and strides."""
+    trajectories = []
+    for condition_id in ("thermal_hold", "fatigue_rich", "oxygen_rich"):
+        full = simulate_named_condition(condition_id)
+        trajectories.append(
+            Trajectory(
+                t=full.t[:11],
+                states={name: values[:11] for name, values in full.states.items()},
+                condition_id=condition_id,
+            )
+        )
+
+    result = discover_closed(
+        trajectories=trajectories,
+        candidates=_closed_candidate_library(),
+        train_ids=("thermal_hold", "fatigue_rich"),
+        validation_ids=("oxygen_rich",),
+        thresholds=(0.01,),
+    )
+
+    expected_by_condition = {
+        "thermal_hold": 11,
+        "fatigue_rich": 11,
+        "oxygen_rich": 11,
+    }
+    expected_stride_by_condition = {
+        "thermal_hold": 10,
+        "fatigue_rich": 10,
+        "oxygen_rich": 10,
+    }
+    assert result.diagnostics["weak_window"] == 11
+    assert result.diagnostics["weak_stride"] == 10
+    assert result.diagnostics["weak_window_by_condition"] == expected_by_condition
+    assert result.diagnostics["weak_stride_by_condition"] == expected_stride_by_condition

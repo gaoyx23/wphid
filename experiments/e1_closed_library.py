@@ -1,7 +1,7 @@
 """Run the reproducible E1 closed-library weak-discovery experiment."""
 
-from pathlib import Path
 import json
+from pathlib import Path
 import sys
 from typing import Any
 
@@ -11,6 +11,8 @@ import numpy as np
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from wphid.grammar.atoms import PRESSURE, aging_atoms
+from wphid.grammar.generate import generate_candidates
 from wphid.pipeline import discover_closed
 from wphid.truth.aging_ode import simulate_named_condition
 from wphid.types import Candidate
@@ -23,54 +25,27 @@ TRAIN_IDS = ("thermal_hold", "fatigue_rich")
 VALIDATION_IDS = ("oxygen_rich",)
 THRESHOLDS = np.geomspace(1.0e-4, 0.5, 48)
 DEFAULT_OUTPUT_DIR = Path("artifacts/e1_closed_library")
-
-
-def _arrhenius(states):
-    return np.exp(-ARRHENIUS_TEMPERATURE / states["T"])
+PRESSURE_SQUARED = (2, -2, -4, 0)
 
 
 def closed_candidate_library() -> list[Candidate]:
-    """Return the declared closed E1 library, including three distractors."""
-    return [
-        Candidate(
-            "arr(T)*pO2",
-            lambda states: _arrhenius(states) * states["pO2"],
-            (1, -1, -2, 0),
-            "G2",
-        ),
-        Candidate(
-            "arr(T)*pO2*sigma",
-            lambda states: _arrhenius(states) * states["pO2"] * states["sigma"],
-            (2, -2, -4, 0),
-            "G3",
-        ),
-        Candidate(
-            "arr(T)*pO2*Df",
-            lambda states: _arrhenius(states) * states["pO2"] * states["Df"],
-            (1, -1, -2, 0),
-            "G3",
-        ),
-        Candidate(
-            "pO2",
-            lambda states: states["pO2"],
-            (1, -1, -2, 0),
-            "F",
-        ),
-        Candidate(
-            "pO2*sigma",
-            lambda states: states["pO2"] * states["sigma"],
-            (2, -2, -4, 0),
-            "G2",
-        ),
-        Candidate(
-            "arr(T)*pO2*sat(Df)",
-            lambda states: _arrhenius(states)
-            * states["pO2"]
-            / (1.0 - states["Df"]),
-            (1, -1, -2, 0),
-            "G3",
-        ),
-    ]
+    """Return the shared grammar's closed E1 library and three distractors."""
+    atoms = aging_atoms(arrhenius_temperature=ARRHENIUS_TEMPERATURE)
+    arrhenius_name = next(
+        candidate.name for candidate in atoms if candidate.name.startswith("arr(T;")
+    )
+    generated = generate_candidates(atoms, PRESSURE)
+    generated += generate_candidates(atoms, PRESSURE_SQUARED)
+    by_name = {candidate.name: candidate for candidate in generated}
+    names = (
+        f"{arrhenius_name}*pO2",
+        f"{arrhenius_name}*pO2*sigma",
+        f"{arrhenius_name}*pO2*Df",
+        "pO2",
+        "pO2*sigma",
+        f"{arrhenius_name}*pO2*sat(Df)",
+    )
+    return [by_name[name] for name in names]
 
 
 def run_experiment(output_dir: str | Path = DEFAULT_OUTPUT_DIR) -> dict[str, Any]:
@@ -93,11 +68,23 @@ def run_experiment(output_dir: str | Path = DEFAULT_OUTPUT_DIR) -> dict[str, Any
             "candidate_names": list(result.names),
             "condition_ids": list(CONDITION_IDS),
             "noise_fraction": 0.0,
+            "normalized_rmse_definition": result.diagnostics[
+                "normalized_rmse_definition"
+            ],
+            "sparsity_penalty_per_term": float(result.diagnostics["sparsity_penalty_per_term"]),
             "thresholds": [float(value) for value in THRESHOLDS],
             "train_ids": list(TRAIN_IDS),
             "validation_ids": list(VALIDATION_IDS),
             "weak_stride": int(result.diagnostics["weak_stride"]),
             "weak_window": int(result.diagnostics["weak_window"]),
+            "weak_stride_by_condition": {
+                name: int(value)
+                for name, value in result.diagnostics["weak_stride_by_condition"].items()
+            },
+            "weak_window_by_condition": {
+                name: int(value)
+                for name, value in result.diagnostics["weak_window_by_condition"].items()
+            },
         },
         "support": support_names,
         "coefficients": {
