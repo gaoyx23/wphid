@@ -1,0 +1,90 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{ctex}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!60!black]{hyperref}
+\titleformat{\section}{\large\bfseries\color{black!85}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{black!70}}{\thesubsection}{0.5em}{}
+\setlength{\parskip}{3pt}\setlength{\parindent}{0pt}
+\renewcommand{\abstractname}{\bfseries 摘\ 要}
+
+\title{\bfseries 面向喷管老化损伤辨识的物理知情双库函数库}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent 面向可重复使用火箭喷管壁的老化损伤稀疏辨识，本文构建双库结构的物理知情候选函数库：物理场库 $\Theta_{\mathrm{phys}}$（$p_{\mathrm{O}_2}$ 为动态辨识目标；温度 $T$ 取傅里叶导热 $\alpha$ 与边界为先验、应力 $\sigma$ 为准静态代数本构、流场作已知强迫，均不予辨识）与损伤库 $\Theta_{\mathrm{dmg}}$（热老化、氧化、疲劳、蠕变四类机制各一目标导数）。各库内部按自身演化项 $F$ 与交叉交互项 $G$ 分组，分别对应多物理场耦合与损伤内部非线性耦合两个创新点。建模上场与损伤不反向耦合：物理场由边界条件与场×场交互驱动演化，损伤由物理场单向算出。库共 $22$ 候选，其中主流程实际辨识 $p_{\mathrm{O}_2}$ 与四类损伤共 $5$ 方程、$15$ 候选；非线性参数（Paris/Norton 指数、各活化能）建候选时先固定以保线性，由 SINDy-PI 辨识恢复。本文给出库的结构、各项物理依据与辨识流程。
+\end{abstract}
+
+\section{引言}
+稀疏辨识（SINDy）从候选函数库中筛选控制方程的活跃项。库的设计直接决定能否辨识出关键耦合机制：库过窄会遗漏真实耦合，库过宽或混杂会引入共线与病态。本文针对喷管壁多物理场老化问题，将库拆分为物理场库与损伤库两个子系统，并把场与损伤的关系明确为单向驱动——这一约定既符合工程上“场为因、损伤为果”的常用建模，也避免了损伤对场的反馈项引入的复杂双向耦合。各库内部再按 $F$（自身演化/机制律）与 $G$（交叉交互）分组，使辨识结果可清晰归因到两个创新点。
+
+\section{库结构}
+\textbf{建模约定：}物理场与损伤不反向耦合。物理场由边界条件与场×场交互驱动演化；损伤由物理场单向算出，不出现在任何场方程中。故场方程候选不含损伤量。表~\ref{tab:fg} 给出 $F$ 与 $G$ 的定义。
+
+\begin{table}[h]\centering\small
+\caption{$F$ 与 $G$ 的定义。}
+\label{tab:fg}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.2cm} >{\raggedright\arraybackslash}p{4.8cm} >{\raggedright\arraybackslash}p{7cm}}
+\toprule
+库 & $F$（自身演化） & $G$（交叉交互） \\
+\midrule
+$\Theta_{\mathrm{phys}}$ & 输运势（$\nabla^2 T$ 导热、$\nabla^2 p_{\mathrm{O}_2}$ 扩散） & 另一场进入：$T\to p_{\mathrm{O}_2}$ 扩散率、$T\to\sigma$ 热应力、$p\to\sigma$ 膜应力、$\sigma\!\cdot\!\nabla^2 p_{\mathrm{O}_2}$ 等 \\
+$\Theta_{\mathrm{dmg}}$ & 仅由物理场驱动的机制律（不含其他损伤量） & 另一损伤量进入：$\mathrm{Paris}\cdot D_o$、$\mathrm{arr}\cdot p_{\mathrm{O}_2}\cdot D_f$、$\mathrm{Norton}\cdot D_o$ 等 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent 场$\to$损伤耦合落在 $\Theta_{\mathrm{dmg}}.F$ 对 $T,\sigma,p_{\mathrm{O}_2}$ 的依赖里（及少量 $G$，如应力助氧化 $\mathrm{arr}\cdot p_{\mathrm{O}_2}\cdot\sigma$）；损伤$\to$场的反向耦合不纳入。
+
+\subsection{物理场库 $\Theta_{\mathrm{phys}}$（10 项）}
+\begin{table}[h]\centering\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.6cm} >{\raggedright\arraybackslash}p{4.6cm} c >{\raggedright\arraybackslash}p{5.2cm}}
+\toprule
+目标 & 候选项 & F/G & 物理依据 \\
+\midrule
+$\partial T/\partial t$ & $\nabla^2 T$；$T^4$；$(T_{\mathrm{gas}}-T)$ & F；G；G & Fourier 导热（确认）；辐射；对流 \\
+$\partial p_{\mathrm{O}_2}/\partial t$ & $\nabla^2 p_{\mathrm{O}_2}$；$\mathrm{arr}_d(T)\!\cdot\!\nabla^2 p_{\mathrm{O}_2}$；$\sigma\!\cdot\!\nabla^2 p_{\mathrm{O}_2}$ & F；G；G & Fick 扩散（确认）；温度相关扩散率；应力调制扩散 \\
+$\sigma$（代数） & $T$；$p$；$T^2$；$T\!\cdot\! p$ & G & 热应力；膜应力；非线性热应力；热-压交互候选 \\
+\bottomrule
+\end{tabular}
+\end{table}
+$\sigma$ 为准静态代数本构，非 $\partial\sigma/\partial t$ 辨识目标。流场作已知强迫（气动热 $Q_{\mathrm{aero}}$、压力 $p$），不入库。
+
+\subsection{损伤库 $\Theta_{\mathrm{dmg}}$（12 项）}
+\begin{table}[h]\centering\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{7cm} c >{\raggedright\arraybackslash}p{3.4cm}}
+\toprule
+目标 & 候选项 & F/G & 物理依据 \\
+\midrule
+$dD_h/dt$ & $\mathrm{arr}_h(T)$；$\mathrm{arr}_h\!\cdot\!\sigma$ & F；G & Arrhenius 热老化；应力调制 \\
+$dD_o/dt$ & $\mathrm{arr}\!\cdot\! p_{\mathrm{O}_2}$；$\mathrm{arr}\!\cdot\! p_{\mathrm{O}_2}\!\cdot\! D_f$；$\mathrm{arr}\!\cdot\! p_{\mathrm{O}_2}\!\cdot\!\sigma$ & F；G；G & 氧化；疲劳助氧化；应力助氧化\textsuperscript{1} \\
+$dD_f/dN$ & Paris；Paris$\cdot D_o$；Paris$\cdot D_c$；Paris$\cdot T$ & F；G；G；G & 疲劳；氧化-疲劳；蠕变-疲劳；TMF\textsuperscript{2} \\
+$dD_c/dt$ & Norton；Norton$\cdot D_o$；Norton$\cdot D_f$ & F；G；G & 蠕变；氧化-蠕变；蠕变-疲劳 \\
+\bottomrule
+\end{tabular}
+\end{table}
+疲劳按循环（$\Delta\sigma$ 为周期统计量，不入连续 $\partial/\partial t$ ODE）。$\mathrm{arr}(T)=e^{-E_a/RT}$。
+
+\section{方法}
+\paragraph{非线性常数} Paris 指数 $m=3$、饱和指数 $q=1$；Norton 指数 $n=4$；活化能 $E_a$（氧化 $120$、蠕变 $280$、热老化 $200$、氧扩散 $100$，单位 kJ/mol）；气体常数 $R=8.314$~J/(mol$\cdot$K)。上列为本合成研究的种入真值；它们位于指数/幂次内、非线性于参数，\textbf{建候选时先固定以保各项对系数线性，真实值由 SINDy-PI 另行辨识恢复}（非文献假定）。
+
+\paragraph{辨识流程} 对每个目标导数，用序贯阈值最小二乘（STLSQ）从候选矩阵 $\Theta$ 中选稀疏支持。列按标准差缩放、不中心化（保留非负、避免隐式截距），辨识后系数换算回原始尺度 $\xi_j=(\sigma_y/\sigma_j)\beta_j$；此缩放可显著降条件数（原始跨量级列 $\mathrm{cond}\!\sim\!10^3\to$标准化后 $\sim\!7$），利于数值稳定，但对 OLS 结果\textbf{数学上等价}（缩放不改变系数估计）。需强调：系数误差的主因并非共线或尺度病态，而是\textbf{目标导数的数值估计精度}——粗采样下 Savitzky--Golay 求导偏差经共因子 $\mathrm{arr}\cdot p_{O_2}$ 不均等地摊到各系数；以与积分一致的解析导数拟合可零误差命中真值，故主流程取细采样 $\Delta t{=}0.2$~s。
+
+\section{讨论}
+占位轨迹上的共线性预检显示：物理场库全良态（$\mathrm{cond}$ $1$--$5$）；损伤库在场量单调演化的占位轨迹上出现损伤×损伤项之间的相关——这是单条单调轨迹的数据结构所致，而非库设计缺陷；真实多工况数据上须对每个目标库重跑预检。库可扩展：可在损伤库补入更多物理有据的损伤交互项（如 Paris$\cdot D_c$ 已列为候选），暂缓纳入缺文献支撑的项（如 $D_h\!\cdot\! D_o$），待数据支持后再加。需说明：在主流程实际前向场上，系数恢复误差的主因是目标导数的数值估计精度（粗采样致 Savitzky--Golay 求导偏差），而非共线——故共线性预检在此仅作库设计健康度的参考，真正决定系数精度的是采样密度与求导方法。
+
+\section*{参考文献}
+\begin{enumerate}\setlength{\itemsep}{1pt}
+\item Molins, R. \textit{Oxidation effects on the fatigue crack growth behaviour of alloy 718 at high temperature}. \textbf{Acta Mater.} (1997).
+\item Jadon, J. K. et al. \textit{Creep-fatigue interaction behavior of high temperature alloys: a review}. \textbf{Int. J. Fatigue} (2022).
+\end{enumerate}
+
+\end{document}

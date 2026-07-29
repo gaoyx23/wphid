@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<script>window.MathJax={tex:{inlineMath:[['$','$']],displayMath:[['$$','$$']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  @page { size: A4; margin: 2.2cm 2.2cm; }
+  body { font-family:"SimSun","Songti SC","Microsoft YaHei",serif; font-size:12pt; line-height:1.9; color:#000; max-width:820px; margin:0 auto; padding:20px 0; }
+  h1 { font-size:15.5pt; text-align:center; font-family:"SimHei","Microsoft YaHei",sans-serif; margin:0 0 6px; line-height:1.5; }
+  .info { text-align:center; font-size:10.5pt; color:#333; margin-bottom:4px; }
+  .meta { text-align:center; font-size:10pt; color:#666; margin-bottom:20px; }
+  h2 { font-size:13pt; font-family:"SimHei","Microsoft YaHei",sans-serif; margin:22px 0 10px; border-bottom:1px solid #888; padding-bottom:4px; }
+  h3 { font-size:11.5pt; font-family:"SimHei","Microsoft YaHei",sans-serif; margin:14px 0 8px; }
+  p { text-indent:2em; margin:8px 0; text-align:justify; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:9.6pt; }
+  th,td { border:1px solid #555; padding:5px 7px; vertical-align:top; }
+  th { background:#eee; font-family:"SimHei","Microsoft YaHei",sans-serif; font-weight:bold; text-align:center; }
+  ul,ol { margin:6px 0 6px 2em; } li { margin-bottom:4px; text-align:justify; }
+  .fig { text-align:center; margin:12px 0 4px; }
+  .fig img { width:100%; max-width:780px; border:1px solid #ccc; }
+  .cap { font-size:9pt; color:#333; margin:0 0 14px; text-align:justify; }
+  .ref { font-size:9.8pt; line-height:1.7; } .ref li { text-indent:0; margin-bottom:3px; }
+  .note { background:#f7f7f7; border-left:3px solid #888; padding:8px 12px; margin:10px 0; font-size:10.5pt; }
+  .toc { background:#fafafa; border:1px solid #ddd; padding:8px 14px; font-size:10pt; margin:0 0 16px; }
+  mjx-container { font-size:110% !important; }
+</style>
+</head>
+<body>
+
+<h1>圆台喷管老化损伤机理辨识实验<br>阶段报告</h1>
+<div class="info">本科毕业设计 / 拟攻读研究生方向　|　阶段实验报告</div>
+<div class="meta">方向：系统可靠性（材料老化损伤机制）　|　方法：物理降阶场求解（隐式）+ 稀疏辨识（SINDy）　|　2026-07</div>
+<div class="toc"><b>目录</b>　一 目的与定位　|　二 方法概览　|　三 物理模型与前向场　|　四 辨识方法与参数　|　五 实验结果　|　六 讨论　|　七 局限与下一步</div>
+
+<h2>一、研究目的与定位</h2>
+<p>研究可重复使用火箭结构材料的<b>老化损伤机制</b>。喷管服役环境下，老化总损伤由热致退化、氧化、疲劳、蠕变几类机理及其耦合共同造成，因此要辨识的是<b>综合老化损伤方程</b> $\frac{dD_{\mathrm{total}}}{dt}$，判断它由哪些机理项主导。做法：在圆台（喷管状）构件上求出服役物理场，自行设定一个含连续机理的老化损伤律，用完整候选函数库做稀疏辨识，看能否把真正起作用的项挑出来、系数恢复到什么程度。</p>
+<p>需说明，实验中的损伤律是自行设定的，损伤场 $D$ 也假设可观测（由所设方程积分得到、当作测量数据）。因此本阶段看的是辨识方法能否用、库的选择性如何、对噪声多稳健，<b>还不是真实材料的机理结论</b>。</p>
+
+<h2>二、方法概览</h2>
+<p>分三步：<b>(1)</b> 以圆台为计算域，用时变边界条件联立求解温度场 $T$、氧分压场 $pO_2$，算出应力场 $\sigma$；<b>(2)</b> 自行设定含连续机理（热损失+氧化+蠕变）的老化损伤律，积分出连续总损伤 $D_{\mathrm{total}}(r,z,t)$；<b>(3)</b> 以完整 11 项函数库为候选，把所有节点×时刻的场数据堆叠喂给 SINDy，看它能否挑出真项并恢复系数，再测噪声鲁棒性。<b>疲劳（Paris 律）按循环计数、属周期统计量，不进连续 ODE，单独处理</b>（见 4.3）。</p>
+
+<h2>三、物理模型与前向场</h2>
+<p>圆台几何只起计算域与边界条件的作用。尺寸：长 $L=0.30\,\mathrm{m}$，内壁半径由喉部 $0.050\,\mathrm{m}$ 线性增大到出口 $0.150\,\mathrm{m}$，壁厚 $5\,\mathrm{mm}$；网格壁厚 $10\times$轴向 $30=300$ 节点。边界条件：</p>
+<table>
+  <tr><th style="width:20%">表面</th><th>温度场</th><th>氧分压场</th></tr>
+  <tr><td>内壁（燃气侧）</td><td>对流 $h_g(z)[T_{\mathrm{gas}}(t)-T]$，$h_g$ 喉部最高</td><td>Dirichlet：$pO_2=pO_{2,\mathrm{gas}}(t)$</td></tr>
+  <tr><td>外壁</td><td>辐射 $\varepsilon\sigma_{\mathrm{SB}}(T^4-T_{\mathrm{amb}}^4)$</td><td>零流</td></tr>
+  <tr><td>轴向两端</td><td>绝热</td><td>零流</td></tr>
+</table>
+<p>温度场求解 $\rho c_p\,\partial T/\partial t=\nabla\!\cdot(k\nabla T)+Q_{\mathrm{aero}}$；氧分压用完整瞬态扩散 $\partial pO_2/\partial t=D_{O_2}\nabla^2 pO_2$（$D_{O_2}=10^{-8}\,\mathrm{m^2/s}$）。两者都用<b>隐式 backward Euler</b>（每步解稀疏线性系统、辐射边界线性化）——壁厚扩散是刚性方向，显式会把时间步逼到极小，隐式无条件稳定、时间步 $0.2\,\mathrm{s}$。<b>温度场靠边界条件前向求出，不进辨识候选库</b>。为让应力含独立于温度的分量，燃气压力用独立时间包络。峰值时刻物理场见图 1 上排：$T$ 内壁 $300\sim1865\,\mathrm{K}$（喉部 $z{=}0$ 最热），$\sigma\in[-43,239]\,\mathrm{MPa}$，$pO_2\in[0,0.78]$。</p>
+
+<h2>四、辨识方法与参数</h2>
+<h3>4.1　候选函数库（11 项）</h3>
+<p>温度（热传导）项已删去（靠边界条件求出），新增热损失 Arrhenius 项。固定参数 $m{=}3,\ q{=}1,\ n{=}4$；$E_{\mathrm{ox}}{=}120,\ E_{\mathrm{c}}{=}280,\ E_h{=}200\,\mathrm{kJ/mol}$。</p>
+<table>
+  <tr><th>机理</th><th>候选项</th></tr>
+  <tr><td>热损失 $D_h$</td><td>$e^{-E_h/(RT)}$、$e^{-E_h/(RT)}\sigma$</td></tr>
+  <tr><td>氧化 $D_o$</td><td>$e^{-E_{\mathrm{ox}}/(RT)}pO_2$、$e^{-E_{\mathrm{ox}}/(RT)}\sigma$、$e^{-E_{\mathrm{ox}}/(RT)}D_f$</td></tr>
+  <tr><td>疲劳 $D_f$</td><td>$(\Delta\sigma)^m(1-D_f)^{-q}$ 及其与 $T$、$D_o$、$D_c$ 的耦合</td></tr>
+  <tr><td>蠕变 $D_c$</td><td>$\sigma^n e^{-E_{\mathrm{c}}/(RT)}$、$\sigma^n e^{-E_{\mathrm{c}}/(RT)}D_o$</td></tr>
+</table>
+<p>种入的连续老化损伤律（4 个连续机理真项）：</p>
+$$\frac{dD_{\mathrm{total}}}{dt}=900\,e^{-E_h/(RT)}+3\,e^{-E_{\mathrm{ox}}/(RT)}\,pO_2+0.01\,e^{-E_{\mathrm{ox}}/(RT)}\,\sigma+8{\times}10^{-4}\,\sigma^n e^{-E_{\mathrm{c}}/(RT)}$$
+<p>积分得 $D_h\in[0,0.19]$、$D_o\in[0,0.15]$、$D_c\in[0,0.14]$，连续总损伤 $D_{\mathrm{total}}\in[0,0.43]$（三类贡献相当、未饱和）。</p>
+<h3>4.2　辨识算法</h3>
+<ul>
+  <li><b>优化器</b>：STLSQ（序贯阈值最小二乘）——全变量最小二乘初拟合 $\to$ 标准化系数幅值低于阈值者置零 $\to$ 保留列上重拟合 $\to$ 重复至支持集稳定（$\le20$ 次）。</li>
+  <li><b>标准化</b>：列按标准差缩放但不中心化（$T_j\to T_j/\sigma_j$），$y$ 同样按 $\sigma_y$ 缩放，使阈值与列量级无关并保留非负物理量的非负性。系数由标准化系数换算回原始尺度 $\xi_j=(\sigma_y/\sigma_j)\,\beta_j$，保证数值良态。</li>
+  <li><b>阈值</b> $thr{=}0.05$（标准化系数上）。</li>
+  <li><b>导数</b> $dD/dt$：Savitzky-Golay 平滑求导，窗口 11 快照、多项式阶 3、$\Delta t{=}1.0\,\mathrm{s}$。<b>存储快照间隔</b> $=$ 前向场 store\_every$\times dt=5\times0.2=1.0\,\mathrm{s}$，与 savgol 的 $\Delta t$ 一致，无错位。理由：对带噪 $D$ 朴素差分会把噪声放大（方差 $\propto1/\Delta t^2$），savgol 先局部多项式拟合、再解析求导，兼得平滑与微分。</li>
+  <li><b>样本量</b>：所有节点×时刻，约 $2.1\times10^5$。</li>
+</ul>
+<h3>4.3　疲劳为何不进连续 ODE</h3>
+<p>Paris 律 $dD_f/dN=C(\Delta\sigma)^m(1-D_f)^{-q}$ 是<b>按循环 $N$ 计</b>的，$\Delta\sigma$ 是一个完整循环的应力幅——是<b>周期统计量</b>，不是单一时刻的瞬时状态。把它直接放进连续时间 ODE 在力学概念上错位。故本实验把疲劳单独按循环积分（供候选列评估），连续总损伤 $D_{\mathrm{total}}=D_h+D_o+D_c$；辨识的是连续部分的方程。</p>
+
+<h2>五、实验结果</h2>
+<div class="fig"><img src="dmg_id_exp.png" alt="实验结果"></div>
+<p class="cap"><b>图 1</b>　上排：峰值时刻 $T$、$\sigma$、$pO_2$ 在壁厚（纵轴 $\theta$）$\times$轴向（横轴 $z$）剖面的空间分布。下排左：<b>支持恢复</b>（绿=真项且选中，灰=剔除；4 个连续机理真项全选中、7 个干扰项全剔除）。下排中：<b>系数恢复</b>（4 真项的恢复值 vs 真值，对数轴，两者几乎重合）。下排右：errors-in-variables 噪声下真项恢复数与误选数。</p>
+<p><b>机理识别与系数恢复</b>：无噪声下（cond$=26.0$，良态）从 11 个候选准确挑出热损失、氧化、应力助氧化、蠕变 4 个真项，剔掉其余 7 项；系数恢复准确：</p>
+<table>
+  <tr><th>真项</th><th>$e^{-E_h/RT}$</th><th>$e^{-E_{\mathrm{ox}}/RT}pO_2$</th><th>$e^{-E_{\mathrm{ox}}/RT}\sigma$</th><th>$\sigma^n e^{-E_{\mathrm{c}}/RT}$</th></tr>
+  <tr><td>真值</td><td>900</td><td>3</td><td>0.01</td><td>$8{\times}10^{-4}$</td></tr>
+  <tr><td>恢复</td><td>913.9</td><td>3.154</td><td>0.00912</td><td>$7.97{\times}10^{-4}$</td></tr>
+  <tr><td>误差</td><td>1.5%</td><td>5.1%</td><td>8.8%</td><td>0.3%</td></tr>
+</table>
+<p><b>噪声鲁棒性</b>（对 $T$、$\sigma$、$pO_2$、$D_{\mathrm{total}}$ 加 errors-in-variables 噪声，6 次平均）：</p>
+<table>
+  <tr><th>测量噪声（×各量 std）</th><th>2%</th><th>5%</th><th>10%</th><th>20%</th></tr>
+  <tr><td>预测 $R^2$</td><td>0.999</td><td>0.997</td><td>0.931</td><td>0.841</td></tr>
+  <tr><td>真项恢复数（共 4）</td><td>4.0</td><td>3.7</td><td>2.0</td><td>1.0</td></tr>
+  <tr><td>误选干扰项</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+</table>
+
+<h2>六、讨论</h2>
+<ul>
+  <li><b>可辨识性</b>：标准化后候选矩阵条件数 cond$=26$，属良态，系数可辨识。无噪声下 4 个连续机理系数全部恢复（误差 $0.3\%\sim8.8\%$）。列幅值的量级差异由按标准差缩放处理，不影响辨识。</li>
+  <li><b>噪声行为</b>：噪声加在回归量（$T,\sigma,pO_2,D$）上属 errors-in-variables，其效应是衰减偏置——系数被向零缩，故真项随噪声升高被丢弃（假阴性），误选假项数为零。阈值 $0.05$ 在假阴与假阳间权衡；20% 噪声下仍恢复 1 项、$R^2{=}0.84$。</li>
+  <li><b>关于 $R^2$</b>：三类机理"贡献相当"指<b>累积损伤量级</b>相当，不是 $dD/dt$ 的方差份额。Arrhenius 项在热点处方差占比大，故高噪下残存的主项仍能维持较高 $R^2$。</li>
+</ul>
+
+<h2>七、局限与下一步</h2>
+<ul>
+  <li><b>律自设</b>：当前是方法验证，非机理发现；真实机理要用机理未知的真实数据，配残差分析与样本外预测核对。</li>
+  <li><b>$D$ 可观测性</b>：SINDy 需 $D$ 可测；$T$、$\sigma$ 单向耦合不含损伤信息。若 $D$ 不可直接测，需损伤代理量（NDE 裂纹密度、质量损失、刚度退化），或 $D\leftrightarrow T,\sigma$ 双向耦合做联合反演。</li>
+  <li><b>疲劳的连续化</b>：Paris 按循环计，本实验将其排除出连续 ODE；要纳入总损伤需在循环边界上累加，或用循环-时间双时钟框架。</li>
+  <li><b>真实数据与增强</b>：合成场替换为飞行遥测/地面热试车/有限元仿真；引入 E-SINDy 或正则化增强弱项；加物理约束（能量守恒、$dD/dt\ge0$）；最终做蒙特卡洛首达可靠性 $R(t)=P(D\le D_{\mathrm{crit}})$。</li>
+</ul>
+
+<h2>主要参考文献</h2>
+<ol class="ref">
+  <li>Brunton S L, Proctor J L, Kutz J N. Discovering governing equations from data by sparse identification of nonlinear dynamical systems. PNAS, 2016, 113(15): 3932–3937.</li>
+  <li>Champion K, Lusch B, Kutz J N, Brunton S L. Data-driven discovery of coordinates and governing equations. PNAS, 2019, 116(45): 22445–22451.</li>
+  <li>Fasel U, et al. Ensemble-SINDy: robust sparse model discovery in the low-data, high-noise limit. Proc. Roy. Soc. A, 2022, 478.</li>
+</ol>
+
+</body>
+</html>
