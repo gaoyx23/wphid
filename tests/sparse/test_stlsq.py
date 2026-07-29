@@ -40,3 +40,45 @@ def test_fit_stlsq_excludes_constant_columns_and_reports_conditioning():
     )
     assert np.isfinite(result.diagnostics["condition_number"])
     assert np.isfinite(result.diagnostics["scaled_condition_number"])
+
+
+def test_fit_stlsq_is_equivalent_under_independent_column_rescaling():
+    """Thresholding raw coefficients instead of scaled ones breaks equivalence."""
+    rng = np.random.default_rng(91)
+    A = rng.normal(size=(300, 4))
+    expected = np.array([1.25, 0.0, -0.4, 0.0])
+    b = A @ expected
+    scale_factors = np.array([1e-6, 1e7, 1e3, 1e-4])
+
+    baseline = fit_stlsq(A, b, threshold=0.1)
+    rescaled = fit_stlsq(A * scale_factors, b, threshold=0.1)
+
+    np.testing.assert_array_equal(rescaled.support, baseline.support)
+    np.testing.assert_array_equal(rescaled.support, np.array([0, 2]))
+    np.testing.assert_allclose(
+        rescaled.coefficients,
+        baseline.coefficients / scale_factors,
+        rtol=1e-8,
+        atol=1e-12,
+    )
+    np.testing.assert_allclose(
+        (A * scale_factors) @ rescaled.coefficients,
+        A @ baseline.coefficients,
+        rtol=1e-12,
+        atol=1e-12,
+    )
+
+
+def test_fit_stlsq_iterates_until_support_stabilizes():
+    """Stopping after the initial threshold leaves a cascading false term."""
+    phase = 2.0 * np.pi * np.arange(240) / 240
+    x0 = np.sin(phase)
+    x1 = np.cos(phase)
+    x2 = -0.9 * x1 + np.sqrt(1.0 - 0.9**2) * np.sin(2.0 * phase)
+    A = np.column_stack((x0, x1, x2))
+    b = x0 + 0.2 * x1 + 0.14 * x2
+
+    result = fit_stlsq(A, b, threshold=0.15)
+
+    np.testing.assert_array_equal(result.support, np.array([0]))
+    assert result.diagnostics["iterations"] == 2

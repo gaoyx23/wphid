@@ -13,6 +13,29 @@ def test_conditions_independently_excitate_sigma_and_fatigue():
     assert cyc.states["Df"][-1] > 2 * low.states["Df"][-1]
 
 
+def test_oxygen_rich_condition_independently_excites_oxygen():
+    """Replacing oxygen_rich with a low-oxygen forcing breaks this test."""
+    oxygen = simulate_named_condition("oxygen_rich")
+    thermal = simulate_named_condition("thermal_hold")
+    fatigue = simulate_named_condition("fatigue_rich")
+
+    assert oxygen.states["pO2"].min() > max(
+        thermal.states["pO2"].max(), fatigue.states["pO2"].max()
+    )
+    assert oxygen.states["Do"][-1] > 2 * fatigue.states["Do"][-1]
+
+
+def test_named_condition_simulation_is_repeatably_deterministic():
+    """Introducing stochastic forcing or solver state breaks this test."""
+    first = simulate_named_condition("fatigue_rich")
+    second = simulate_named_condition("fatigue_rich")
+
+    assert first.condition_id == second.condition_id
+    np.testing.assert_array_equal(first.t, second.t)
+    for name in first.states:
+        np.testing.assert_array_equal(first.states[name], second.states[name])
+
+
 def test_named_conditions_export_only_observations_with_bounded_damage():
     """Leaking truth metadata or allowing runaway damage breaks this test."""
     for condition_id in ("thermal_hold", "fatigue_rich", "oxygen_rich"):

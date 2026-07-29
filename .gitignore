@@ -46,3 +46,13 @@ desktop.ini
 # Isolated implementation workspaces
 .worktrees/
 .superpowers/
+
+# Generated experiment payloads; compact JSON metrics and Markdown summaries
+# remain version-controlled.
+artifacts/**/arrays/
+artifacts/**/*.npz
+artifacts/**/*.png
+artifacts/**/*.jpg
+artifacts/**/*.jpeg
+artifacts/**/*.svg
+artifacts/**/*.pdf

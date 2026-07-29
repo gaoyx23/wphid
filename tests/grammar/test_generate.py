@@ -49,6 +49,22 @@ def test_generation_is_deterministic_and_labels_complexity_groups():
     assert _by_name(first, "arr(T;theta=1000)*pO2*sigma").group == "G3"
 
 
+def test_generation_order_is_invariant_to_permuted_atom_input():
+    """Depending on caller atom order breaks canonical candidate ordering."""
+    atoms = aging_atoms()
+    baseline = generate_candidates(atoms, PRESSURE)
+    permuted = generate_candidates(
+        [atoms[index] for index in (3, 0, 4, 1, 2)], PRESSURE
+    )
+
+    assert [candidate.name for candidate in permuted] == [
+        candidate.name for candidate in baseline
+    ]
+    assert [candidate.parents for candidate in permuted] == [
+        candidate.parents for candidate in baseline
+    ]
+
+
 def test_declared_saturation_transform_is_available_as_an_atom():
     saturation = _by_name(aging_atoms(), "sat(Df)")
 
