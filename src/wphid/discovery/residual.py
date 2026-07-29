@@ -8,12 +8,16 @@ from typing import Any
 import numpy as np
 
 from wphid.pipeline import _condition_matrix, _normalized_rmse, discover_closed
+from wphid.sparse.stlsq import fit_stlsq
 from wphid.types import Candidate, DiscoveryResult, Trajectory
 
 
 _MIN_ABSOLUTE_CORRELATION = 0.25
 _MIN_SIGN_CONSISTENCY = 0.75
 _MIN_RELATIVE_VALIDATION_REDUCTION = 0.01
+_RESIDUAL_FIT_SELECTION_RULE = (
+    "sparsest_nonempty_training_support_then_training_error"
+)
 
 
 def _readonly_vector(values: np.ndarray, label: str) -> np.ndarray:
@@ -67,6 +71,16 @@ class ExpansionScore:
             "correlations_by_condition",
             MappingProxyType(dict(self.correlations_by_condition)),
         )
+
+
+@dataclass(frozen=True)
+class _TrainingFit:
+    """A conservative sparse fit selected without held-out conditions."""
+
+    coefficients: np.ndarray
+    support: np.ndarray
+    error: float
+    selected_threshold: float
 
 
 def _correlation(left: np.ndarray, right: np.ndarray) -> float:
@@ -159,19 +173,79 @@ def _complexity(candidate: Candidate) -> int:
     return max(1, len(candidate.parents))
 
 
+def _training_matrix(
+    trajectories_by_id: Mapping[str, Trajectory],
+    condition_ids: Sequence[str],
+    candidates: Sequence[Candidate],
+) -> tuple[np.ndarray, np.ndarray]:
+    matrices = [
+        _condition_matrix(trajectories_by_id[condition_id], candidates)
+        for condition_id in condition_ids
+    ]
+    return (
+        np.vstack([item[0] for item in matrices]),
+        np.concatenate([item[1] for item in matrices]),
+    )
+
+
 def _training_error(
     trajectories_by_id: Mapping[str, Trajectory],
     condition_ids: Sequence[str],
     candidates: Sequence[Candidate],
     coefficients: np.ndarray,
 ) -> float:
-    matrices = [
-        _condition_matrix(trajectories_by_id[condition_id], candidates)
-        for condition_id in condition_ids
-    ]
-    matrix = np.vstack([item[0] for item in matrices])
-    target = np.concatenate([item[1] for item in matrices])
+    matrix, target = _training_matrix(
+        trajectories_by_id, condition_ids, candidates
+    )
     return _normalized_rmse(matrix, target, coefficients)
+
+
+def _fit_training_only(
+    trajectories_by_id: Mapping[str, Trajectory],
+    condition_ids: Sequence[str],
+    candidates: Sequence[Candidate],
+    thresholds: Sequence[float],
+) -> _TrainingFit:
+    """Choose a conservative residual base using training rows only.
+
+    Missing-structure diagnostics require the base model not to absorb omitted
+    interactions through flexible distractors. The selection therefore
+    prefers the sparsest non-empty training support, then lower training
+    error, then the higher threshold. If every fit is empty, the lowest-error
+    empty fit is retained.
+    """
+    matrix, target = _training_matrix(
+        trajectories_by_id, condition_ids, candidates
+    )
+    selected_key: tuple[bool, int, float, float] | None = None
+    selected_fit: DiscoveryResult | None = None
+    selected_threshold = float("nan")
+    selected_error = float("nan")
+    for threshold in thresholds:
+        fit = fit_stlsq(matrix, target, float(threshold))
+        training_error = _normalized_rmse(
+            matrix, target, fit.coefficients
+        )
+        key = (
+            fit.support.size == 0,
+            int(fit.support.size),
+            training_error,
+            -float(threshold),
+        )
+        if selected_key is None or key < selected_key:
+            selected_key = key
+            selected_fit = fit
+            selected_threshold = float(threshold)
+            selected_error = training_error
+
+    if selected_fit is None:
+        raise ValueError("thresholds must be non-empty")
+    return _TrainingFit(
+        coefficients=np.asarray(selected_fit.coefficients),
+        support=np.asarray(selected_fit.support),
+        error=selected_error,
+        selected_threshold=selected_threshold,
+    )
 
 
 def _residual_blocks(
@@ -209,6 +283,55 @@ def _score_diagnostic(score: ExpansionScore) -> dict[str, Any]:
     }
 
 
+def _validate_discovery_inputs(
+    observations: Sequence[Trajectory],
+    current_candidates: Sequence[Candidate],
+    training_ids: Sequence[str],
+    held_out_ids: Sequence[str],
+    threshold_values: np.ndarray,
+) -> dict[str, Trajectory]:
+    if not observations:
+        raise ValueError("at least one trajectory is required")
+    if not current_candidates:
+        raise ValueError("at least one candidate is required")
+    if len(training_ids) < 2:
+        raise ValueError(
+            "cross-condition expansion requires at least two training IDs"
+        )
+    if not held_out_ids:
+        raise ValueError("validation_ids must be non-empty")
+    if len(set(training_ids)) != len(training_ids):
+        raise ValueError("train_ids must contain unique condition IDs")
+    if len(set(held_out_ids)) != len(held_out_ids):
+        raise ValueError("validation_ids must contain unique condition IDs")
+    if set(training_ids) & set(held_out_ids):
+        raise ValueError("training and validation condition IDs must be disjoint")
+    trajectories_by_id = {
+        trajectory.condition_id: trajectory for trajectory in observations
+    }
+    if len(trajectories_by_id) != len(observations):
+        raise ValueError("trajectory condition IDs must be unique")
+    missing = (set(training_ids) | set(held_out_ids)).difference(
+        trajectories_by_id
+    )
+    if missing:
+        raise ValueError(f"unknown condition IDs: {', '.join(sorted(missing))}")
+    names = [candidate.name for candidate in current_candidates]
+    if len(set(names)) != len(names):
+        raise ValueError("base candidate names must be unique")
+    if threshold_values.ndim != 1 or threshold_values.size == 0:
+        raise ValueError(
+            "thresholds must be a non-empty one-dimensional sequence"
+        )
+    if not np.all(np.isfinite(threshold_values)) or np.any(
+        threshold_values < 0.0
+    ):
+        raise ValueError(
+            "thresholds must contain finite non-negative values"
+        )
+    return trajectories_by_id
+
+
 def discover_with_expansion(
     trajectories: Iterable[Trajectory],
     base_candidates: Sequence[Candidate],
@@ -218,12 +341,11 @@ def discover_with_expansion(
     thresholds: Iterable[float],
     max_rounds: int = 2,
 ) -> DiscoveryResult:
-    """Fit a base library and admit only stable, held-out-improving expansions.
+    """Fit and rank on training data, then validate controlled expansions.
 
-    Weak-residual evidence is computed independently in every training
-    condition. Candidates are considered one grammar-complexity layer per
-    round; held-out conditions are consulted only after ranking, and a
-    candidate that fails to reduce validation error is rejected.
+    Every round constructs its weak residual from a sparse base fit selected
+    only on training rows. Held-out targets are first consulted after residual
+    ranking, when stable candidates are trialled for admission.
     """
     if not isinstance(max_rounds, (int, np.integer)) or max_rounds < 0:
         raise ValueError("max_rounds must be a non-negative integer")
@@ -233,7 +355,15 @@ def discover_with_expansion(
     available_candidates = list(expansion_candidates)
     training_ids = tuple(train_ids)
     held_out_ids = tuple(validation_ids)
-    threshold_values = tuple(thresholds)
+    threshold_array = np.asarray(tuple(thresholds), dtype=float)
+    trajectories_by_id = _validate_discovery_inputs(
+        observations,
+        current_candidates,
+        training_ids,
+        held_out_ids,
+        threshold_array,
+    )
+    threshold_values = tuple(float(value) for value in threshold_array)
     if len({candidate.name for candidate in available_candidates}) != len(
         available_candidates
     ):
@@ -245,47 +375,54 @@ def discover_with_expansion(
         if candidate.name not in current_names
     ]
 
-    current_result = discover_closed(
-        trajectories=observations,
-        candidates=current_candidates,
-        train_ids=training_ids,
-        validation_ids=held_out_ids,
-        thresholds=threshold_values,
-    )
-    fixed_validation_error = current_result.validation_error
-    trajectories_by_id = {
-        trajectory.condition_id: trajectory for trajectory in observations
-    }
-    fixed_training_error = _training_error(
-        trajectories_by_id,
-        training_ids,
-        current_candidates,
-        current_result.coefficients,
-    )
-
+    current_result: DiscoveryResult | None = None
+    fixed_validation_error: float | None = None
+    fixed_training_fit: _TrainingFit | None = None
     rounds: list[dict[str, Any]] = []
     admitted_candidates: list[str] = []
     complexity_layers = sorted(
         {_complexity(candidate) for candidate in available_candidates}
     )
-    for round_index, layer in enumerate(complexity_layers[:max_rounds], start=1):
+    for round_index, layer in enumerate(
+        complexity_layers[:max_rounds], start=1
+    ):
         layer_candidates = [
             candidate
             for candidate in available_candidates
             if _complexity(candidate) == layer
         ]
+        ranking_fit = _fit_training_only(
+            trajectories_by_id,
+            training_ids,
+            current_candidates,
+            threshold_values,
+        )
+        if fixed_training_fit is None:
+            fixed_training_fit = ranking_fit
         residuals = _residual_blocks(
             trajectories_by_id,
             training_ids,
             current_candidates,
             layer_candidates,
-            current_result.coefficients,
+            ranking_fit.coefficients,
         )
         ranked = rank_expansions(
             residuals,
             base_candidates=current_candidates,
             expansion_candidates=layer_candidates,
         )
+
+        # Validation starts only after the complete residual ranking exists.
+        if current_result is None:
+            current_result = discover_closed(
+                trajectories=observations,
+                candidates=current_candidates,
+                train_ids=training_ids,
+                validation_ids=held_out_ids,
+                thresholds=threshold_values,
+            )
+            fixed_validation_error = current_result.validation_error
+
         updated_scores: dict[str, ExpansionScore] = {
             score.candidate.name: score for score in ranked
         }
@@ -376,11 +513,23 @@ def discover_with_expansion(
                 if candidate.name != admitted_name
             ]
 
+        ranking_support = tuple(
+            current_candidates[index].name
+            for index in ranking_fit.support
+            if index < len(current_candidates)
+        )
         rounds.append(
             {
                 "round": round_index,
                 "complexity_layer": layer,
                 "residual_condition_ids": training_ids,
+                "residual_base_fit": {
+                    "selection_data": "training_conditions_only",
+                    "selection_rule": _RESIDUAL_FIT_SELECTION_RULE,
+                    "selected_threshold": ranking_fit.selected_threshold,
+                    "training_error": ranking_fit.error,
+                    "support": ranking_support,
+                },
                 "residual_ranking": [
                     _score_diagnostic(updated_scores[score.candidate.name])
                     for score in ranked
@@ -394,6 +543,25 @@ def discover_with_expansion(
             }
         )
 
+    if fixed_training_fit is None:
+        fixed_training_fit = _fit_training_only(
+            trajectories_by_id,
+            training_ids,
+            current_candidates,
+            threshold_values,
+        )
+    if current_result is None:
+        current_result = discover_closed(
+            trajectories=observations,
+            candidates=current_candidates,
+            train_ids=training_ids,
+            validation_ids=held_out_ids,
+            thresholds=threshold_values,
+        )
+        fixed_validation_error = current_result.validation_error
+    if fixed_validation_error is None:
+        raise RuntimeError("fixed-library validation error was not evaluated")
+
     final_training_error = _training_error(
         trajectories_by_id,
         training_ids,
@@ -403,7 +571,12 @@ def discover_with_expansion(
     diagnostics = {
         **dict(current_result.diagnostics),
         "fixed_library_validation_error": fixed_validation_error,
-        "fixed_library_training_error": fixed_training_error,
+        "fixed_library_training_error": fixed_training_fit.error,
+        "fixed_residual_fit_selected_threshold": (
+            fixed_training_fit.selected_threshold
+        ),
+        "residual_fit_selection_data": "training_conditions_only",
+        "residual_fit_selection_rule": _RESIDUAL_FIT_SELECTION_RULE,
         "final_training_error": final_training_error,
         "initial_candidate_names": tuple(
             candidate.name for candidate in base_candidates

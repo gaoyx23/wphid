@@ -3,14 +3,9 @@
 from collections.abc import Mapping, Sequence
 import json
 from pathlib import Path
-import sys
 from typing import Any
 
 import numpy as np
-
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from experiments.e1_closed_library import (
     ARRHENIUS_TEMPERATURE,
@@ -30,7 +25,19 @@ NOISE_FRACTION = 1.0e-4
 TRAIN_IDS = ("fatigue_warm", "fatigue_oxygen")
 VALIDATION_IDS = ("fatigue_validation",)
 EXPECTED_MISSING_INTERACTION = "arr(T;theta=1800)*pO2*Df"
+TASK6_E1_VALIDATION_NRMSE = 0.00025879605792407254
 DEFAULT_OUTPUT_DIR = Path("artifacts/e3_missing_interaction")
+_JSON_NEWLINE = "LF"
+_OBSERVATION_NOISE = {
+    "applied_to": "Do_observation_only",
+    "description": (
+        "target-only Do observation noise; "
+        "t, T, pO2, sigma, and Df are unchanged"
+    ),
+    "distribution": "independent zero-mean Gaussian per time sample",
+    "noise_fraction": NOISE_FRACTION,
+    "scale_per_condition": "noise_fraction * max(abs(clean Do))",
+}
 
 
 def _forcing_profiles(t: np.ndarray) -> dict[str, dict[str, np.ndarray]]:
@@ -64,7 +71,9 @@ def _observations(seed: int) -> list[Trajectory]:
         noise_scale = NOISE_FRACTION * float(np.max(np.abs(oxidation)))
         noisy_states = {
             **clean.states,
-            "Do": oxidation + rng.normal(scale=noise_scale, size=oxidation.size),
+            "Do": oxidation + rng.normal(
+                scale=noise_scale, size=oxidation.size
+            ),
         }
         trajectories.append(
             Trajectory(
@@ -127,12 +136,12 @@ def _result_summary(result: DiscoveryResult) -> dict[str, Any]:
 
 
 def run_seed(seed: int) -> dict[str, Any]:
-    """Run one noisy E3 replicate without exposing truth support to discovery."""
+    """Run one target-noise E3 replicate with truth isolated from discovery."""
     trajectories = _observations(seed)
     closed_candidates, fixed_candidates, expansion_candidates = (
         _candidate_libraries()
     )
-    closed_result = discover_closed(
+    same_seed_closed_result = discover_closed(
         trajectories=trajectories,
         candidates=closed_candidates,
         train_ids=TRAIN_IDS,
@@ -163,22 +172,33 @@ def run_seed(seed: int) -> dict[str, Any]:
     structured_evidence = bool(
         rounds
         and rounds[0]["residual_ranking"]
+        and rounds[0]["residual_base_fit"]["selection_data"]
+        == "training_conditions_only"
         and all(
             set(item["correlations_by_condition"]) == set(TRAIN_IDS)
             for item in rounds[0]["residual_ranking"]
         )
     )
+    expanded_summary = _result_summary(expanded_result)
+    expanded_summary["validation_nrmse_over_task6_e1"] = (
+        expanded_result.validation_error / TASK6_E1_VALIDATION_NRMSE
+    )
+    same_seed_closed_summary = _result_summary(same_seed_closed_result)
+    same_seed_closed_summary["role"] = (
+        "noisy same-seed closed-library diagnostic; not the Task6 E1 reference"
+    )
     gates = {
-        "fixed_error_at_least_50_percent_above_closed": (
-            fixed_result.validation_error >= 1.5 * closed_result.validation_error
+        "fixed_error_at_least_50_percent_above_same_seed_closed_diagnostic": (
+            fixed_result.validation_error
+            >= 1.5 * same_seed_closed_result.validation_error
         ),
         "structured_cross_condition_residual_evidence": structured_evidence,
         "missing_interaction_admitted": (
             EXPECTED_MISSING_INTERACTION in admitted
         ),
-        "expanded_error_within_20_percent_of_closed": (
+        "expanded_error_within_20_percent_of_task6_e1": (
             expanded_result.validation_error
-            <= 1.2 * closed_result.validation_error
+            <= 1.2 * TASK6_E1_VALIDATION_NRMSE
         ),
         "at_most_one_false_interaction": len(false_interactions) <= 1,
     }
@@ -186,7 +206,8 @@ def run_seed(seed: int) -> dict[str, Any]:
         "seed": int(seed),
         "configuration": {
             "arrhenius_temperature": ARRHENIUS_TEMPERATURE,
-            "noise_fraction": NOISE_FRACTION,
+            "observation_noise": dict(_OBSERVATION_NOISE),
+            "json_newline": _JSON_NEWLINE,
             "train_ids": list(TRAIN_IDS),
             "validation_ids": list(VALIDATION_IDS),
             "thresholds": [float(value) for value in THRESHOLDS],
@@ -197,9 +218,13 @@ def run_seed(seed: int) -> dict[str, Any]:
                 candidate.name for candidate in expansion_candidates
             ],
         },
-        "closed_library": _result_summary(closed_result),
+        "task6_e1_reference": {
+            "source": "Task6 E1",
+            "validation_normalized_rmse": TASK6_E1_VALIDATION_NRMSE,
+        },
+        "same_seed_closed_library_diagnostic": same_seed_closed_summary,
         "fixed_library": _result_summary(fixed_result),
-        "expanded_library": _result_summary(expanded_result),
+        "expanded_library": expanded_summary,
         "expansion": {
             "admitted_candidates": admitted,
             "false_interactions": false_interactions,
@@ -209,11 +234,18 @@ def run_seed(seed: int) -> dict[str, Any]:
     }
 
 
+def _json_bytes(value: Any) -> bytes:
+    """Serialize deterministic UTF-8 JSON with exactly one trailing LF."""
+    return (
+        json.dumps(value, indent=2, sort_keys=True) + "\n"
+    ).encode("utf-8")
+
+
 def run_experiment(
     output_dir: str | Path = DEFAULT_OUTPUT_DIR,
     seeds: Sequence[int] = SEEDS,
 ) -> dict[str, Any]:
-    """Run all E3 replicates and persist per-seed plus aggregate metrics."""
+    """Run all E3 replicates and persist LF-normalized JSON metrics."""
     seed_values = tuple(int(seed) for seed in seeds)
     if not seed_values:
         raise ValueError("seeds must be non-empty")
@@ -228,6 +260,15 @@ def run_experiment(
             "seeds": list(seed_values),
             "passing_seed_count": passing_seed_count,
             "all_seeds_pass": passing_seed_count == len(seed_values),
+            "task6_e1_validation_normalized_rmse": (
+                TASK6_E1_VALIDATION_NRMSE
+            ),
+            "maximum_expanded_nrmse_over_task6_e1": max(
+                result["expanded_library"][
+                    "validation_nrmse_over_task6_e1"
+                ]
+                for result in per_seed
+            ),
             "missing_interaction_detection_rate": (
                 sum(
                     result["gates"]["missing_interaction_admitted"]
@@ -247,25 +288,6 @@ def run_experiment(
     per_seed_destination.mkdir(parents=True, exist_ok=True)
     for result in per_seed:
         seed_path = per_seed_destination / f"seed_{result['seed']}.json"
-        seed_path.write_text(
-            json.dumps(result, indent=2, sort_keys=True) + "\n",
-            encoding="utf-8",
-        )
-    (destination / "metrics.json").write_text(
-        json.dumps(metrics, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+        seed_path.write_bytes(_json_bytes(result))
+    (destination / "metrics.json").write_bytes(_json_bytes(metrics))
     return metrics
-
-
-if __name__ == "__main__":
-    experiment_metrics = run_experiment()
-    aggregate = experiment_metrics["aggregate"]
-    print(
-        "E3 seeds passing:",
-        f"{aggregate['passing_seed_count']}/{len(aggregate['seeds'])}",
-        "detection rate:",
-        f"{aggregate['missing_interaction_detection_rate']:.3f}",
-        "max false interactions:",
-        aggregate["maximum_false_interactions"],
-    )
