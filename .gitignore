@@ -42,3 +42,7 @@ desktop.ini
 *.temp
 ~$*
 
+
+# Isolated implementation workspaces
+.worktrees/
+.superpowers/
