@@ -22,14 +22,14 @@ The final gate was reproduced on Windows with:
 - Matplotlib 3.10.8
 - pytest 9.0.3
 
-From the repository root, install the package in editable mode:
+From the repository root, install the package in editable mode with test
+dependencies:
 
 ```text
-python -m pip install -e .
+python -m pip install -e ".[test]"
 ```
 
-No dependency beyond those already used by the project is introduced by the
-foundation implementation.
+Runtime dependencies are NumPy and SciPy. The test extra adds pytest.
 
 ## Architecture and leakage boundary
 
@@ -71,12 +71,17 @@ Regenerate the missing-interaction E3 metrics for seeds 11, 23, 47, 89, and 131:
 python experiments/e3_missing_interaction.py
 ```
 
-E1 uses `noise_fraction = 0.0`. E3 applies independent zero-mean Gaussian noise
-only to the observed `Do` target, with per-condition scale
-`1e-4 * max(abs(clean Do))`. Its `t`, `T`, `pO2`, `sigma`, and `Df` inputs remain
-unchanged. The E3 result therefore establishes target-only `Do` noise behavior;
-it does not establish robustness to noisy covariates, time jitter, or broader
-measurement noise.
+E1 applies 5% independent Gaussian noise to every observed field
+(`T`, `pO2`, `sigma`, `Df`, `Do`). E3 applies independent zero-mean Gaussian
+noise only to the observed `Do` target, with per-condition scale
+`1e-4 * max(abs(clean Do))`; its `t`, `T`, `pO2`, `sigma`, and `Df` inputs
+remain unchanged.
+
+Regenerate the deterministic gate report from JSON metrics:
+
+```text
+python experiments/foundation_report.py
+```
 
 ## Artifact policy and schema
 
