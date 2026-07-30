@@ -68,10 +68,39 @@ class Candidate:
     dimension: tuple[int, ...]
     group: str
     parents: tuple[str, ...] = ()
+    coefficient_dimension: tuple[int, ...] | None = None
+    canonical_identity: str | None = None
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "dimension", tuple(self.dimension))
-        object.__setattr__(self, "parents", tuple(self.parents))
+        if not isinstance(self.name, str) or not self.name:
+            raise ValueError("candidate name must be a non-empty string")
+        if not isinstance(self.group, str) or not self.group:
+            raise ValueError("candidate group must be a non-empty string")
+        dimension = tuple(self.dimension)
+        parents = tuple(self.parents)
+        coefficient_dimension = (
+            None
+            if self.coefficient_dimension is None
+            else tuple(self.coefficient_dimension)
+        )
+        if (
+            coefficient_dimension is not None
+            and len(coefficient_dimension) != len(dimension)
+        ):
+            raise ValueError(
+                "candidate and coefficient dimensions must use the same basis"
+            )
+        identity = (
+            self.name
+            if self.canonical_identity is None
+            else self.canonical_identity
+        )
+        if not isinstance(identity, str) or not identity:
+            raise ValueError("canonical_identity must be a non-empty string")
+        object.__setattr__(self, "dimension", dimension)
+        object.__setattr__(self, "parents", parents)
+        object.__setattr__(self, "coefficient_dimension", coefficient_dimension)
+        object.__setattr__(self, "canonical_identity", identity)
 
 
 @dataclass(frozen=True)
@@ -85,7 +114,51 @@ class DiscoveryResult:
     diagnostics: Mapping[str, Any]
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "names", tuple(self.names))
-        object.__setattr__(self, "coefficients", _readonly_array(self.coefficients))
-        object.__setattr__(self, "support", _readonly_array(self.support))
+        names = tuple(self.names)
+        if any(not isinstance(name, str) or not name for name in names):
+            raise ValueError("names must contain non-empty strings")
+        if len(set(names)) != len(names):
+            raise ValueError("names must be unique")
+
+        coefficients = np.array(self.coefficients, dtype=float, copy=True)
+        if coefficients.ndim != 1:
+            raise ValueError("coefficients must be one-dimensional")
+        if coefficients.size != len(names):
+            raise ValueError("DiscoveryResult requires one coefficient per name")
+        if not np.all(np.isfinite(coefficients)):
+            raise ValueError("coefficients must contain only finite values")
+
+        support = np.array(self.support, copy=True)
+        if support.ndim != 1:
+            raise ValueError("support must be one-dimensional")
+        if (
+            np.issubdtype(support.dtype, np.bool_)
+            or not np.issubdtype(support.dtype, np.integer)
+        ):
+            raise ValueError("support must contain integer indices")
+        support = support.astype(np.intp, copy=False)
+        if support.size and (
+            np.any(support < 0) or np.any(support >= len(names))
+        ):
+            raise ValueError("support indices must be within names")
+        if support.size > 1 and not np.all(np.diff(support) > 0):
+            raise ValueError("support indices must be strictly increasing")
+
+        try:
+            validation_error = float(self.validation_error)
+        except (TypeError, ValueError) as error:
+            raise ValueError("validation_error must be a finite number") from error
+        if not np.isfinite(validation_error):
+            raise ValueError("validation_error must be finite")
+        if validation_error < 0.0:
+            raise ValueError("validation_error must be non-negative")
+        if not isinstance(self.diagnostics, Mapping):
+            raise ValueError("diagnostics must be a mapping")
+
+        coefficients.setflags(write=False)
+        support.setflags(write=False)
+        object.__setattr__(self, "names", names)
+        object.__setattr__(self, "coefficients", coefficients)
+        object.__setattr__(self, "support", support)
+        object.__setattr__(self, "validation_error", validation_error)
         object.__setattr__(self, "diagnostics", _immutable_mapping(self.diagnostics))

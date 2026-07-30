@@ -122,3 +122,19 @@ def _validate_forcing(
     if np.any(observed["pO2"] < 0.0):
         raise ValueError("forcing 'pO2' must be non-negative")
     return time, observed
+
+
+def oxidation_evaluation_truth() -> dict[str, object]:
+    """Return hidden oxidation metadata for post-discovery evaluation only.
+
+    Discovery modules do not import this function. Experiment evaluators call
+    it only after model and parameter selection have completed.
+    """
+    return {
+        "arrhenius_theta": _ACTIVATION_TEMPERATURE,
+        "coefficient_by_factor": {
+            "pO2": _OXIDATION_RATE,
+            "pO2*sigma": _STRESS_OXIDATION_RATE,
+            "pO2*Df": _FATIGUE_OXIDATION_RATE,
+        },
+    }

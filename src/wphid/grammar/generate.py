@@ -20,10 +20,8 @@ class _Node:
 
 
 def _canonical_key(candidate: Candidate) -> tuple[str, ...]:
-    """Identify an input expression by its tree leaves, never its display name."""
-
-    leaves = candidate.parents or (candidate.name,)
-    return tuple(sorted(leaves))
+    """Identify an expression by canonical physics identity, not display name."""
+    return (candidate.canonical_identity,)
 
 
 def _add_dimensions(dimensions: Sequence[tuple[int, ...]]) -> tuple[int, ...]:
@@ -68,6 +66,7 @@ def generate_candidates(
     atoms: Iterable[Candidate],
     target_dimension: tuple[int, ...],
     max_order: int = _MAX_SUPPORTED_ORDER,
+    coefficient_dimension: tuple[int, ...] | None = None,
 ) -> list[Candidate]:
     """Generate admissible products up to ``max_order`` at one exact dimension.
 
@@ -91,6 +90,11 @@ def generate_candidates(
         len(node.candidate.dimension) != len(target_dimension) for node in nodes
     ):
         raise ValueError("target_dimension must use the candidates' dimension basis")
+    if (
+        coefficient_dimension is not None
+        and len(coefficient_dimension) != len(target_dimension)
+    ):
+        raise ValueError("coefficient_dimension must use the target dimension basis")
 
     generated: dict[tuple[tuple[str, ...], ...], Candidate] = {}
     for order in range(1, max_order + 1):
@@ -107,12 +111,19 @@ def generate_candidates(
 
             display_nodes = tuple(sorted(selection, key=_display_key))
             parents = tuple(node.candidate.name for node in display_nodes)
+            canonical_identity = "product(" + ",".join(
+                identity
+                for key in tree
+                for identity in key
+            ) + ")"
             generated[tree] = Candidate(
                 name="*".join(parents),
                 evaluate=_product_evaluator(display_nodes),
                 dimension=tuple(target_dimension),
                 group=_group(order),
                 parents=parents,
+                coefficient_dimension=coefficient_dimension,
+                canonical_identity=canonical_identity,
             )
 
     return sorted(

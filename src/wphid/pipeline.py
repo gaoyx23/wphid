@@ -1,10 +1,11 @@
 """Leakage-safe end-to-end weak-form discovery pipelines."""
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from typing import Any
 
 import numpy as np
 
+from wphid.dimensions import validate_equation_dimensions
 from wphid.sparse.stlsq import fit_stlsq
 from wphid.types import Candidate, DiscoveryResult, Trajectory
 from wphid.weak.time import project_time_weak
@@ -78,6 +79,7 @@ def _select_trajectories(
 def discover_closed(
     trajectories: Iterable[Trajectory],
     candidates: Sequence[Candidate],
+    target_dimension: tuple[int, ...],
     train_ids: Iterable[str],
     validation_ids: Iterable[str],
     thresholds: Iterable[float],
@@ -101,6 +103,9 @@ def discover_closed(
     names = tuple(candidate.name for candidate in library)
     if len(set(names)) != len(names):
         raise ValueError("candidate names must be unique")
+    equation_target_dimension = validate_equation_dimensions(
+        library, target_dimension
+    )
     if threshold_values.ndim != 1 or threshold_values.size == 0:
         raise ValueError("thresholds must be a non-empty one-dimensional sequence")
     if not np.all(np.isfinite(threshold_values)) or np.any(threshold_values < 0.0):
@@ -179,6 +184,13 @@ def discover_closed(
         "weak_window_by_condition": weak_window_by_condition,
         "weak_stride_by_condition": weak_stride_by_condition,
         "normalized_rmse_definition": _NORMALIZED_RMSE_DEFINITION,
+        "target_dimension": equation_target_dimension,
+        "candidate_dimensions": {
+            candidate.name: candidate.dimension for candidate in library
+        },
+        "coefficient_dimensions": {
+            candidate.name: candidate.coefficient_dimension for candidate in library
+        },
         "weak_rows_by_condition": {
             name: matrix.shape[0] for name, (matrix, _) in matrices.items()
         },
@@ -190,5 +202,202 @@ def discover_closed(
         coefficients=coefficients,
         support=selected_support,
         validation_error=validation_error,
+        diagnostics=diagnostics,
+    )
+
+
+def _profile_training_score(
+    trajectories_by_id: Mapping[str, Trajectory],
+    candidates: Sequence[Candidate],
+    target_dimension: tuple[int, ...],
+    training_ids: tuple[str, ...],
+    thresholds: tuple[float, ...],
+) -> dict[str, Any]:
+    """Select one profile threshold by leave-one-training-condition-out error."""
+    validate_equation_dimensions(candidates, target_dimension)
+    matrices = {
+        condition_id: _condition_matrix(
+            trajectories_by_id[condition_id], candidates
+        )
+        for condition_id in training_ids
+    }
+    threshold_history: list[dict[str, Any]] = []
+    selected_key: tuple[float, float, float] | None = None
+    selected_record: dict[str, Any] | None = None
+    for threshold in thresholds:
+        fold_errors = {}
+        fold_support_sizes = {}
+        for held_out_id in training_ids:
+            fit_ids = tuple(
+                condition_id
+                for condition_id in training_ids
+                if condition_id != held_out_id
+            )
+            train_matrix = np.vstack(
+                [matrices[condition_id][0] for condition_id in fit_ids]
+            )
+            train_target = np.concatenate(
+                [matrices[condition_id][1] for condition_id in fit_ids]
+            )
+            fit = fit_stlsq(
+                train_matrix,
+                train_target,
+                float(threshold),
+            )
+            held_out_matrix, held_out_target = matrices[held_out_id]
+            fold_errors[held_out_id] = _normalized_rmse(
+                held_out_matrix,
+                held_out_target,
+                fit.coefficients,
+            )
+            fold_support_sizes[held_out_id] = int(fit.support.size)
+        cross_validation_error = float(
+            np.median(tuple(fold_errors.values()))
+        )
+        median_support_size = float(
+            np.median(tuple(fold_support_sizes.values()))
+        )
+        selection_score = (
+            cross_validation_error
+            + _SPARSITY_PENALTY * median_support_size
+        )
+        record = {
+            "threshold": float(threshold),
+            "fold_errors": fold_errors,
+            "fold_support_sizes": fold_support_sizes,
+            "cross_validation_error": cross_validation_error,
+            "median_support_size": median_support_size,
+            "selection_score": selection_score,
+        }
+        threshold_history.append(record)
+        key = (
+            selection_score,
+            median_support_size,
+            -float(threshold),
+        )
+        if selected_key is None or key < selected_key:
+            selected_key = key
+            selected_record = record
+    if selected_record is None:
+        raise ValueError("thresholds must be non-empty")
+    return {
+        "selected_training_threshold": selected_record["threshold"],
+        "training_cross_validation_error": selected_record[
+            "cross_validation_error"
+        ],
+        "median_support_size": selected_record["median_support_size"],
+        "selection_score": selected_record["selection_score"],
+        "threshold_history": threshold_history,
+    }
+
+
+def discover_profiled_closed(
+    trajectories: Iterable[Trajectory],
+    candidate_profiles: Mapping[float, Sequence[Candidate]],
+    parameter_name: str,
+    target_dimension: tuple[int, ...],
+    train_ids: Iterable[str],
+    validation_ids: Iterable[str],
+    thresholds: Iterable[float],
+) -> DiscoveryResult:
+    """Select a nonlinear parameter profile on training conditions only.
+
+    The selected candidate profile is then passed to ``discover_closed``,
+    where the ordinary sparse threshold selection may use validation data.
+    Neither validation observations nor truth parameters enter profile
+    selection.
+    """
+    if not isinstance(parameter_name, str) or not parameter_name:
+        raise ValueError("parameter_name must be a non-empty string")
+    observations = tuple(trajectories)
+    training_ids = tuple(train_ids)
+    held_out_ids = tuple(validation_ids)
+    if len(training_ids) < 2:
+        raise ValueError(
+            "parameter profiling requires at least two training IDs"
+        )
+    training, _ = _select_trajectories(
+        observations, training_ids, held_out_ids
+    )
+    trajectories_by_id = {
+        trajectory.condition_id: trajectory for trajectory in training
+    }
+    threshold_values = tuple(float(value) for value in thresholds)
+    if not threshold_values or not np.all(np.isfinite(threshold_values)):
+        raise ValueError("thresholds must contain finite values")
+    if any(value < 0.0 for value in threshold_values):
+        raise ValueError("thresholds must contain non-negative values")
+
+    normalized_profiles = []
+    for raw_parameter, raw_candidates in candidate_profiles.items():
+        parameter = float(raw_parameter)
+        if not np.isfinite(parameter):
+            raise ValueError("profile parameter values must be finite")
+        candidates = tuple(raw_candidates)
+        if not candidates:
+            raise ValueError("every parameter profile needs candidates")
+        names = tuple(candidate.name for candidate in candidates)
+        if len(set(names)) != len(names):
+            raise ValueError("candidate names must be unique within a profile")
+        normalized_profiles.append((parameter, candidates))
+    if not normalized_profiles:
+        raise ValueError("candidate_profiles must be non-empty")
+    normalized_profiles.sort(key=lambda item: item[0])
+
+    profile_history = []
+    selected_key: tuple[float, float, float, float] | None = None
+    selected_parameter = float("nan")
+    selected_candidates: tuple[Candidate, ...] = ()
+    for parameter, candidates in normalized_profiles:
+        profile = _profile_training_score(
+            trajectories_by_id,
+            candidates,
+            target_dimension,
+            training_ids,
+            threshold_values,
+        )
+        profile_record = {
+            "parameter": parameter,
+            "candidate_identities": tuple(
+                candidate.canonical_identity for candidate in candidates
+            ),
+            **profile,
+        }
+        profile_history.append(profile_record)
+        key = (
+            profile["selection_score"],
+            profile["training_cross_validation_error"],
+            profile["median_support_size"],
+            parameter,
+        )
+        if selected_key is None or key < selected_key:
+            selected_key = key
+            selected_parameter = parameter
+            selected_candidates = candidates
+
+    result = discover_closed(
+        trajectories=observations,
+        candidates=selected_candidates,
+        target_dimension=target_dimension,
+        train_ids=training_ids,
+        validation_ids=held_out_ids,
+        thresholds=threshold_values,
+    )
+    diagnostics = {
+        **dict(result.diagnostics),
+        "parameter_name": parameter_name,
+        "selected_parameter": selected_parameter,
+        "parameter_selection_data": "training_conditions_only",
+        "parameter_selection_rule": (
+            "leave_one_training_condition_out_profile_score"
+        ),
+        "parameter_selection_train_ids": training_ids,
+        "parameter_profile_history": profile_history,
+    }
+    return DiscoveryResult(
+        names=result.names,
+        coefficients=result.coefficients,
+        support=result.support,
+        validation_error=result.validation_error,
         diagnostics=diagnostics,
     )

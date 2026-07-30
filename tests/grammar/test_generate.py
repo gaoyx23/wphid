@@ -88,6 +88,8 @@ def test_arrhenius_parameter_changes_evaluator_and_canonical_identity():
     assert arrhenius_1000.name == "arr(T;theta=1000)"
     assert arrhenius_1800.name == "arr(T;theta=1800)"
     assert arrhenius_1000.name != arrhenius_1800.name
+    assert arrhenius_1000.canonical_identity == "arrhenius(T;theta=1000)"
+    assert arrhenius_1800.canonical_identity == "arrhenius(T;theta=1800)"
     np.testing.assert_allclose(arrhenius_1000.evaluate(states), [np.exp(-2.5)])
     np.testing.assert_allclose(arrhenius_1800.evaluate(states), [np.exp(-4.5)])
 
@@ -109,3 +111,55 @@ def test_generated_candidates_preserve_arrhenius_parameter_identity():
     assert "arr(T;theta=1000)*pO2*Df" in names_1000
     assert "arr(T;theta=1800)*pO2*Df" in names_1800
     assert "arr(T;theta=1800)*pO2*Df" not in names_1000
+
+
+def test_arrhenius_identity_uses_one_canonical_shortest_roundtrip_encoding():
+    """Equivalent float spellings must share identity while distinct values differ."""
+    equivalent = [
+        next(
+            candidate
+            for candidate in aging_atoms(value)
+            if candidate.name.startswith("arr(T;")
+        )
+        for value in (1800, 1800.0, np.float64(1800.0))
+    ]
+    distinct = next(
+        candidate
+        for candidate in aging_atoms(1800.0000000000002)
+        if candidate.name.startswith("arr(T;")
+    )
+
+    assert {candidate.canonical_identity for candidate in equivalent} == {
+        "arrhenius(T;theta=1800)"
+    }
+    assert distinct.canonical_identity != equivalent[0].canonical_identity
+
+
+def test_generated_candidate_declares_coefficient_units_for_derivative_target():
+    """Raw pressure and pressure-squared terms need different coefficient units."""
+    from wphid.dimensions import subtract_dimensions
+
+    damage_rate = (0, 0, -1, 0)
+    pressure_coefficient = subtract_dimensions(damage_rate, PRESSURE)
+    pressure_squared_coefficient = subtract_dimensions(
+        damage_rate, PRESSURE_SQUARED
+    )
+    oxygen = generate_candidates(
+        aging_atoms(),
+        PRESSURE,
+        coefficient_dimension=pressure_coefficient,
+    )
+    stress_oxygen = generate_candidates(
+        aging_atoms(),
+        PRESSURE_SQUARED,
+        coefficient_dimension=pressure_squared_coefficient,
+    )
+
+    assert all(
+        candidate.coefficient_dimension == pressure_coefficient
+        for candidate in oxygen
+    )
+    assert all(
+        candidate.coefficient_dimension == pressure_squared_coefficient
+        for candidate in stress_oxygen
+    )
