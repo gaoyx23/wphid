@@ -1,30 +1,68 @@
 {
-  "coefficients": {
-    "arr(T;theta=1800)*pO2": 0.1800950654791471,
-    "arr(T;theta=1800)*pO2*Df": 0.44918109648928445,
-    "arr(T;theta=1800)*pO2*sat(Df)": 0.0,
-    "arr(T;theta=1800)*pO2*sigma": 0.005999210205703619,
-    "pO2": 0.0,
-    "pO2*sigma": 0.0
+  "aggregate": {
+    "all_seeds_pass": false,
+    "gate": {
+      "criterion": "greater_than_or_equal",
+      "metric": "minimum_per_seed_support_f1",
+      "observed": 0.7499999999999999,
+      "pass": false,
+      "threshold": 0.9
+    },
+    "maximum_coefficient_relative_l2_error": 5.057195770515044,
+    "maximum_theta_relative_error": 0.3333333333333333,
+    "mean_support_precision": 0.79,
+    "mean_support_recall": 1.0,
+    "minimum_support_f1": 0.7499999999999999,
+    "passing_seed_count": 2,
+    "reference_validation_normalized_rmse": 0.14707388895401824,
+    "reference_validation_nrmse_definition": "maximum validation NRMSE across canonical E1 noise seeds",
+    "seeds": [
+      101,
+      203,
+      307,
+      401,
+      509
+    ],
+    "support_f1_threshold": 0.9
   },
   "configuration": {
-    "arrhenius_temperature": 1800.0,
-    "candidate_names": [
-      "arr(T;theta=1800)*pO2",
-      "arr(T;theta=1800)*pO2*sigma",
-      "arr(T;theta=1800)*pO2*Df",
-      "pO2",
-      "pO2*sigma",
-      "arr(T;theta=1800)*pO2*sat(Df)"
-    ],
     "condition_ids": [
-      "thermal_hold",
-      "fatigue_rich",
-      "oxygen_rich"
+      "thermal_hot",
+      "fatigue_warm",
+      "fatigue_cool",
+      "fatigue_low_oxygen",
+      "validation_hot_fatigue",
+      "validation_cool_fatigue"
     ],
-    "noise_fraction": 0.0,
-    "normalized_rmse_definition": "RMS(residual)/RMS(target)",
-    "sparsity_penalty_per_term": 0.001,
+    "normalized_rmse_definition": "RMS(weak residual)/RMS(weak target)",
+    "observation_noise": {
+      "applied_to": [
+        "T",
+        "pO2",
+        "sigma",
+        "Df",
+        "Do"
+      ],
+      "distribution": "independent zero-mean Gaussian per field and time sample",
+      "noise_fraction": 0.05,
+      "scale_per_condition_field": "noise_fraction * RMS(clean field)"
+    },
+    "target_dimension": [
+      0,
+      0,
+      -1,
+      0
+    ],
+    "theta_grid": [
+      1200.0,
+      1400.0,
+      1600.0,
+      1800.0,
+      2000.0,
+      2200.0,
+      2400.0
+    ],
+    "theta_selection_data": "training_conditions_only",
     "thresholds": [
       0.0001,
       0.00011986751154646968,
@@ -76,38 +114,1043 @@
       0.5
     ],
     "train_ids": [
-      "thermal_hold",
-      "fatigue_rich"
+      "thermal_hot",
+      "fatigue_warm",
+      "fatigue_cool",
+      "fatigue_low_oxygen"
     ],
     "validation_ids": [
-      "oxygen_rich"
-    ],
-    "weak_stride": 20,
-    "weak_stride_by_condition": {
-      "fatigue_rich": 20,
-      "oxygen_rich": 20,
-      "thermal_hold": 20
-    },
-    "weak_window": 81,
-    "weak_window_by_condition": {
-      "fatigue_rich": 81,
-      "oxygen_rich": 81,
-      "thermal_hold": 81
-    }
+      "validation_hot_fatigue",
+      "validation_cool_fatigue"
+    ]
   },
   "experiment": "e1_closed_library",
-  "normalized_rmse_by_condition": {
-    "fatigue_rich": 9.998806389625204e-05,
-    "oxygen_rich": 0.00025879605792407254,
-    "thermal_hold": 1.799216787249842e-06
-  },
-  "seed": 20260729,
-  "selected_threshold": 0.013333378729599095,
-  "selection_score": 0.0032587960579240727,
-  "support": [
-    "arr(T;theta=1800)*pO2",
-    "arr(T;theta=1800)*pO2*sigma",
-    "arr(T;theta=1800)*pO2*Df"
+  "per_seed": [
+    {
+      "coefficient_metrics": {
+        "relative_absolute_error_by_term": {
+          "arr(T;theta=1800)*pO2": 0.1322514849136633,
+          "arr(T;theta=1800)*pO2*Df": 0.1291527421739639,
+          "arr(T;theta=1800)*pO2*sigma": 0.06830849143130262
+        },
+        "relative_l2_error": 0.12957739077044256
+      },
+      "coefficients": {
+        "arr(T;theta=1800)*pO2": 0.1561947327155406,
+        "arr(T;theta=1800)*pO2*Df": 0.5081187339782838,
+        "arr(T;theta=1800)*pO2*sigma": 0.006409850948587816,
+        "pO2": 0.0,
+        "pO2*sigma": 0.0
+      },
+      "evaluation_true_theta": 1800.0,
+      "expected_support": [
+        "arr(T;theta=1800)*pO2",
+        "arr(T;theta=1800)*pO2*Df",
+        "arr(T;theta=1800)*pO2*sigma"
+      ],
+      "noise_scales": {
+        "fatigue_cool": {
+          "Df": 0.003945526161994012,
+          "Do": 0.0008413165127206557,
+          "T": 16.505467242032427,
+          "pO2": 0.031206630479445524,
+          "sigma": 2.808252190774077
+        },
+        "fatigue_low_oxygen": {
+          "Df": 0.009877489417620301,
+          "Do": 0.0003605567271158743,
+          "T": 18.510969990118355,
+          "pO2": 0.007635270009667439,
+          "sigma": 2.5688007173443625
+        },
+        "fatigue_warm": {
+          "Df": 0.0026547498017112005,
+          "Do": 0.0009117505644510414,
+          "T": 19.75618609518121,
+          "pO2": 0.015274789752890625,
+          "sigma": 2.5581367799659414
+        },
+        "thermal_hot": {
+          "Df": 0.0,
+          "Do": 0.001754026892182967,
+          "T": 22.002833642040333,
+          "pO2": 0.011095706972381597,
+          "sigma": 5.25
+        },
+        "validation_cool_fatigue": {
+          "Df": 0.016975074534355823,
+          "Do": 0.00144152848646442,
+          "T": 17.516599572089884,
+          "pO2": 0.038087124097385114,
+          "sigma": 2.69773441740597
+        },
+        "validation_hot_fatigue": {
+          "Df": 0.012326090245948173,
+          "Do": 0.0021573971129878206,
+          "T": 21.172848872173294,
+          "pO2": 0.024219387257214498,
+          "sigma": 2.6915105968244735
+        }
+      },
+      "normalized_rmse_by_condition": {
+        "fatigue_cool": 0.05928581662902397,
+        "fatigue_low_oxygen": 0.09403226957751346,
+        "fatigue_warm": 0.0787597924821601,
+        "thermal_hot": 0.08893906129034825,
+        "validation_cool_fatigue": 0.13227234511835873,
+        "validation_hot_fatigue": 0.1011260763118113
+      },
+      "parameter_profile_summary": [
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1200),state:pO2)",
+            "product(arrhenius(T;theta=1200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.5,
+          "parameter": 1200.0,
+          "selected_training_threshold": 0.06811670321370596,
+          "selection_score": 0.12293327697856951,
+          "training_cross_validation_error": 0.11943327697856951
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1400),state:pO2)",
+            "product(arrhenius(T;theta=1400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 1400.0,
+          "selected_training_threshold": 0.1406240424274093,
+          "selection_score": 0.11590858158088509,
+          "training_cross_validation_error": 0.11290858158088508
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1600),state:pO2)",
+            "product(arrhenius(T;theta=1600),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1600),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.5,
+          "parameter": 1600.0,
+          "selected_training_threshold": 0.06811670321370596,
+          "selection_score": 0.11087873283974298,
+          "training_cross_validation_error": 0.10737873283974297
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1800),state:pO2)",
+            "product(arrhenius(T;theta=1800),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1800),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 1800.0,
+          "selected_training_threshold": 0.04740789163589092,
+          "selection_score": 0.08704642599021964,
+          "training_cross_validation_error": 0.08404642599021964
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2000),state:pO2)",
+            "product(arrhenius(T;theta=2000),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2000),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.0,
+          "parameter": 2000.0,
+          "selected_training_threshold": 0.04740789163589092,
+          "selection_score": 0.10726356815868367,
+          "training_cross_validation_error": 0.10326356815868366
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2200),state:pO2)",
+            "product(arrhenius(T;theta=2200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.0,
+          "parameter": 2200.0,
+          "selected_training_threshold": 0.04740789163589092,
+          "selection_score": 0.09245759674653607,
+          "training_cross_validation_error": 0.08845759674653607
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2400),state:pO2)",
+            "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.0,
+          "parameter": 2400.0,
+          "selected_training_threshold": 0.04740789163589092,
+          "selection_score": 0.10075633031044126,
+          "training_cross_validation_error": 0.09675633031044126
+        }
+      ],
+      "parameter_selection_data": "training_conditions_only",
+      "parameter_selection_rule": "leave_one_training_condition_out_profile_score",
+      "seed": 101,
+      "selected_theta": 1800.0,
+      "selected_theta_candidate_identities": [
+        "product(arrhenius(T;theta=1800),state:pO2)",
+        "product(arrhenius(T;theta=1800),state:pO2,state:sigma)",
+        "product(arrhenius(T;theta=1800),state:Df,state:pO2)",
+        "product(state:pO2)",
+        "product(state:pO2,state:sigma)"
+      ],
+      "selected_threshold": 0.05682665998058931,
+      "selection_score": 0.11517644984619355,
+      "support": [
+        "arr(T;theta=1800)*pO2",
+        "arr(T;theta=1800)*pO2*Df",
+        "arr(T;theta=1800)*pO2*sigma"
+      ],
+      "support_gate_pass": true,
+      "support_metrics": {
+        "f1": 1.0,
+        "false_negatives": 0,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positives": 3
+      },
+      "theta_relative_error": 0.0,
+      "validation_normalized_rmse": 0.11217644984619354
+    },
+    {
+      "coefficient_metrics": {
+        "relative_absolute_error_by_term": {
+          "arr(T;theta=2400)*pO2": 4.174878567630325,
+          "arr(T;theta=2400)*pO2*Df": 2.4561715142313516,
+          "arr(T;theta=2400)*pO2*sigma": 1.8419961056431446
+        },
+        "relative_l2_error": 2.757555080467612
+      },
+      "coefficients": {
+        "arr(T;theta=2400)*pO2": 0.9314781421734585,
+        "arr(T;theta=2400)*pO2*Df": 1.5552771814041082,
+        "arr(T;theta=2400)*pO2*sigma": 0.017051976633858868,
+        "pO2": 0.00026421230548008236,
+        "pO2*sigma": 1.1345773964322597e-05
+      },
+      "evaluation_true_theta": 1800.0,
+      "expected_support": [
+        "arr(T;theta=2400)*pO2",
+        "arr(T;theta=2400)*pO2*Df",
+        "arr(T;theta=2400)*pO2*sigma"
+      ],
+      "noise_scales": {
+        "fatigue_cool": {
+          "Df": 0.003945526161994012,
+          "Do": 0.0008413165127206557,
+          "T": 16.505467242032427,
+          "pO2": 0.031206630479445524,
+          "sigma": 2.808252190774077
+        },
+        "fatigue_low_oxygen": {
+          "Df": 0.009877489417620301,
+          "Do": 0.0003605567271158743,
+          "T": 18.510969990118355,
+          "pO2": 0.007635270009667439,
+          "sigma": 2.5688007173443625
+        },
+        "fatigue_warm": {
+          "Df": 0.0026547498017112005,
+          "Do": 0.0009117505644510414,
+          "T": 19.75618609518121,
+          "pO2": 0.015274789752890625,
+          "sigma": 2.5581367799659414
+        },
+        "thermal_hot": {
+          "Df": 0.0,
+          "Do": 0.001754026892182967,
+          "T": 22.002833642040333,
+          "pO2": 0.011095706972381597,
+          "sigma": 5.25
+        },
+        "validation_cool_fatigue": {
+          "Df": 0.016975074534355823,
+          "Do": 0.00144152848646442,
+          "T": 17.516599572089884,
+          "pO2": 0.038087124097385114,
+          "sigma": 2.69773441740597
+        },
+        "validation_hot_fatigue": {
+          "Df": 0.012326090245948173,
+          "Do": 0.0021573971129878206,
+          "T": 21.172848872173294,
+          "pO2": 0.024219387257214498,
+          "sigma": 2.6915105968244735
+        }
+      },
+      "normalized_rmse_by_condition": {
+        "fatigue_cool": 0.08971377142257608,
+        "fatigue_low_oxygen": 0.12699528094654625,
+        "fatigue_warm": 0.13546394271441356,
+        "thermal_hot": 0.0927295924956631,
+        "validation_cool_fatigue": 0.1128707764085965,
+        "validation_hot_fatigue": 0.09582998584154238
+      },
+      "parameter_profile_summary": [
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1200),state:pO2)",
+            "product(arrhenius(T;theta=1200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.5,
+          "parameter": 1200.0,
+          "selected_training_threshold": 0.08164979708976347,
+          "selection_score": 0.24542711487540986,
+          "training_cross_validation_error": 0.24192711487540985
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1400),state:pO2)",
+            "product(arrhenius(T;theta=1400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.5,
+          "parameter": 1400.0,
+          "selected_training_threshold": 0.05682665998058931,
+          "selection_score": 0.24947828741850148,
+          "training_cross_validation_error": 0.24597828741850147
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1600),state:pO2)",
+            "product(arrhenius(T;theta=1600),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1600),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 2.5,
+          "parameter": 1600.0,
+          "selected_training_threshold": 0.11731622740236235,
+          "selection_score": 0.23238989310718536,
+          "training_cross_validation_error": 0.22988989310718536
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1800),state:pO2)",
+            "product(arrhenius(T;theta=1800),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1800),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 2.5,
+          "parameter": 1800.0,
+          "selected_training_threshold": 0.16856254029378726,
+          "selection_score": 0.23136197056871,
+          "training_cross_validation_error": 0.22886197056871
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2000),state:pO2)",
+            "product(arrhenius(T;theta=2000),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2000),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 2.5,
+          "parameter": 2000.0,
+          "selected_training_threshold": 0.20205172244967803,
+          "selection_score": 0.233802184873109,
+          "training_cross_validation_error": 0.231302184873109
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2200),state:pO2)",
+            "product(arrhenius(T;theta=2200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 2200.0,
+          "selected_training_threshold": 0.09787157995424128,
+          "selection_score": 0.22965910387200505,
+          "training_cross_validation_error": 0.22665910387200505
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2400),state:pO2)",
+            "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 2400.0,
+          "selected_training_threshold": 0.1406240424274093,
+          "selection_score": 0.2246599300230263,
+          "training_cross_validation_error": 0.2216599300230263
+        }
+      ],
+      "parameter_selection_data": "training_conditions_only",
+      "parameter_selection_rule": "leave_one_training_condition_out_profile_score",
+      "seed": 203,
+      "selected_theta": 2400.0,
+      "selected_theta_candidate_identities": [
+        "product(arrhenius(T;theta=2400),state:pO2)",
+        "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+        "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+        "product(state:pO2)",
+        "product(state:pO2,state:sigma)"
+      ],
+      "selected_threshold": 0.03299496427930684,
+      "selection_score": 0.10681316470571532,
+      "support": [
+        "arr(T;theta=2400)*pO2",
+        "arr(T;theta=2400)*pO2*Df",
+        "arr(T;theta=2400)*pO2*sigma",
+        "pO2",
+        "pO2*sigma"
+      ],
+      "support_gate_pass": false,
+      "support_metrics": {
+        "f1": 0.7499999999999999,
+        "false_negatives": 0,
+        "false_positives": 2,
+        "precision": 0.6,
+        "recall": 1.0,
+        "true_positives": 3
+      },
+      "theta_relative_error": 0.3333333333333333,
+      "validation_normalized_rmse": 0.10181316470571532
+    },
+    {
+      "coefficient_metrics": {
+        "relative_absolute_error_by_term": {
+          "arr(T;theta=1800)*pO2": 0.05493860746537112,
+          "arr(T;theta=1800)*pO2*Df": 0.2891583957335136,
+          "arr(T;theta=1800)*pO2*sigma": 0.01388168174375334
+        },
+        "relative_l2_error": 0.2692304581745908
+      },
+      "coefficients": {
+        "arr(T;theta=1800)*pO2": 0.1701110506562332,
+        "arr(T;theta=1800)*pO2*Df": 0.3198787219199189,
+        "arr(T;theta=1800)*pO2*sigma": 0.00608329009046252,
+        "pO2": 0.0,
+        "pO2*sigma": 0.0
+      },
+      "evaluation_true_theta": 1800.0,
+      "expected_support": [
+        "arr(T;theta=1800)*pO2",
+        "arr(T;theta=1800)*pO2*Df",
+        "arr(T;theta=1800)*pO2*sigma"
+      ],
+      "noise_scales": {
+        "fatigue_cool": {
+          "Df": 0.003945526161994012,
+          "Do": 0.0008413165127206557,
+          "T": 16.505467242032427,
+          "pO2": 0.031206630479445524,
+          "sigma": 2.808252190774077
+        },
+        "fatigue_low_oxygen": {
+          "Df": 0.009877489417620301,
+          "Do": 0.0003605567271158743,
+          "T": 18.510969990118355,
+          "pO2": 0.007635270009667439,
+          "sigma": 2.5688007173443625
+        },
+        "fatigue_warm": {
+          "Df": 0.0026547498017112005,
+          "Do": 0.0009117505644510414,
+          "T": 19.75618609518121,
+          "pO2": 0.015274789752890625,
+          "sigma": 2.5581367799659414
+        },
+        "thermal_hot": {
+          "Df": 0.0,
+          "Do": 0.001754026892182967,
+          "T": 22.002833642040333,
+          "pO2": 0.011095706972381597,
+          "sigma": 5.25
+        },
+        "validation_cool_fatigue": {
+          "Df": 0.016975074534355823,
+          "Do": 0.00144152848646442,
+          "T": 17.516599572089884,
+          "pO2": 0.038087124097385114,
+          "sigma": 2.69773441740597
+        },
+        "validation_hot_fatigue": {
+          "Df": 0.012326090245948173,
+          "Do": 0.0021573971129878206,
+          "T": 21.172848872173294,
+          "pO2": 0.024219387257214498,
+          "sigma": 2.6915105968244735
+        }
+      },
+      "normalized_rmse_by_condition": {
+        "fatigue_cool": 0.07503664343120055,
+        "fatigue_low_oxygen": 0.0943440511766722,
+        "fatigue_warm": 0.06935497262765093,
+        "thermal_hot": 0.11704878504831184,
+        "validation_cool_fatigue": 0.11698570352350715,
+        "validation_hot_fatigue": 0.09976235580292442
+      },
+      "parameter_profile_summary": [
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1200),state:pO2)",
+            "product(arrhenius(T;theta=1200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 1200.0,
+          "selected_training_threshold": 0.09787157995424128,
+          "selection_score": 0.15169934552716835,
+          "training_cross_validation_error": 0.14869934552716835
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1400),state:pO2)",
+            "product(arrhenius(T;theta=1400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 1400.0,
+          "selected_training_threshold": 0.09787157995424128,
+          "selection_score": 0.1479068561799915,
+          "training_cross_validation_error": 0.1449068561799915
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1600),state:pO2)",
+            "product(arrhenius(T;theta=1600),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1600),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 1.5,
+          "parameter": 1600.0,
+          "selected_training_threshold": 0.11731622740236235,
+          "selection_score": 0.1411848436766029,
+          "training_cross_validation_error": 0.1396848436766029
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1800),state:pO2)",
+            "product(arrhenius(T;theta=1800),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1800),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.5,
+          "parameter": 1800.0,
+          "selected_training_threshold": 0.01915769232547889,
+          "selection_score": 0.13169554224199811,
+          "training_cross_validation_error": 0.1271955422419981
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2000),state:pO2)",
+            "product(arrhenius(T;theta=2000),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2000),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.5,
+          "parameter": 2000.0,
+          "selected_training_threshold": 0.02296384906028052,
+          "selection_score": 0.13232205773687636,
+          "training_cross_validation_error": 0.12782205773687635
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2200),state:pO2)",
+            "product(arrhenius(T;theta=2200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 2200.0,
+          "selected_training_threshold": 0.02296384906028052,
+          "selection_score": 0.1395596422920856,
+          "training_cross_validation_error": 0.13455964229208559
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2400),state:pO2)",
+            "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 2400.0,
+          "selected_training_threshold": 0.02296384906028052,
+          "selection_score": 0.14605173957185244,
+          "training_cross_validation_error": 0.14105173957185244
+        }
+      ],
+      "parameter_selection_data": "training_conditions_only",
+      "parameter_selection_rule": "leave_one_training_condition_out_profile_score",
+      "seed": 307,
+      "selected_theta": 1800.0,
+      "selected_theta_candidate_identities": [
+        "product(arrhenius(T;theta=1800),state:pO2)",
+        "product(arrhenius(T;theta=1800),state:pO2,state:sigma)",
+        "product(arrhenius(T;theta=1800),state:Df,state:pO2)",
+        "product(state:pO2)",
+        "product(state:pO2,state:sigma)"
+      ],
+      "selected_threshold": 0.03955024261725167,
+      "selection_score": 0.10859030510760168,
+      "support": [
+        "arr(T;theta=1800)*pO2",
+        "arr(T;theta=1800)*pO2*Df",
+        "arr(T;theta=1800)*pO2*sigma"
+      ],
+      "support_gate_pass": true,
+      "support_metrics": {
+        "f1": 1.0,
+        "false_negatives": 0,
+        "false_positives": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "true_positives": 3
+      },
+      "theta_relative_error": 0.0,
+      "validation_normalized_rmse": 0.10559030510760167
+    },
+    {
+      "coefficient_metrics": {
+        "relative_absolute_error_by_term": {
+          "arr(T;theta=2400)*pO2": 2.652254558741112,
+          "arr(T;theta=2400)*pO2*Df": 3.8387949961307135,
+          "arr(T;theta=2400)*pO2*sigma": 2.6692377277843744
+        },
+        "relative_l2_error": 3.697703805197299
+      },
+      "coefficients": {
+        "arr(T;theta=2400)*pO2": 0.6574058205734001,
+        "arr(T;theta=2400)*pO2*Df": 2.177457748258821,
+        "arr(T;theta=2400)*pO2*sigma": 0.022015426366706246,
+        "pO2": 0.0007485581234733217,
+        "pO2*sigma": 0.0
+      },
+      "evaluation_true_theta": 1800.0,
+      "expected_support": [
+        "arr(T;theta=2400)*pO2",
+        "arr(T;theta=2400)*pO2*Df",
+        "arr(T;theta=2400)*pO2*sigma"
+      ],
+      "noise_scales": {
+        "fatigue_cool": {
+          "Df": 0.003945526161994012,
+          "Do": 0.0008413165127206557,
+          "T": 16.505467242032427,
+          "pO2": 0.031206630479445524,
+          "sigma": 2.808252190774077
+        },
+        "fatigue_low_oxygen": {
+          "Df": 0.009877489417620301,
+          "Do": 0.0003605567271158743,
+          "T": 18.510969990118355,
+          "pO2": 0.007635270009667439,
+          "sigma": 2.5688007173443625
+        },
+        "fatigue_warm": {
+          "Df": 0.0026547498017112005,
+          "Do": 0.0009117505644510414,
+          "T": 19.75618609518121,
+          "pO2": 0.015274789752890625,
+          "sigma": 2.5581367799659414
+        },
+        "thermal_hot": {
+          "Df": 0.0,
+          "Do": 0.001754026892182967,
+          "T": 22.002833642040333,
+          "pO2": 0.011095706972381597,
+          "sigma": 5.25
+        },
+        "validation_cool_fatigue": {
+          "Df": 0.016975074534355823,
+          "Do": 0.00144152848646442,
+          "T": 17.516599572089884,
+          "pO2": 0.038087124097385114,
+          "sigma": 2.69773441740597
+        },
+        "validation_hot_fatigue": {
+          "Df": 0.012326090245948173,
+          "Do": 0.0021573971129878206,
+          "T": 21.172848872173294,
+          "pO2": 0.024219387257214498,
+          "sigma": 2.6915105968244735
+        }
+      },
+      "normalized_rmse_by_condition": {
+        "fatigue_cool": 0.08236030449225505,
+        "fatigue_low_oxygen": 0.11431696232516322,
+        "fatigue_warm": 0.07752513863432281,
+        "thermal_hot": 0.08884217285468238,
+        "validation_cool_fatigue": 0.12946679682772375,
+        "validation_hot_fatigue": 0.1547838741421922
+      },
+      "parameter_profile_summary": [
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1200),state:pO2)",
+            "product(arrhenius(T;theta=1200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 1200.0,
+          "selected_training_threshold": 0.16856254029378726,
+          "selection_score": 0.1439036403243325,
+          "training_cross_validation_error": 0.1409036403243325
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1400),state:pO2)",
+            "product(arrhenius(T;theta=1400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 3.0,
+          "parameter": 1400.0,
+          "selected_training_threshold": 0.16856254029378726,
+          "selection_score": 0.12742309331366225,
+          "training_cross_validation_error": 0.12442309331366225
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1600),state:pO2)",
+            "product(arrhenius(T;theta=1600),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1600),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 1600.0,
+          "selected_training_threshold": 0.00645853856909903,
+          "selection_score": 0.1287767488007764,
+          "training_cross_validation_error": 0.12377674880077641
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1800),state:pO2)",
+            "product(arrhenius(T;theta=1800),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1800),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 1800.0,
+          "selected_training_threshold": 0.007741689465047977,
+          "selection_score": 0.11552709012969972,
+          "training_cross_validation_error": 0.11052709012969972
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2000),state:pO2)",
+            "product(arrhenius(T;theta=2000),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2000),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.5,
+          "parameter": 2000.0,
+          "selected_training_threshold": 0.03955024261725167,
+          "selection_score": 0.12114177561950912,
+          "training_cross_validation_error": 0.11664177561950911
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2200),state:pO2)",
+            "product(arrhenius(T;theta=2200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 2200.0,
+          "selected_training_threshold": 0.02752619442384562,
+          "selection_score": 0.11947457746774268,
+          "training_cross_validation_error": 0.11447457746774267
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2400),state:pO2)",
+            "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.0,
+          "parameter": 2400.0,
+          "selected_training_threshold": 0.04740789163589092,
+          "selection_score": 0.10814776600673462,
+          "training_cross_validation_error": 0.10414776600673462
+        }
+      ],
+      "parameter_selection_data": "training_conditions_only",
+      "parameter_selection_rule": "leave_one_training_condition_out_profile_score",
+      "seed": 401,
+      "selected_theta": 2400.0,
+      "selected_theta_candidate_identities": [
+        "product(arrhenius(T;theta=2400),state:pO2)",
+        "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+        "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+        "product(state:pO2)",
+        "product(state:pO2,state:sigma)"
+      ],
+      "selected_threshold": 0.05682665998058931,
+      "selection_score": 0.15107388895401824,
+      "support": [
+        "arr(T;theta=2400)*pO2",
+        "arr(T;theta=2400)*pO2*Df",
+        "arr(T;theta=2400)*pO2*sigma",
+        "pO2"
+      ],
+      "support_gate_pass": false,
+      "support_metrics": {
+        "f1": 0.8571428571428571,
+        "false_negatives": 0,
+        "false_positives": 1,
+        "precision": 0.75,
+        "recall": 1.0,
+        "true_positives": 3
+      },
+      "theta_relative_error": 0.3333333333333333,
+      "validation_normalized_rmse": 0.14707388895401824
+    },
+    {
+      "coefficient_metrics": {
+        "relative_absolute_error_by_term": {
+          "arr(T;theta=2400)*pO2": 2.933636541932922,
+          "arr(T;theta=2400)*pO2*Df": 5.3191857732180985,
+          "arr(T;theta=2400)*pO2*sigma": 2.464056353425058
+        },
+        "relative_l2_error": 5.057195770515044
+      },
+      "coefficients": {
+        "arr(T;theta=2400)*pO2": 0.708054577547926,
+        "arr(T;theta=2400)*pO2*Df": 2.8436335979481444,
+        "arr(T;theta=2400)*pO2*sigma": 0.020784338120550347,
+        "pO2": 0.0004886698520908894,
+        "pO2*sigma": 4.938998583940701e-06
+      },
+      "evaluation_true_theta": 1800.0,
+      "expected_support": [
+        "arr(T;theta=2400)*pO2",
+        "arr(T;theta=2400)*pO2*Df",
+        "arr(T;theta=2400)*pO2*sigma"
+      ],
+      "noise_scales": {
+        "fatigue_cool": {
+          "Df": 0.003945526161994012,
+          "Do": 0.0008413165127206557,
+          "T": 16.505467242032427,
+          "pO2": 0.031206630479445524,
+          "sigma": 2.808252190774077
+        },
+        "fatigue_low_oxygen": {
+          "Df": 0.009877489417620301,
+          "Do": 0.0003605567271158743,
+          "T": 18.510969990118355,
+          "pO2": 0.007635270009667439,
+          "sigma": 2.5688007173443625
+        },
+        "fatigue_warm": {
+          "Df": 0.0026547498017112005,
+          "Do": 0.0009117505644510414,
+          "T": 19.75618609518121,
+          "pO2": 0.015274789752890625,
+          "sigma": 2.5581367799659414
+        },
+        "thermal_hot": {
+          "Df": 0.0,
+          "Do": 0.001754026892182967,
+          "T": 22.002833642040333,
+          "pO2": 0.011095706972381597,
+          "sigma": 5.25
+        },
+        "validation_cool_fatigue": {
+          "Df": 0.016975074534355823,
+          "Do": 0.00144152848646442,
+          "T": 17.516599572089884,
+          "pO2": 0.038087124097385114,
+          "sigma": 2.69773441740597
+        },
+        "validation_hot_fatigue": {
+          "Df": 0.012326090245948173,
+          "Do": 0.0021573971129878206,
+          "T": 21.172848872173294,
+          "pO2": 0.024219387257214498,
+          "sigma": 2.6915105968244735
+        }
+      },
+      "normalized_rmse_by_condition": {
+        "fatigue_cool": 0.12055358567589826,
+        "fatigue_low_oxygen": 0.10567129118598957,
+        "fatigue_warm": 0.10025690790944998,
+        "thermal_hot": 0.09840718851562456,
+        "validation_cool_fatigue": 0.08364027479051997,
+        "validation_hot_fatigue": 0.16655706677216917
+      },
+      "parameter_profile_summary": [
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1200),state:pO2)",
+            "product(arrhenius(T;theta=1200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.5,
+          "parameter": 1200.0,
+          "selected_training_threshold": 0.05682665998058931,
+          "selection_score": 0.13697286058798044,
+          "training_cross_validation_error": 0.13247286058798044
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1400),state:pO2)",
+            "product(arrhenius(T;theta=1400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 4.0,
+          "parameter": 1400.0,
+          "selected_training_threshold": 0.05682665998058931,
+          "selection_score": 0.13425028953662366,
+          "training_cross_validation_error": 0.13025028953662365
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1600),state:pO2)",
+            "product(arrhenius(T;theta=1600),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1600),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 1600.0,
+          "selected_training_threshold": 0.015982389288236726,
+          "selection_score": 0.13775519886851567,
+          "training_cross_validation_error": 0.13275519886851567
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=1800),state:pO2)",
+            "product(arrhenius(T;theta=1800),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=1800),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 1800.0,
+          "selected_training_threshold": 0.04740789163589092,
+          "selection_score": 0.13854190741919284,
+          "training_cross_validation_error": 0.13354190741919283
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2000),state:pO2)",
+            "product(arrhenius(T;theta=2000),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2000),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 2000.0,
+          "selected_training_threshold": 0.06811670321370596,
+          "selection_score": 0.1361513243485222,
+          "training_cross_validation_error": 0.1311513243485222
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2200),state:pO2)",
+            "product(arrhenius(T;theta=2200),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2200),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 2200.0,
+          "selected_training_threshold": 0.011123429991645463,
+          "selection_score": 0.13486986052731217,
+          "training_cross_validation_error": 0.12986986052731217
+        },
+        {
+          "candidate_identities": [
+            "product(arrhenius(T;theta=2400),state:pO2)",
+            "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+            "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+            "product(state:pO2)",
+            "product(state:pO2,state:sigma)"
+          ],
+          "median_support_size": 5.0,
+          "parameter": 2400.0,
+          "selected_training_threshold": 0.01915769232547889,
+          "selection_score": 0.1307524310686741,
+          "training_cross_validation_error": 0.1257524310686741
+        }
+      ],
+      "parameter_selection_data": "training_conditions_only",
+      "parameter_selection_rule": "leave_one_training_condition_out_profile_score",
+      "seed": 509,
+      "selected_theta": 2400.0,
+      "selected_theta_candidate_identities": [
+        "product(arrhenius(T;theta=2400),state:pO2)",
+        "product(arrhenius(T;theta=2400),state:pO2,state:sigma)",
+        "product(arrhenius(T;theta=2400),state:Df,state:pO2)",
+        "product(state:pO2)",
+        "product(state:pO2,state:sigma)"
+      ],
+      "selected_threshold": 0.05682665998058931,
+      "selection_score": 0.1495905453385198,
+      "support": [
+        "arr(T;theta=2400)*pO2",
+        "arr(T;theta=2400)*pO2*Df",
+        "arr(T;theta=2400)*pO2*sigma",
+        "pO2",
+        "pO2*sigma"
+      ],
+      "support_gate_pass": false,
+      "support_metrics": {
+        "f1": 0.7499999999999999,
+        "false_negatives": 0,
+        "false_positives": 2,
+        "precision": 0.6,
+        "recall": 1.0,
+        "true_positives": 3
+      },
+      "theta_relative_error": 0.3333333333333333,
+      "validation_normalized_rmse": 0.14459054533851978
+    }
   ],
-  "validation_normalized_rmse": 0.00025879605792407254
+  "provenance_id": 20260729
 }

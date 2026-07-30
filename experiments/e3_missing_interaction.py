@@ -11,25 +11,31 @@ for import_root in (PROJECT_ROOT, PROJECT_ROOT / "src"):
         sys.path.insert(0, import_path)
 
 from experiments.e3_missing_interaction_core import (
+    DEFAULT_E1_METRICS_PATH,
     DEFAULT_OUTPUT_DIR,
     EXPECTED_MISSING_INTERACTION,
     NOISE_FRACTION,
     SEEDS,
     TRAIN_IDS,
+    TEST_IDS,
     VALIDATION_IDS,
     run_experiment,
+    load_e1_reference,
     run_seed,
 )
 
 
 __all__ = [
+    "DEFAULT_E1_METRICS_PATH",
     "DEFAULT_OUTPUT_DIR",
     "EXPECTED_MISSING_INTERACTION",
     "NOISE_FRACTION",
     "SEEDS",
     "TRAIN_IDS",
+    "TEST_IDS",
     "VALIDATION_IDS",
     "run_experiment",
+    "load_e1_reference",
     "run_seed",
 ]
 
@@ -44,4 +50,6 @@ if __name__ == "__main__":
         f"{aggregate['missing_interaction_detection_rate']:.3f}",
         "max false interactions:",
         aggregate["maximum_false_interactions"],
+        "overall phase:",
+        aggregate["overall_phase_decision"],
     )

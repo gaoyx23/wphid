@@ -287,7 +287,8 @@ def _validate_discovery_inputs(
     observations: Sequence[Trajectory],
     current_candidates: Sequence[Candidate],
     training_ids: Sequence[str],
-    held_out_ids: Sequence[str],
+    validation_ids: Sequence[str],
+    test_ids: Sequence[str],
     threshold_values: np.ndarray,
 ) -> dict[str, Trajectory]:
     if not observations:
@@ -298,22 +299,32 @@ def _validate_discovery_inputs(
         raise ValueError(
             "cross-condition expansion requires at least two training IDs"
         )
-    if not held_out_ids:
-        raise ValueError("validation_ids must be non-empty")
-    if len(set(training_ids)) != len(training_ids):
-        raise ValueError("train_ids must contain unique condition IDs")
-    if len(set(held_out_ids)) != len(held_out_ids):
-        raise ValueError("validation_ids must contain unique condition IDs")
-    if set(training_ids) & set(held_out_ids):
-        raise ValueError("training and validation condition IDs must be disjoint")
+    roles = {
+        "train_ids": training_ids,
+        "validation_ids": validation_ids,
+        "test_ids": test_ids,
+    }
+    for role, condition_ids in roles.items():
+        if not condition_ids:
+            raise ValueError(f"{role} must be non-empty")
+        if len(set(condition_ids)) != len(condition_ids):
+            raise ValueError(f"{role} must contain unique condition IDs")
+    role_sets = [set(condition_ids) for condition_ids in roles.values()]
+    if any(
+        left & right
+        for index, left in enumerate(role_sets)
+        for right in role_sets[index + 1 :]
+    ):
+        raise ValueError(
+            "train_ids, validation_ids, and test_ids must be pairwise disjoint"
+        )
     trajectories_by_id = {
         trajectory.condition_id: trajectory for trajectory in observations
     }
     if len(trajectories_by_id) != len(observations):
         raise ValueError("trajectory condition IDs must be unique")
-    missing = (set(training_ids) | set(held_out_ids)).difference(
-        trajectories_by_id
-    )
+    requested_ids = set().union(*role_sets)
+    missing = requested_ids.difference(trajectories_by_id)
     if missing:
         raise ValueError(f"unknown condition IDs: {', '.join(sorted(missing))}")
     names = [candidate.name for candidate in current_candidates]
@@ -338,14 +349,17 @@ def discover_with_expansion(
     expansion_candidates: Sequence[Candidate],
     train_ids: Iterable[str],
     validation_ids: Iterable[str],
+    test_ids: Iterable[str],
+    target_dimension: tuple[int, ...],
     thresholds: Iterable[float],
     max_rounds: int = 2,
 ) -> DiscoveryResult:
-    """Fit and rank on training data, then validate controlled expansions.
+    """Screen on training, admit from a finite pool, then test once.
 
-    Every round constructs its weak residual from a sparse base fit selected
-    only on training rows. Held-out targets are first consulted after residual
-    ranking, when stable candidates are trialled for admission.
+    Every residual and stability score uses training conditions only.
+    Validation targets are consulted only for finite-pool admission and sparse
+    threshold selection. Test targets are first read after all model choices
+    and coefficients are frozen.
     """
     if not isinstance(max_rounds, (int, np.integer)) or max_rounds < 0:
         raise ValueError("max_rounds must be a non-negative integer")
@@ -355,12 +369,14 @@ def discover_with_expansion(
     available_candidates = list(expansion_candidates)
     training_ids = tuple(train_ids)
     held_out_ids = tuple(validation_ids)
+    independent_test_ids = tuple(test_ids)
     threshold_array = np.asarray(tuple(thresholds), dtype=float)
     trajectories_by_id = _validate_discovery_inputs(
         observations,
         current_candidates,
         training_ids,
         held_out_ids,
+        independent_test_ids,
         threshold_array,
     )
     threshold_values = tuple(float(value) for value in threshold_array)
@@ -417,6 +433,7 @@ def discover_with_expansion(
             current_result = discover_closed(
                 trajectories=observations,
                 candidates=current_candidates,
+                target_dimension=target_dimension,
                 train_ids=training_ids,
                 validation_ids=held_out_ids,
                 thresholds=threshold_values,
@@ -440,6 +457,7 @@ def discover_with_expansion(
             trial_result = discover_closed(
                 trajectories=observations,
                 candidates=trial_candidates,
+                target_dimension=target_dimension,
                 train_ids=training_ids,
                 validation_ids=held_out_ids,
                 thresholds=threshold_values,
@@ -521,8 +539,16 @@ def discover_with_expansion(
         rounds.append(
             {
                 "round": round_index,
+                "stage_name": "training-only residual screening",
                 "complexity_layer": layer,
                 "residual_condition_ids": training_ids,
+                "stability_thresholds": {
+                    "minimum_absolute_correlation": _MIN_ABSOLUTE_CORRELATION,
+                    "minimum_sign_consistency": _MIN_SIGN_CONSISTENCY,
+                    "minimum_supporting_condition_count": (
+                        len(training_ids) // 2 + 1
+                    ),
+                },
                 "residual_base_fit": {
                     "selection_data": "training_conditions_only",
                     "selection_rule": _RESIDUAL_FIT_SELECTION_RULE,
@@ -540,6 +566,16 @@ def discover_with_expansion(
                     admitted_validation_reduction
                 ),
                 "minimum_validation_error_reduction": minimum_reduction,
+                "validation_admission": {
+                    "stage_name": "finite-pool validation admission",
+                    "condition_ids": held_out_ids,
+                    "rule": (
+                        "candidate_selected_and_validation_error_reduction_"
+                        "exceeds_one_percent_of_current_error"
+                    ),
+                    "minimum_error_reduction": minimum_reduction,
+                    "admitted_candidate": admitted_name,
+                },
             }
         )
 
@@ -554,6 +590,7 @@ def discover_with_expansion(
         current_result = discover_closed(
             trajectories=observations,
             candidates=current_candidates,
+            target_dimension=target_dimension,
             train_ids=training_ids,
             validation_ids=held_out_ids,
             thresholds=threshold_values,
@@ -568,8 +605,34 @@ def discover_with_expansion(
         current_candidates,
         current_result.coefficients,
     )
+    test_normalized_rmse = _training_error(
+        trajectories_by_id,
+        independent_test_ids,
+        current_candidates,
+        current_result.coefficients,
+    )
     diagnostics = {
         **dict(current_result.diagnostics),
+        "stage_names": (
+            "training-only residual screening",
+            "finite-pool validation admission",
+            "independent test evaluation",
+        ),
+        "condition_roles": {
+            "residual_screening_and_training": training_ids,
+            "finite_pool_validation_admission": held_out_ids,
+            "independent_test_evaluation": independent_test_ids,
+        },
+        "finite_pool": tuple(
+            candidate.name for candidate in expansion_candidates
+        ),
+        "admission_name": "finite-pool validation admission",
+        "claim_boundary": (
+            "controlled finite-pool evidence; not unrestricted grammar discovery"
+        ),
+        "test_ids": independent_test_ids,
+        "test_normalized_rmse": test_normalized_rmse,
+        "test_evaluation_data": "independent_test_conditions_only",
         "fixed_library_validation_error": fixed_validation_error,
         "fixed_library_training_error": fixed_training_fit.error,
         "fixed_residual_fit_selected_threshold": (

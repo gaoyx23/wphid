@@ -1,24 +1,120 @@
 {
   "aggregate": {
-    "all_seeds_pass": true,
-    "maximum_expanded_nrmse_over_task6_e1": 0.9204354692018799,
+    "all_seeds_pass": false,
+    "e1_gate_pass": false,
+    "e1_reference_validation_normalized_rmse": 0.14707388895401824,
+    "e3_gate_pass": false,
+    "maximum_expanded_test_nrmse_over_e1_reference": 0.5142266311172622,
     "maximum_false_interactions": 0,
-    "missing_interaction_detection_rate": 1.0,
-    "passing_seed_count": 5,
+    "missing_interaction_detection_rate": 0.6,
+    "overall_phase_decision": "NO-GO",
+    "overall_phase_decision_rule": "E1 and E3 must both pass; E3 cannot override E1",
+    "passing_seed_count": 3,
     "seeds": [
       11,
       23,
       47,
       89,
       131
+    ]
+  },
+  "configuration": {
+    "condition_roles": {
+      "finite_pool_validation_admission": [
+        "fatigue_validation"
+      ],
+      "independent_test_evaluation": [
+        "fatigue_test"
+      ],
+      "residual_screening_and_training": [
+        "fatigue_warm",
+        "fatigue_oxygen"
+      ]
+    },
+    "target_dimension": [
+      0,
+      0,
+      -1,
+      0
     ],
-    "task6_e1_validation_normalized_rmse": 0.00025879605792407254
+    "theta_grid": [
+      1200.0,
+      1400.0,
+      1600.0,
+      1800.0,
+      2000.0,
+      2200.0,
+      2400.0
+    ],
+    "thresholds": [
+      0.0001,
+      0.00011986751154646968,
+      0.0001436822032434304,
+      0.00017222828156304078,
+      0.0002064457552888642,
+      0.00024746138955807583,
+      0.00029662580970158086,
+      0.00035555797669385123,
+      0.00042619849876789604,
+      0.0005108735347214882,
+      0.0006123713932201377,
+      0.0007340343504754256,
+      0.0008798687098111846,
+      0.0010546767273266944,
+      0.0012642147479062537,
+      0.0015153827589186996,
+      0.001816451603520083,
+      0.002177335335585469,
+      0.0026099176847882762,
+      0.0031284433821669407,
+      0.0037499872323437243,
+      0.004495016378720752,
+      0.005388064276778795,
+      0.00645853856909903,
+      0.007741689465047977,
+      0.009279770513408201,
+      0.011123429991645463,
+      0.013333378729599095,
+      0.015982389288236726,
+      0.01915769232547889,
+      0.02296384906028052,
+      0.02752619442384562,
+      0.03299496427930684,
+      0.03955024261725167,
+      0.04740789163589092,
+      0.05682665998058931,
+      0.06811670321370596,
+      0.08164979708976347,
+      0.09787157995424128,
+      0.11731622740236235,
+      0.1406240424274093,
+      0.16856254029378726,
+      0.20205172244967803,
+      0.24219437173720867,
+      0.290312366506998,
+      0.3479902094436052,
+      0.4171272044853974,
+      0.5
+    ]
+  },
+  "e1_reference": {
+    "all_seeds_pass": false,
+    "gate": {
+      "criterion": "greater_than_or_equal",
+      "metric": "minimum_per_seed_support_f1",
+      "observed": 0.7499999999999999,
+      "pass": false,
+      "threshold": 0.9
+    },
+    "gate_pass": false,
+    "reference_validation_normalized_rmse": 0.14707388895401824,
+    "reference_validation_nrmse_definition": "maximum validation NRMSE across canonical E1 noise seeds",
+    "source": "artifacts/e1_closed_library/metrics.json"
   },
   "experiment": "e3_missing_interaction",
   "per_seed": [
     {
       "configuration": {
-        "arrhenius_temperature": 1800.0,
         "base_candidate_names": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
@@ -26,6 +122,18 @@
           "pO2*sigma",
           "arr(T;theta=1800)*pO2*sat(Df)"
         ],
+        "condition_roles": {
+          "finite_pool_validation_admission": [
+            "fatigue_validation"
+          ],
+          "independent_test_evaluation": [
+            "fatigue_test"
+          ],
+          "residual_screening_and_training": [
+            "fatigue_warm",
+            "fatigue_oxygen"
+          ]
+        },
         "expansion_candidate_names": [
           "arr(T;theta=1800)*pO2*Df",
           "arr(T;theta=1800)*sigma*Df",
@@ -45,63 +153,16 @@
           "noise_fraction": 0.0001,
           "scale_per_condition": "noise_fraction * max(abs(clean Do))"
         },
-        "thresholds": [
-          0.0001,
-          0.00011986751154646968,
-          0.0001436822032434304,
-          0.00017222828156304078,
-          0.0002064457552888642,
-          0.00024746138955807583,
-          0.00029662580970158086,
-          0.00035555797669385123,
-          0.00042619849876789604,
-          0.0005108735347214882,
-          0.0006123713932201377,
-          0.0007340343504754256,
-          0.0008798687098111846,
-          0.0010546767273266944,
-          0.0012642147479062537,
-          0.0015153827589186996,
-          0.001816451603520083,
-          0.002177335335585469,
-          0.0026099176847882762,
-          0.0031284433821669407,
-          0.0037499872323437243,
-          0.004495016378720752,
-          0.005388064276778795,
-          0.00645853856909903,
-          0.007741689465047977,
-          0.009279770513408201,
-          0.011123429991645463,
-          0.013333378729599095,
-          0.015982389288236726,
-          0.01915769232547889,
-          0.02296384906028052,
-          0.02752619442384562,
-          0.03299496427930684,
-          0.03955024261725167,
-          0.04740789163589092,
-          0.05682665998058931,
-          0.06811670321370596,
-          0.08164979708976347,
-          0.09787157995424128,
-          0.11731622740236235,
-          0.1406240424274093,
-          0.16856254029378726,
-          0.20205172244967803,
-          0.24219437173720867,
-          0.290312366506998,
-          0.3479902094436052,
-          0.4171272044853974,
-          0.5
-        ],
-        "train_ids": [
-          "fatigue_warm",
-          "fatigue_oxygen"
-        ],
-        "validation_ids": [
-          "fatigue_validation"
+        "target_dimension": [
+          0,
+          0,
+          -1,
+          0
         ]
+      },
+      "evaluation_target": {
+        "expected_missing_interaction": "arr(T;theta=1800)*pO2*Df",
+        "use": "post-discovery evaluation only; not supplied to discovery"
       },
       "expanded_library": {
         "candidate_names": [
@@ -120,19 +181,34 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.24219437173720867,
         "support": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*Df"
         ],
-        "validation_normalized_rmse": 0.0002382050710029406,
-        "validation_nrmse_over_task6_e1": 0.9204354692018799
+        "test_normalized_rmse": 0.00022285522276539225,
+        "test_nrmse_over_e1_reference": 0.0015152602841355925,
+        "validation_normalized_rmse": 0.0002382050710029406
       },
       "expansion": {
+        "admission_name": "finite-pool validation admission",
         "admitted_candidates": [
           "arr(T;theta=1800)*pO2*Df"
         ],
+        "claim_boundary": "controlled finite-pool evidence; not unrestricted grammar discovery",
         "false_interactions": [],
+        "finite_pool": [
+          "arr(T;theta=1800)*pO2*Df",
+          "arr(T;theta=1800)*sigma*Df",
+          "arr(T;theta=1800)*sigma*sat(Df)",
+          "pO2*Df*Df",
+          "pO2*Df*sat(Df)",
+          "pO2*sat(Df)*sat(Df)",
+          "sigma*Df*Df",
+          "sigma*Df*sat(Df)",
+          "sigma*sat(Df)*sat(Df)"
+        ],
         "rounds": [
           {
             "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
@@ -273,7 +349,22 @@
                 "validation_error_reduction": null
               }
             ],
-            "round": 1
+            "round": 1,
+            "stability_thresholds": {
+              "minimum_absolute_correlation": 0.25,
+              "minimum_sign_consistency": 0.75,
+              "minimum_supporting_condition_count": 2
+            },
+            "stage_name": "training-only residual screening",
+            "validation_admission": {
+              "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
+              "condition_ids": [
+                "fatigue_validation"
+              ],
+              "minimum_error_reduction": 0.0002449313372303904,
+              "rule": "candidate_selected_and_validation_error_reduction_exceeds_one_percent_of_current_error",
+              "stage_name": "finite-pool validation admission"
+            }
           }
         ]
       },
@@ -292,18 +383,90 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.5,
         "support": [
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*sat(Df)"
         ],
+        "test_normalized_rmse": 0.019153673330613456,
         "validation_normalized_rmse": 0.02449313372303904
       },
       "gates": {
         "at_most_one_false_interaction": true,
-        "expanded_error_within_20_percent_of_task6_e1": true,
-        "fixed_error_at_least_50_percent_above_same_seed_closed_diagnostic": true,
+        "expanded_test_error_within_20_percent_of_e1_reference": true,
+        "fixed_test_error_at_least_50_percent_above_closed_diagnostic": true,
         "missing_interaction_admitted": true,
         "structured_cross_condition_residual_evidence": true
+      },
+      "independent_test_evaluation": {
+        "closed_diagnostic_normalized_rmse": 0.00022285522276539553,
+        "condition_ids": [
+          "fatigue_test"
+        ],
+        "expanded_library_normalized_rmse": 0.00022285522276539225,
+        "fixed_library_normalized_rmse": 0.019153673330613456,
+        "stage_name": "independent test evaluation"
+      },
+      "parameter_selection": {
+        "parameter_name": "arrhenius_theta",
+        "profile_history": [
+          {
+            "median_support_size": 7.5,
+            "selected_training_threshold": 0.08164979708976347,
+            "selection_score": 0.03555512848501937,
+            "theta": 1200.0,
+            "training_cross_validation_error": 0.02805512848501937
+          },
+          {
+            "median_support_size": 5.5,
+            "selected_training_threshold": 0.09787157995424128,
+            "selection_score": 0.035960522247885034,
+            "theta": 1400.0,
+            "training_cross_validation_error": 0.030460522247885032
+          },
+          {
+            "median_support_size": 8.0,
+            "selected_training_threshold": 0.03955024261725167,
+            "selection_score": 0.03601163847800436,
+            "theta": 1600.0,
+            "training_cross_validation_error": 0.02801163847800436
+          },
+          {
+            "median_support_size": 3.0,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.020745431486186117,
+            "theta": 1800.0,
+            "training_cross_validation_error": 0.017745431486186118
+          },
+          {
+            "median_support_size": 5.0,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.0415165464980894,
+            "theta": 2000.0,
+            "training_cross_validation_error": 0.0365165464980894
+          },
+          {
+            "median_support_size": 7.0,
+            "selected_training_threshold": 0.04740789163589092,
+            "selection_score": 0.06655419480413372,
+            "theta": 2200.0,
+            "training_cross_validation_error": 0.05955419480413371
+          },
+          {
+            "median_support_size": 5.5,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.06202772935382953,
+            "theta": 2400.0,
+            "training_cross_validation_error": 0.056527729353829534
+          }
+        ],
+        "selected_theta": 1800.0,
+        "selection_data": "training_conditions_only",
+        "selection_rule": "leave_one_training_condition_out_profile_score",
+        "train_ids": [
+          "fatigue_warm",
+          "fatigue_oxygen"
+        ]
       },
       "same_seed_closed_library_diagnostic": {
         "candidate_names": [
@@ -322,23 +485,20 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
-        "role": "noisy same-seed closed-library diagnostic; not the Task6 E1 reference",
+        "role": "post-selection closed-library diagnostic on the same noisy seed",
+        "selected_threshold": 0.24219437173720867,
         "support": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*Df"
         ],
+        "test_normalized_rmse": 0.00022285522276539553,
         "validation_normalized_rmse": 0.00023820507100292694
       },
-      "seed": 11,
-      "task6_e1_reference": {
-        "source": "Task6 E1",
-        "validation_normalized_rmse": 0.00025879605792407254
-      }
+      "seed": 11
     },
     {
       "configuration": {
-        "arrhenius_temperature": 1800.0,
         "base_candidate_names": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
@@ -346,6 +506,18 @@
           "pO2*sigma",
           "arr(T;theta=1800)*pO2*sat(Df)"
         ],
+        "condition_roles": {
+          "finite_pool_validation_admission": [
+            "fatigue_validation"
+          ],
+          "independent_test_evaluation": [
+            "fatigue_test"
+          ],
+          "residual_screening_and_training": [
+            "fatigue_warm",
+            "fatigue_oxygen"
+          ]
+        },
         "expansion_candidate_names": [
           "arr(T;theta=1800)*pO2*Df",
           "arr(T;theta=1800)*sigma*Df",
@@ -365,63 +537,16 @@
           "noise_fraction": 0.0001,
           "scale_per_condition": "noise_fraction * max(abs(clean Do))"
         },
-        "thresholds": [
-          0.0001,
-          0.00011986751154646968,
-          0.0001436822032434304,
-          0.00017222828156304078,
-          0.0002064457552888642,
-          0.00024746138955807583,
-          0.00029662580970158086,
-          0.00035555797669385123,
-          0.00042619849876789604,
-          0.0005108735347214882,
-          0.0006123713932201377,
-          0.0007340343504754256,
-          0.0008798687098111846,
-          0.0010546767273266944,
-          0.0012642147479062537,
-          0.0015153827589186996,
-          0.001816451603520083,
-          0.002177335335585469,
-          0.0026099176847882762,
-          0.0031284433821669407,
-          0.0037499872323437243,
-          0.004495016378720752,
-          0.005388064276778795,
-          0.00645853856909903,
-          0.007741689465047977,
-          0.009279770513408201,
-          0.011123429991645463,
-          0.013333378729599095,
-          0.015982389288236726,
-          0.01915769232547889,
-          0.02296384906028052,
-          0.02752619442384562,
-          0.03299496427930684,
-          0.03955024261725167,
-          0.04740789163589092,
-          0.05682665998058931,
-          0.06811670321370596,
-          0.08164979708976347,
-          0.09787157995424128,
-          0.11731622740236235,
-          0.1406240424274093,
-          0.16856254029378726,
-          0.20205172244967803,
-          0.24219437173720867,
-          0.290312366506998,
-          0.3479902094436052,
-          0.4171272044853974,
-          0.5
-        ],
-        "train_ids": [
-          "fatigue_warm",
-          "fatigue_oxygen"
-        ],
-        "validation_ids": [
-          "fatigue_validation"
+        "target_dimension": [
+          0,
+          0,
+          -1,
+          0
         ]
+      },
+      "evaluation_target": {
+        "expected_missing_interaction": "arr(T;theta=1800)*pO2*Df",
+        "use": "post-discovery evaluation only; not supplied to discovery"
       },
       "expanded_library": {
         "candidate_names": [
@@ -440,19 +565,34 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.24219437173720867,
         "support": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*Df"
         ],
-        "validation_normalized_rmse": 0.00014429723856345086,
-        "validation_nrmse_over_task6_e1": 0.5575712386074514
+        "test_normalized_rmse": 0.00016733403837388143,
+        "test_nrmse_over_e1_reference": 0.0011377549037694748,
+        "validation_normalized_rmse": 0.00014429723856345086
       },
       "expansion": {
+        "admission_name": "finite-pool validation admission",
         "admitted_candidates": [
           "arr(T;theta=1800)*pO2*Df"
         ],
+        "claim_boundary": "controlled finite-pool evidence; not unrestricted grammar discovery",
         "false_interactions": [],
+        "finite_pool": [
+          "arr(T;theta=1800)*pO2*Df",
+          "arr(T;theta=1800)*sigma*Df",
+          "arr(T;theta=1800)*sigma*sat(Df)",
+          "pO2*Df*Df",
+          "pO2*Df*sat(Df)",
+          "pO2*sat(Df)*sat(Df)",
+          "sigma*Df*Df",
+          "sigma*Df*sat(Df)",
+          "sigma*sat(Df)*sat(Df)"
+        ],
         "rounds": [
           {
             "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
@@ -593,7 +733,22 @@
                 "validation_error_reduction": null
               }
             ],
-            "round": 1
+            "round": 1,
+            "stability_thresholds": {
+              "minimum_absolute_correlation": 0.25,
+              "minimum_sign_consistency": 0.75,
+              "minimum_supporting_condition_count": 2
+            },
+            "stage_name": "training-only residual screening",
+            "validation_admission": {
+              "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
+              "condition_ids": [
+                "fatigue_validation"
+              ],
+              "minimum_error_reduction": 0.0002455203504872218,
+              "rule": "candidate_selected_and_validation_error_reduction_exceeds_one_percent_of_current_error",
+              "stage_name": "finite-pool validation admission"
+            }
           }
         ]
       },
@@ -612,18 +767,90 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.5,
         "support": [
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*sat(Df)"
         ],
+        "test_normalized_rmse": 0.01921580963101973,
         "validation_normalized_rmse": 0.02455203504872218
       },
       "gates": {
         "at_most_one_false_interaction": true,
-        "expanded_error_within_20_percent_of_task6_e1": true,
-        "fixed_error_at_least_50_percent_above_same_seed_closed_diagnostic": true,
+        "expanded_test_error_within_20_percent_of_e1_reference": true,
+        "fixed_test_error_at_least_50_percent_above_closed_diagnostic": true,
         "missing_interaction_admitted": true,
         "structured_cross_condition_residual_evidence": true
+      },
+      "independent_test_evaluation": {
+        "closed_diagnostic_normalized_rmse": 0.0001673340383739126,
+        "condition_ids": [
+          "fatigue_test"
+        ],
+        "expanded_library_normalized_rmse": 0.00016733403837388143,
+        "fixed_library_normalized_rmse": 0.01921580963101973,
+        "stage_name": "independent test evaluation"
+      },
+      "parameter_selection": {
+        "parameter_name": "arrhenius_theta",
+        "profile_history": [
+          {
+            "median_support_size": 6.0,
+            "selected_training_threshold": 0.11731622740236235,
+            "selection_score": 0.06528500212535694,
+            "theta": 1200.0,
+            "training_cross_validation_error": 0.059285002125356936
+          },
+          {
+            "median_support_size": 4.5,
+            "selected_training_threshold": 0.09787157995424128,
+            "selection_score": 0.04132930045196924,
+            "theta": 1400.0,
+            "training_cross_validation_error": 0.036829300451969235
+          },
+          {
+            "median_support_size": 6.5,
+            "selected_training_threshold": 0.08164979708976347,
+            "selection_score": 0.036607618144921444,
+            "theta": 1600.0,
+            "training_cross_validation_error": 0.030107618144921442
+          },
+          {
+            "median_support_size": 3.0,
+            "selected_training_threshold": 0.08164979708976347,
+            "selection_score": 0.02096895109616903,
+            "theta": 1800.0,
+            "training_cross_validation_error": 0.01796895109616903
+          },
+          {
+            "median_support_size": 4.5,
+            "selected_training_threshold": 0.05682665998058931,
+            "selection_score": 0.03431776329001639,
+            "theta": 2000.0,
+            "training_cross_validation_error": 0.02981776329001639
+          },
+          {
+            "median_support_size": 6.5,
+            "selected_training_threshold": 0.05682665998058931,
+            "selection_score": 0.1239937867767601,
+            "theta": 2200.0,
+            "training_cross_validation_error": 0.11749378677676009
+          },
+          {
+            "median_support_size": 5.5,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.12008412911775657,
+            "theta": 2400.0,
+            "training_cross_validation_error": 0.11458412911775656
+          }
+        ],
+        "selected_theta": 1800.0,
+        "selection_data": "training_conditions_only",
+        "selection_rule": "leave_one_training_condition_out_profile_score",
+        "train_ids": [
+          "fatigue_warm",
+          "fatigue_oxygen"
+        ]
       },
       "same_seed_closed_library_diagnostic": {
         "candidate_names": [
@@ -642,23 +869,20 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
-        "role": "noisy same-seed closed-library diagnostic; not the Task6 E1 reference",
+        "role": "post-selection closed-library diagnostic on the same noisy seed",
+        "selected_threshold": 0.24219437173720867,
         "support": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*Df"
         ],
+        "test_normalized_rmse": 0.0001673340383739126,
         "validation_normalized_rmse": 0.0001442972385634782
       },
-      "seed": 23,
-      "task6_e1_reference": {
-        "source": "Task6 E1",
-        "validation_normalized_rmse": 0.00025879605792407254
-      }
+      "seed": 23
     },
     {
       "configuration": {
-        "arrhenius_temperature": 1800.0,
         "base_candidate_names": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
@@ -666,6 +890,18 @@
           "pO2*sigma",
           "arr(T;theta=1800)*pO2*sat(Df)"
         ],
+        "condition_roles": {
+          "finite_pool_validation_admission": [
+            "fatigue_validation"
+          ],
+          "independent_test_evaluation": [
+            "fatigue_test"
+          ],
+          "residual_screening_and_training": [
+            "fatigue_warm",
+            "fatigue_oxygen"
+          ]
+        },
         "expansion_candidate_names": [
           "arr(T;theta=1800)*pO2*Df",
           "arr(T;theta=1800)*sigma*Df",
@@ -685,63 +921,16 @@
           "noise_fraction": 0.0001,
           "scale_per_condition": "noise_fraction * max(abs(clean Do))"
         },
-        "thresholds": [
-          0.0001,
-          0.00011986751154646968,
-          0.0001436822032434304,
-          0.00017222828156304078,
-          0.0002064457552888642,
-          0.00024746138955807583,
-          0.00029662580970158086,
-          0.00035555797669385123,
-          0.00042619849876789604,
-          0.0005108735347214882,
-          0.0006123713932201377,
-          0.0007340343504754256,
-          0.0008798687098111846,
-          0.0010546767273266944,
-          0.0012642147479062537,
-          0.0015153827589186996,
-          0.001816451603520083,
-          0.002177335335585469,
-          0.0026099176847882762,
-          0.0031284433821669407,
-          0.0037499872323437243,
-          0.004495016378720752,
-          0.005388064276778795,
-          0.00645853856909903,
-          0.007741689465047977,
-          0.009279770513408201,
-          0.011123429991645463,
-          0.013333378729599095,
-          0.015982389288236726,
-          0.01915769232547889,
-          0.02296384906028052,
-          0.02752619442384562,
-          0.03299496427930684,
-          0.03955024261725167,
-          0.04740789163589092,
-          0.05682665998058931,
-          0.06811670321370596,
-          0.08164979708976347,
-          0.09787157995424128,
-          0.11731622740236235,
-          0.1406240424274093,
-          0.16856254029378726,
-          0.20205172244967803,
-          0.24219437173720867,
-          0.290312366506998,
-          0.3479902094436052,
-          0.4171272044853974,
-          0.5
-        ],
-        "train_ids": [
-          "fatigue_warm",
-          "fatigue_oxygen"
-        ],
-        "validation_ids": [
-          "fatigue_validation"
+        "target_dimension": [
+          0,
+          0,
+          -1,
+          0
         ]
+      },
+      "evaluation_target": {
+        "expected_missing_interaction": "arr(T;theta=1800)*pO2*Df",
+        "use": "post-discovery evaluation only; not supplied to discovery"
       },
       "expanded_library": {
         "candidate_names": [
@@ -760,19 +949,34 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.24219437173720867,
         "support": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*Df"
         ],
-        "validation_normalized_rmse": 0.00017134453828185003,
-        "validation_nrmse_over_task6_e1": 0.6620832622269708
+        "test_normalized_rmse": 0.0002430808243624183,
+        "test_nrmse_over_e1_reference": 0.0016527802867741944,
+        "validation_normalized_rmse": 0.00017134453828185003
       },
       "expansion": {
+        "admission_name": "finite-pool validation admission",
         "admitted_candidates": [
           "arr(T;theta=1800)*pO2*Df"
         ],
+        "claim_boundary": "controlled finite-pool evidence; not unrestricted grammar discovery",
         "false_interactions": [],
+        "finite_pool": [
+          "arr(T;theta=1800)*pO2*Df",
+          "arr(T;theta=1800)*sigma*Df",
+          "arr(T;theta=1800)*sigma*sat(Df)",
+          "pO2*Df*Df",
+          "pO2*Df*sat(Df)",
+          "pO2*sat(Df)*sat(Df)",
+          "sigma*Df*Df",
+          "sigma*Df*sat(Df)",
+          "sigma*sat(Df)*sat(Df)"
+        ],
         "rounds": [
           {
             "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
@@ -913,7 +1117,22 @@
                 "validation_error_reduction": null
               }
             ],
-            "round": 1
+            "round": 1,
+            "stability_thresholds": {
+              "minimum_absolute_correlation": 0.25,
+              "minimum_sign_consistency": 0.75,
+              "minimum_supporting_condition_count": 2
+            },
+            "stage_name": "training-only residual screening",
+            "validation_admission": {
+              "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
+              "condition_ids": [
+                "fatigue_validation"
+              ],
+              "minimum_error_reduction": 0.00024639830113450735,
+              "rule": "candidate_selected_and_validation_error_reduction_exceeds_one_percent_of_current_error",
+              "stage_name": "finite-pool validation admission"
+            }
           }
         ]
       },
@@ -932,18 +1151,90 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.5,
         "support": [
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*sat(Df)"
         ],
+        "test_normalized_rmse": 0.01919639034616172,
         "validation_normalized_rmse": 0.024639830113450733
       },
       "gates": {
         "at_most_one_false_interaction": true,
-        "expanded_error_within_20_percent_of_task6_e1": true,
-        "fixed_error_at_least_50_percent_above_same_seed_closed_diagnostic": true,
+        "expanded_test_error_within_20_percent_of_e1_reference": true,
+        "fixed_test_error_at_least_50_percent_above_closed_diagnostic": true,
         "missing_interaction_admitted": true,
         "structured_cross_condition_residual_evidence": true
+      },
+      "independent_test_evaluation": {
+        "closed_diagnostic_normalized_rmse": 0.00024308082436235443,
+        "condition_ids": [
+          "fatigue_test"
+        ],
+        "expanded_library_normalized_rmse": 0.0002430808243624183,
+        "fixed_library_normalized_rmse": 0.01919639034616172,
+        "stage_name": "independent test evaluation"
+      },
+      "parameter_selection": {
+        "parameter_name": "arrhenius_theta",
+        "profile_history": [
+          {
+            "median_support_size": 8.5,
+            "selected_training_threshold": 0.11731622740236235,
+            "selection_score": 0.046517042764071766,
+            "theta": 1200.0,
+            "training_cross_validation_error": 0.038017042764071765
+          },
+          {
+            "median_support_size": 5.5,
+            "selected_training_threshold": 0.11731622740236235,
+            "selection_score": 0.030033856108077864,
+            "theta": 1400.0,
+            "training_cross_validation_error": 0.024533856108077862
+          },
+          {
+            "median_support_size": 2.0,
+            "selected_training_threshold": 0.16856254029378726,
+            "selection_score": 0.02738550315868018,
+            "theta": 1600.0,
+            "training_cross_validation_error": 0.02538550315868018
+          },
+          {
+            "median_support_size": 3.0,
+            "selected_training_threshold": 0.08164979708976347,
+            "selection_score": 0.02083676364241632,
+            "theta": 1800.0,
+            "training_cross_validation_error": 0.01783676364241632
+          },
+          {
+            "median_support_size": 4.5,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.033660151731457505,
+            "theta": 2000.0,
+            "training_cross_validation_error": 0.029160151731457508
+          },
+          {
+            "median_support_size": 4.5,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.0640828613240075,
+            "theta": 2200.0,
+            "training_cross_validation_error": 0.05958286132400751
+          },
+          {
+            "median_support_size": 8.0,
+            "selected_training_threshold": 0.03955024261725167,
+            "selection_score": 0.09949944838645969,
+            "theta": 2400.0,
+            "training_cross_validation_error": 0.09149944838645968
+          }
+        ],
+        "selected_theta": 1800.0,
+        "selection_data": "training_conditions_only",
+        "selection_rule": "leave_one_training_condition_out_profile_score",
+        "train_ids": [
+          "fatigue_warm",
+          "fatigue_oxygen"
+        ]
       },
       "same_seed_closed_library_diagnostic": {
         "candidate_names": [
@@ -962,34 +1253,43 @@
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
-        "role": "noisy same-seed closed-library diagnostic; not the Task6 E1 reference",
+        "role": "post-selection closed-library diagnostic on the same noisy seed",
+        "selected_threshold": 0.24219437173720867,
         "support": [
           "arr(T;theta=1800)*pO2",
           "arr(T;theta=1800)*pO2*sigma",
           "arr(T;theta=1800)*pO2*Df"
         ],
+        "test_normalized_rmse": 0.00024308082436235443,
         "validation_normalized_rmse": 0.00017134453828184315
       },
-      "seed": 47,
-      "task6_e1_reference": {
-        "source": "Task6 E1",
-        "validation_normalized_rmse": 0.00025879605792407254
-      }
+      "seed": 47
     },
     {
       "configuration": {
-        "arrhenius_temperature": 1800.0,
         "base_candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
+          "arr(T;theta=2000)*pO2",
+          "arr(T;theta=2000)*pO2*sigma",
           "pO2",
           "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
+          "arr(T;theta=2000)*pO2*sat(Df)"
         ],
+        "condition_roles": {
+          "finite_pool_validation_admission": [
+            "fatigue_validation"
+          ],
+          "independent_test_evaluation": [
+            "fatigue_test"
+          ],
+          "residual_screening_and_training": [
+            "fatigue_warm",
+            "fatigue_oxygen"
+          ]
+        },
         "expansion_candidate_names": [
-          "arr(T;theta=1800)*pO2*Df",
-          "arr(T;theta=1800)*sigma*Df",
-          "arr(T;theta=1800)*sigma*sat(Df)",
+          "arr(T;theta=2000)*pO2*Df",
+          "arr(T;theta=2000)*sigma*Df",
+          "arr(T;theta=2000)*sigma*sat(Df)",
           "pO2*Df*Df",
           "pO2*Df*sat(Df)",
           "pO2*sat(Df)*sat(Df)",
@@ -1005,311 +1305,50 @@
           "noise_fraction": 0.0001,
           "scale_per_condition": "noise_fraction * max(abs(clean Do))"
         },
-        "thresholds": [
-          0.0001,
-          0.00011986751154646968,
-          0.0001436822032434304,
-          0.00017222828156304078,
-          0.0002064457552888642,
-          0.00024746138955807583,
-          0.00029662580970158086,
-          0.00035555797669385123,
-          0.00042619849876789604,
-          0.0005108735347214882,
-          0.0006123713932201377,
-          0.0007340343504754256,
-          0.0008798687098111846,
-          0.0010546767273266944,
-          0.0012642147479062537,
-          0.0015153827589186996,
-          0.001816451603520083,
-          0.002177335335585469,
-          0.0026099176847882762,
-          0.0031284433821669407,
-          0.0037499872323437243,
-          0.004495016378720752,
-          0.005388064276778795,
-          0.00645853856909903,
-          0.007741689465047977,
-          0.009279770513408201,
-          0.011123429991645463,
-          0.013333378729599095,
-          0.015982389288236726,
-          0.01915769232547889,
-          0.02296384906028052,
-          0.02752619442384562,
-          0.03299496427930684,
-          0.03955024261725167,
-          0.04740789163589092,
-          0.05682665998058931,
-          0.06811670321370596,
-          0.08164979708976347,
-          0.09787157995424128,
-          0.11731622740236235,
-          0.1406240424274093,
-          0.16856254029378726,
-          0.20205172244967803,
-          0.24219437173720867,
-          0.290312366506998,
-          0.3479902094436052,
-          0.4171272044853974,
-          0.5
-        ],
-        "train_ids": [
-          "fatigue_warm",
-          "fatigue_oxygen"
-        ],
-        "validation_ids": [
-          "fatigue_validation"
+        "target_dimension": [
+          0,
+          0,
+          -1,
+          0
         ]
+      },
+      "evaluation_target": {
+        "expected_missing_interaction": "arr(T;theta=1800)*pO2*Df",
+        "use": "post-discovery evaluation only; not supplied to discovery"
       },
       "expanded_library": {
         "candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
+          "arr(T;theta=2000)*pO2",
+          "arr(T;theta=2000)*pO2*sigma",
           "pO2",
           "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)",
-          "arr(T;theta=1800)*pO2*Df"
+          "arr(T;theta=2000)*pO2*sat(Df)"
         ],
         "coefficients": {
-          "arr(T;theta=1800)*pO2": 0.18020753393012445,
-          "arr(T;theta=1800)*pO2*Df": 0.4497486579318703,
-          "arr(T;theta=1800)*pO2*sat(Df)": 0.0,
-          "arr(T;theta=1800)*pO2*sigma": 0.005996820117746247,
+          "arr(T;theta=2000)*pO2": 0.0,
+          "arr(T;theta=2000)*pO2*sat(Df)": 0.4492499527951947,
+          "arr(T;theta=2000)*pO2*sigma": 0.008422763499202334,
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.4171272044853974,
         "support": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*Df"
+          "arr(T;theta=2000)*pO2*sigma",
+          "arr(T;theta=2000)*pO2*sat(Df)"
         ],
-        "validation_normalized_rmse": 0.00021672831550472016,
-        "validation_nrmse_over_task6_e1": 0.8374482874399326
+        "test_normalized_rmse": 0.07562931044213912,
+        "test_nrmse_over_e1_reference": 0.5142266311172622,
+        "validation_normalized_rmse": 0.03606402350733405
       },
       "expansion": {
-        "admitted_candidates": [
-          "arr(T;theta=1800)*pO2*Df"
-        ],
+        "admission_name": "finite-pool validation admission",
+        "admitted_candidates": [],
+        "claim_boundary": "controlled finite-pool evidence; not unrestricted grammar discovery",
         "false_interactions": [],
-        "rounds": [
-          {
-            "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
-            "admitted_training_error_reduction": 0.023266942833495684,
-            "admitted_validation_error_reduction": 0.024349569413047008,
-            "complexity_layer": 3,
-            "minimum_validation_error_reduction": 0.0002456629772855173,
-            "residual_base_fit": {
-              "selected_threshold": 0.5,
-              "selection_data": "training_conditions_only",
-              "selection_rule": "sparsest_nonempty_training_support_then_training_error",
-              "support": [
-                "arr(T;theta=1800)*pO2*sigma",
-                "arr(T;theta=1800)*pO2*sat(Df)"
-              ],
-              "training_error": 0.023444727035299963
-            },
-            "residual_condition_ids": [
-              "fatigue_warm",
-              "fatigue_oxygen"
-            ],
-            "residual_ranking": [
-              {
-                "candidate": "arr(T;theta=1800)*sigma*Df",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.914312754413276,
-                  "fatigue_warm": 0.9535872159072235
-                },
-                "median_absolute_correlation": 0.9339499851602497,
-                "residual_score": 0.9339499851602497,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              },
-              {
-                "candidate": "sigma*Df*sat(Df)",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.9233146635831708,
-                  "fatigue_warm": 0.9414925538547105
-                },
-                "median_absolute_correlation": 0.9324036087189407,
-                "residual_score": 0.9324036087189407,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              },
-              {
-                "candidate": "sigma*sat(Df)*sat(Df)",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.9298396072349955,
-                  "fatigue_warm": 0.8710888895524366
-                },
-                "median_absolute_correlation": 0.900464248393716,
-                "residual_score": 0.900464248393716,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              },
-              {
-                "candidate": "sigma*Df*Df",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8689273435732029,
-                  "fatigue_warm": 0.8966843641148563
-                },
-                "median_absolute_correlation": 0.8828058538440295,
-                "residual_score": 0.8828058538440295,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              },
-              {
-                "candidate": "pO2*Df*sat(Df)",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8507720790115616,
-                  "fatigue_warm": 0.8482213969394984
-                },
-                "median_absolute_correlation": 0.84949673797553,
-                "residual_score": 0.84949673797553,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              },
-              {
-                "candidate": "pO2*Df*Df",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8214043484618485,
-                  "fatigue_warm": 0.8715973161760203
-                },
-                "median_absolute_correlation": 0.8465008323189345,
-                "residual_score": 0.8465008323189345,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              },
-              {
-                "candidate": "arr(T;theta=1800)*pO2*Df",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.848425084246979,
-                  "fatigue_warm": 0.8153223102249242
-                },
-                "median_absolute_correlation": 0.8318736972359516,
-                "residual_score": 0.8318736972359516,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.024349569413047008
-              },
-              {
-                "candidate": "pO2*sat(Df)*sat(Df)",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.7959575430985475,
-                  "fatigue_warm": 0.3137115814660933
-                },
-                "median_absolute_correlation": 0.5548345622823204,
-                "residual_score": 0.5548345622823204,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              },
-              {
-                "candidate": "arr(T;theta=1800)*sigma*sat(Df)",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8174106696606921,
-                  "fatigue_warm": 0.25285925516629265
-                },
-                "median_absolute_correlation": 0.5351349624134923,
-                "residual_score": 0.5351349624134923,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.0
-              }
-            ],
-            "round": 1
-          }
-        ]
-      },
-      "fixed_library": {
-        "candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "pO2",
-          "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
-        ],
-        "coefficients": {
-          "arr(T;theta=1800)*pO2": 0.0,
-          "arr(T;theta=1800)*pO2*sat(Df)": 0.2276856712271824,
-          "arr(T;theta=1800)*pO2*sigma": 0.005499173482860811,
-          "pO2": 0.0,
-          "pO2*sigma": 0.0
-        },
-        "support": [
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
-        ],
-        "validation_normalized_rmse": 0.024566297728551727
-      },
-      "gates": {
-        "at_most_one_false_interaction": true,
-        "expanded_error_within_20_percent_of_task6_e1": true,
-        "fixed_error_at_least_50_percent_above_same_seed_closed_diagnostic": true,
-        "missing_interaction_admitted": true,
-        "structured_cross_condition_residual_evidence": true
-      },
-      "same_seed_closed_library_diagnostic": {
-        "candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*Df",
-          "pO2",
-          "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
-        ],
-        "coefficients": {
-          "arr(T;theta=1800)*pO2": 0.18020753393012445,
-          "arr(T;theta=1800)*pO2*Df": 0.4497486579318703,
-          "arr(T;theta=1800)*pO2*sat(Df)": 0.0,
-          "arr(T;theta=1800)*pO2*sigma": 0.005996820117746247,
-          "pO2": 0.0,
-          "pO2*sigma": 0.0
-        },
-        "role": "noisy same-seed closed-library diagnostic; not the Task6 E1 reference",
-        "support": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*Df"
-        ],
-        "validation_normalized_rmse": 0.00021672831550474526
-      },
-      "seed": 89,
-      "task6_e1_reference": {
-        "source": "Task6 E1",
-        "validation_normalized_rmse": 0.00025879605792407254
-      }
-    },
-    {
-      "configuration": {
-        "arrhenius_temperature": 1800.0,
-        "base_candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "pO2",
-          "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
-        ],
-        "expansion_candidate_names": [
-          "arr(T;theta=1800)*pO2*Df",
-          "arr(T;theta=1800)*sigma*Df",
-          "arr(T;theta=1800)*sigma*sat(Df)",
+        "finite_pool": [
+          "arr(T;theta=2000)*pO2*Df",
+          "arr(T;theta=2000)*sigma*Df",
+          "arr(T;theta=2000)*sigma*sat(Df)",
           "pO2*Df*Df",
           "pO2*Df*sat(Df)",
           "pO2*sat(Df)*sat(Df)",
@@ -1317,118 +1356,21 @@
           "sigma*Df*sat(Df)",
           "sigma*sat(Df)*sat(Df)"
         ],
-        "json_newline": "LF",
-        "observation_noise": {
-          "applied_to": "Do_observation_only",
-          "description": "target-only Do observation noise; t, T, pO2, sigma, and Df are unchanged",
-          "distribution": "independent zero-mean Gaussian per time sample",
-          "noise_fraction": 0.0001,
-          "scale_per_condition": "noise_fraction * max(abs(clean Do))"
-        },
-        "thresholds": [
-          0.0001,
-          0.00011986751154646968,
-          0.0001436822032434304,
-          0.00017222828156304078,
-          0.0002064457552888642,
-          0.00024746138955807583,
-          0.00029662580970158086,
-          0.00035555797669385123,
-          0.00042619849876789604,
-          0.0005108735347214882,
-          0.0006123713932201377,
-          0.0007340343504754256,
-          0.0008798687098111846,
-          0.0010546767273266944,
-          0.0012642147479062537,
-          0.0015153827589186996,
-          0.001816451603520083,
-          0.002177335335585469,
-          0.0026099176847882762,
-          0.0031284433821669407,
-          0.0037499872323437243,
-          0.004495016378720752,
-          0.005388064276778795,
-          0.00645853856909903,
-          0.007741689465047977,
-          0.009279770513408201,
-          0.011123429991645463,
-          0.013333378729599095,
-          0.015982389288236726,
-          0.01915769232547889,
-          0.02296384906028052,
-          0.02752619442384562,
-          0.03299496427930684,
-          0.03955024261725167,
-          0.04740789163589092,
-          0.05682665998058931,
-          0.06811670321370596,
-          0.08164979708976347,
-          0.09787157995424128,
-          0.11731622740236235,
-          0.1406240424274093,
-          0.16856254029378726,
-          0.20205172244967803,
-          0.24219437173720867,
-          0.290312366506998,
-          0.3479902094436052,
-          0.4171272044853974,
-          0.5
-        ],
-        "train_ids": [
-          "fatigue_warm",
-          "fatigue_oxygen"
-        ],
-        "validation_ids": [
-          "fatigue_validation"
-        ]
-      },
-      "expanded_library": {
-        "candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "pO2",
-          "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)",
-          "arr(T;theta=1800)*pO2*Df"
-        ],
-        "coefficients": {
-          "arr(T;theta=1800)*pO2": 0.18019672171465362,
-          "arr(T;theta=1800)*pO2*Df": 0.4502361196445345,
-          "arr(T;theta=1800)*pO2*sat(Df)": 0.0,
-          "arr(T;theta=1800)*pO2*sigma": 0.005995378621594352,
-          "pO2": 0.0,
-          "pO2*sigma": 0.0
-        },
-        "support": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*Df"
-        ],
-        "validation_normalized_rmse": 0.00022841711191699576,
-        "validation_nrmse_over_task6_e1": 0.882614340223105
-      },
-      "expansion": {
-        "admitted_candidates": [
-          "arr(T;theta=1800)*pO2*Df"
-        ],
-        "false_interactions": [],
         "rounds": [
           {
-            "admitted_candidate": "arr(T;theta=1800)*pO2*Df",
-            "admitted_training_error_reduction": 0.02329536077897489,
-            "admitted_validation_error_reduction": 0.024379692308508946,
+            "admitted_candidate": null,
+            "admitted_training_error_reduction": null,
+            "admitted_validation_error_reduction": null,
             "complexity_layer": 3,
-            "minimum_validation_error_reduction": 0.0002460810942042594,
+            "minimum_validation_error_reduction": 0.00036064023507334053,
             "residual_base_fit": {
               "selected_threshold": 0.5,
               "selection_data": "training_conditions_only",
               "selection_rule": "sparsest_nonempty_training_support_then_training_error",
               "support": [
-                "arr(T;theta=1800)*pO2*sigma",
-                "arr(T;theta=1800)*pO2*sat(Df)"
+                "arr(T;theta=2000)*pO2*sat(Df)"
               ],
-              "training_error": 0.023537787595734657
+              "training_error": 0.11461364659367113
             },
             "residual_condition_ids": [
               "fatigue_warm",
@@ -1436,185 +1378,656 @@
             ],
             "residual_ranking": [
               {
-                "candidate": "arr(T;theta=1800)*sigma*Df",
+                "candidate": "arr(T;theta=2000)*sigma*sat(Df)",
                 "complexity_layer": 3,
                 "correlations_by_condition": {
-                  "fatigue_oxygen": 0.9109978887936053,
-                  "fatigue_warm": 0.9560425338694198
+                  "fatigue_oxygen": 0.6884339401218638,
+                  "fatigue_warm": 0.8357934849770953
                 },
-                "median_absolute_correlation": 0.9335202113315126,
-                "residual_score": 0.9335202113315126,
+                "median_absolute_correlation": 0.7621137125494795,
+                "residual_score": 0.7621137125494795,
                 "sign_consistency": 1.0,
                 "stable": true,
-                "validation_error_reduction": 3.469446951953614e-18
-              },
-              {
-                "candidate": "sigma*Df*sat(Df)",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.9201651156262611,
-                  "fatigue_warm": 0.9441705228729056
-                },
-                "median_absolute_correlation": 0.9321678192495834,
-                "residual_score": 0.9321678192495834,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 3.469446951953614e-18
+                "validation_error_reduction": 0.0
               },
               {
                 "candidate": "sigma*sat(Df)*sat(Df)",
                 "complexity_layer": 3,
                 "correlations_by_condition": {
-                  "fatigue_oxygen": 0.9275129650036217,
-                  "fatigue_warm": 0.8647477712952105
+                  "fatigue_oxygen": 0.6291877845782909,
+                  "fatigue_warm": 0.8814064007777263
                 },
-                "median_absolute_correlation": 0.8961303681494162,
-                "residual_score": 0.8961303681494162,
+                "median_absolute_correlation": 0.7552970926780086,
+                "residual_score": 0.7552970926780086,
                 "sign_consistency": 1.0,
                 "stable": true,
-                "validation_error_reduction": 3.469446951953614e-18
+                "validation_error_reduction": 0.0
+              },
+              {
+                "candidate": "arr(T;theta=2000)*sigma*Df",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.3342654492355138,
+                  "fatigue_warm": 0.4782312667266686
+                },
+                "median_absolute_correlation": 0.4062483579810912,
+                "residual_score": 0.4062483579810912,
+                "sign_consistency": 1.0,
+                "stable": true,
+                "validation_error_reduction": 0.0
+              },
+              {
+                "candidate": "sigma*Df*sat(Df)",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.31167384728535746,
+                  "fatigue_warm": 0.40849726062273173
+                },
+                "median_absolute_correlation": 0.3600855539540446,
+                "residual_score": 0.3600855539540446,
+                "sign_consistency": 1.0,
+                "stable": true,
+                "validation_error_reduction": 0.0
               },
               {
                 "candidate": "sigma*Df*Df",
                 "complexity_layer": 3,
                 "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8650525003007096,
-                  "fatigue_warm": 0.8988193471032385
+                  "fatigue_oxygen": 0.19775234039459239,
+                  "fatigue_warm": 0.31269611562806865
                 },
-                "median_absolute_correlation": 0.881935923701974,
-                "residual_score": 0.881935923701974,
+                "median_absolute_correlation": 0.2552242280113305,
+                "residual_score": 0.2552242280113305,
                 "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 3.469446951953614e-18
+                "stable": false,
+                "validation_error_reduction": null
+              },
+              {
+                "candidate": "arr(T;theta=2000)*pO2*Df",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.007993213858988948,
+                  "fatigue_warm": 0.28226680363643764
+                },
+                "median_absolute_correlation": 0.14513000874771328,
+                "residual_score": 0.14513000874771328,
+                "sign_consistency": 1.0,
+                "stable": false,
+                "validation_error_reduction": null
               },
               {
                 "candidate": "pO2*Df*sat(Df)",
                 "complexity_layer": 3,
                 "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8488788194788056,
-                  "fatigue_warm": 0.8542320679906363
+                  "fatigue_oxygen": -0.015479471563843663,
+                  "fatigue_warm": 0.2557968887848525
                 },
-                "median_absolute_correlation": 0.851555443734721,
-                "residual_score": 0.851555443734721,
+                "median_absolute_correlation": 0.1356381801743481,
+                "residual_score": 0.1356381801743481,
                 "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 3.469446951953614e-18
+                "stable": false,
+                "validation_error_reduction": null
               },
               {
                 "candidate": "pO2*Df*Df",
                 "complexity_layer": 3,
                 "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8190889678794581,
-                  "fatigue_warm": 0.8756470556761092
+                  "fatigue_oxygen": -0.027214667182504045,
+                  "fatigue_warm": 0.23041795477987023
                 },
-                "median_absolute_correlation": 0.8473680117777836,
-                "residual_score": 0.8473680117777836,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 3.469446951953614e-18
-              },
-              {
-                "candidate": "arr(T;theta=1800)*pO2*Df",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8462448261474858,
-                  "fatigue_warm": 0.8218419775683856
-                },
-                "median_absolute_correlation": 0.8340434018579357,
-                "residual_score": 0.8340434018579357,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 0.024379692308508946
+                "median_absolute_correlation": 0.12881631098118715,
+                "residual_score": 0.0,
+                "sign_consistency": 0.0,
+                "stable": false,
+                "validation_error_reduction": null
               },
               {
                 "candidate": "pO2*sat(Df)*sat(Df)",
                 "complexity_layer": 3,
                 "correlations_by_condition": {
-                  "fatigue_oxygen": 0.7928284107786232,
-                  "fatigue_warm": 0.31956834112553445
+                  "fatigue_oxygen": -0.08260790976242925,
+                  "fatigue_warm": 0.18548839560575517
                 },
-                "median_absolute_correlation": 0.5561983759520788,
-                "residual_score": 0.5561983759520788,
-                "sign_consistency": 1.0,
-                "stable": true,
-                "validation_error_reduction": 3.469446951953614e-18
-              },
-              {
-                "candidate": "arr(T;theta=1800)*sigma*sat(Df)",
-                "complexity_layer": 3,
-                "correlations_by_condition": {
-                  "fatigue_oxygen": 0.8145345557313783,
-                  "fatigue_warm": 0.24004000356590707
-                },
-                "median_absolute_correlation": 0.5272872796486427,
-                "residual_score": 0.5272872796486427,
-                "sign_consistency": 1.0,
+                "median_absolute_correlation": 0.1340481526840922,
+                "residual_score": 0.0,
+                "sign_consistency": 0.0,
                 "stable": false,
                 "validation_error_reduction": null
               }
             ],
-            "round": 1
+            "round": 1,
+            "stability_thresholds": {
+              "minimum_absolute_correlation": 0.25,
+              "minimum_sign_consistency": 0.75,
+              "minimum_supporting_condition_count": 2
+            },
+            "stage_name": "training-only residual screening",
+            "validation_admission": {
+              "admitted_candidate": null,
+              "condition_ids": [
+                "fatigue_validation"
+              ],
+              "minimum_error_reduction": 0.00036064023507334053,
+              "rule": "candidate_selected_and_validation_error_reduction_exceeds_one_percent_of_current_error",
+              "stage_name": "finite-pool validation admission"
+            }
           }
         ]
       },
       "fixed_library": {
         "candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
+          "arr(T;theta=2000)*pO2",
+          "arr(T;theta=2000)*pO2*sigma",
           "pO2",
           "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
+          "arr(T;theta=2000)*pO2*sat(Df)"
         ],
         "coefficients": {
-          "arr(T;theta=1800)*pO2": 0.0,
-          "arr(T;theta=1800)*pO2*sat(Df)": 0.22778365786597965,
-          "arr(T;theta=1800)*pO2*sigma": 0.005496589786625579,
+          "arr(T;theta=2000)*pO2": 0.0,
+          "arr(T;theta=2000)*pO2*sat(Df)": 0.4492499527951947,
+          "arr(T;theta=2000)*pO2*sigma": 0.008422763499202334,
           "pO2": 0.0,
           "pO2*sigma": 0.0
         },
+        "selected_threshold": 0.4171272044853974,
         "support": [
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
+          "arr(T;theta=2000)*pO2*sigma",
+          "arr(T;theta=2000)*pO2*sat(Df)"
         ],
-        "validation_normalized_rmse": 0.02460810942042594
+        "test_normalized_rmse": 0.07562931044213912,
+        "validation_normalized_rmse": 0.03606402350733405
       },
       "gates": {
         "at_most_one_false_interaction": true,
-        "expanded_error_within_20_percent_of_task6_e1": true,
-        "fixed_error_at_least_50_percent_above_same_seed_closed_diagnostic": true,
-        "missing_interaction_admitted": true,
+        "expanded_test_error_within_20_percent_of_e1_reference": true,
+        "fixed_test_error_at_least_50_percent_above_closed_diagnostic": true,
+        "missing_interaction_admitted": false,
         "structured_cross_condition_residual_evidence": true
+      },
+      "independent_test_evaluation": {
+        "closed_diagnostic_normalized_rmse": 0.01595221156543346,
+        "condition_ids": [
+          "fatigue_test"
+        ],
+        "expanded_library_normalized_rmse": 0.07562931044213912,
+        "fixed_library_normalized_rmse": 0.07562931044213912,
+        "stage_name": "independent test evaluation"
+      },
+      "parameter_selection": {
+        "parameter_name": "arrhenius_theta",
+        "profile_history": [
+          {
+            "median_support_size": 6.0,
+            "selected_training_threshold": 0.11731622740236235,
+            "selection_score": 0.0634985570383189,
+            "theta": 1200.0,
+            "training_cross_validation_error": 0.057498557038318895
+          },
+          {
+            "median_support_size": 8.0,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.027257286656603725,
+            "theta": 1400.0,
+            "training_cross_validation_error": 0.019257286656603725
+          },
+          {
+            "median_support_size": 4.0,
+            "selected_training_threshold": 0.08164979708976347,
+            "selection_score": 0.033234158830154584,
+            "theta": 1600.0,
+            "training_cross_validation_error": 0.029234158830154587
+          },
+          {
+            "median_support_size": 3.5,
+            "selected_training_threshold": 0.08164979708976347,
+            "selection_score": 0.0223311599478845,
+            "theta": 1800.0,
+            "training_cross_validation_error": 0.0188311599478845
+          },
+          {
+            "median_support_size": 4.0,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.016054769579709367,
+            "theta": 2000.0,
+            "training_cross_validation_error": 0.012054769579709365
+          },
+          {
+            "median_support_size": 5.0,
+            "selected_training_threshold": 0.05682665998058931,
+            "selection_score": 0.06882958193467498,
+            "theta": 2200.0,
+            "training_cross_validation_error": 0.06382958193467497
+          },
+          {
+            "median_support_size": 5.0,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.07502071676040857,
+            "theta": 2400.0,
+            "training_cross_validation_error": 0.07002071676040857
+          }
+        ],
+        "selected_theta": 2000.0,
+        "selection_data": "training_conditions_only",
+        "selection_rule": "leave_one_training_condition_out_profile_score",
+        "train_ids": [
+          "fatigue_warm",
+          "fatigue_oxygen"
+        ]
       },
       "same_seed_closed_library_diagnostic": {
         "candidate_names": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*Df",
+          "arr(T;theta=2000)*pO2",
+          "arr(T;theta=2000)*pO2*sigma",
+          "arr(T;theta=2000)*pO2*Df",
           "pO2",
           "pO2*sigma",
-          "arr(T;theta=1800)*pO2*sat(Df)"
+          "arr(T;theta=2000)*pO2*sat(Df)"
         ],
         "coefficients": {
-          "arr(T;theta=1800)*pO2": 0.18019672171465362,
-          "arr(T;theta=1800)*pO2*Df": 0.4502361196445345,
-          "arr(T;theta=1800)*pO2*sat(Df)": 0.0,
-          "arr(T;theta=1800)*pO2*sigma": 0.005995378621594352,
+          "arr(T;theta=2000)*pO2": 0.32020869464395313,
+          "arr(T;theta=2000)*pO2*Df": 0.8090840919803097,
+          "arr(T;theta=2000)*pO2*sat(Df)": 0.0,
+          "arr(T;theta=2000)*pO2*sigma": 0.008570908536322539,
           "pO2": 0.0,
-          "pO2*sigma": 0.0
+          "pO2*sigma": 6.479408476830692e-06
         },
-        "role": "noisy same-seed closed-library diagnostic; not the Task6 E1 reference",
+        "role": "post-selection closed-library diagnostic on the same noisy seed",
+        "selected_threshold": 0.08164979708976347,
         "support": [
-          "arr(T;theta=1800)*pO2",
-          "arr(T;theta=1800)*pO2*sigma",
-          "arr(T;theta=1800)*pO2*Df"
+          "arr(T;theta=2000)*pO2",
+          "arr(T;theta=2000)*pO2*sigma",
+          "arr(T;theta=2000)*pO2*Df",
+          "pO2*sigma"
         ],
-        "validation_normalized_rmse": 0.00022841711191703761
+        "test_normalized_rmse": 0.01595221156543346,
+        "validation_normalized_rmse": 0.006513574073278805
       },
-      "seed": 131,
-      "task6_e1_reference": {
-        "source": "Task6 E1",
-        "validation_normalized_rmse": 0.00025879605792407254
-      }
+      "seed": 89
+    },
+    {
+      "configuration": {
+        "base_candidate_names": [
+          "arr(T;theta=1400)*pO2",
+          "arr(T;theta=1400)*pO2*sigma",
+          "pO2",
+          "pO2*sigma",
+          "arr(T;theta=1400)*pO2*sat(Df)"
+        ],
+        "condition_roles": {
+          "finite_pool_validation_admission": [
+            "fatigue_validation"
+          ],
+          "independent_test_evaluation": [
+            "fatigue_test"
+          ],
+          "residual_screening_and_training": [
+            "fatigue_warm",
+            "fatigue_oxygen"
+          ]
+        },
+        "expansion_candidate_names": [
+          "arr(T;theta=1400)*pO2*Df",
+          "arr(T;theta=1400)*sigma*Df",
+          "arr(T;theta=1400)*sigma*sat(Df)",
+          "pO2*Df*Df",
+          "pO2*Df*sat(Df)",
+          "pO2*sat(Df)*sat(Df)",
+          "sigma*Df*Df",
+          "sigma*Df*sat(Df)",
+          "sigma*sat(Df)*sat(Df)"
+        ],
+        "json_newline": "LF",
+        "observation_noise": {
+          "applied_to": "Do_observation_only",
+          "description": "target-only Do observation noise; t, T, pO2, sigma, and Df are unchanged",
+          "distribution": "independent zero-mean Gaussian per time sample",
+          "noise_fraction": 0.0001,
+          "scale_per_condition": "noise_fraction * max(abs(clean Do))"
+        },
+        "target_dimension": [
+          0,
+          0,
+          -1,
+          0
+        ]
+      },
+      "evaluation_target": {
+        "expected_missing_interaction": "arr(T;theta=1800)*pO2*Df",
+        "use": "post-discovery evaluation only; not supplied to discovery"
+      },
+      "expanded_library": {
+        "candidate_names": [
+          "arr(T;theta=1400)*pO2",
+          "arr(T;theta=1400)*pO2*sigma",
+          "pO2",
+          "pO2*sigma",
+          "arr(T;theta=1400)*pO2*sat(Df)"
+        ],
+        "coefficients": {
+          "arr(T;theta=1400)*pO2": 0.0,
+          "arr(T;theta=1400)*pO2*sat(Df)": 0.06744784582357412,
+          "arr(T;theta=1400)*pO2*sigma": 0.0026670462918605385,
+          "pO2": 0.0,
+          "pO2*sigma": -1.3996219717396332e-05
+        },
+        "selected_threshold": 0.290312366506998,
+        "support": [
+          "arr(T;theta=1400)*pO2*sigma",
+          "pO2*sigma",
+          "arr(T;theta=1400)*pO2*sat(Df)"
+        ],
+        "test_normalized_rmse": 0.04197486106046437,
+        "test_nrmse_over_e1_reference": 0.2853998174590158,
+        "validation_normalized_rmse": 0.0333407380676344
+      },
+      "expansion": {
+        "admission_name": "finite-pool validation admission",
+        "admitted_candidates": [],
+        "claim_boundary": "controlled finite-pool evidence; not unrestricted grammar discovery",
+        "false_interactions": [],
+        "finite_pool": [
+          "arr(T;theta=1400)*pO2*Df",
+          "arr(T;theta=1400)*sigma*Df",
+          "arr(T;theta=1400)*sigma*sat(Df)",
+          "pO2*Df*Df",
+          "pO2*Df*sat(Df)",
+          "pO2*sat(Df)*sat(Df)",
+          "sigma*Df*Df",
+          "sigma*Df*sat(Df)",
+          "sigma*sat(Df)*sat(Df)"
+        ],
+        "rounds": [
+          {
+            "admitted_candidate": null,
+            "admitted_training_error_reduction": null,
+            "admitted_validation_error_reduction": null,
+            "complexity_layer": 3,
+            "minimum_validation_error_reduction": 0.000333407380676344,
+            "residual_base_fit": {
+              "selected_threshold": 0.5,
+              "selection_data": "training_conditions_only",
+              "selection_rule": "sparsest_nonempty_training_support_then_training_error",
+              "support": [
+                "arr(T;theta=1400)*pO2*sigma"
+              ],
+              "training_error": 0.09923894757155616
+            },
+            "residual_condition_ids": [
+              "fatigue_warm",
+              "fatigue_oxygen"
+            ],
+            "residual_ranking": [
+              {
+                "candidate": "arr(T;theta=1400)*sigma*sat(Df)",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": -0.41744038371515885,
+                  "fatigue_warm": -0.9393848258047552
+                },
+                "median_absolute_correlation": 0.678412604759957,
+                "residual_score": 0.678412604759957,
+                "sign_consistency": 1.0,
+                "stable": true,
+                "validation_error_reduction": 0.0
+              },
+              {
+                "candidate": "sigma*sat(Df)*sat(Df)",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": -0.2698762305888712,
+                  "fatigue_warm": -0.8282034419714569
+                },
+                "median_absolute_correlation": 0.5490398362801641,
+                "residual_score": 0.5490398362801641,
+                "sign_consistency": 1.0,
+                "stable": true,
+                "validation_error_reduction": 0.0
+              },
+              {
+                "candidate": "pO2*sat(Df)*sat(Df)",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.47812165119068634,
+                  "fatigue_warm": -0.07983024277626435
+                },
+                "median_absolute_correlation": 0.27897594698347533,
+                "residual_score": 0.27897594698347533,
+                "sign_consistency": 1.0,
+                "stable": false,
+                "validation_error_reduction": null
+              },
+              {
+                "candidate": "pO2*Df*sat(Df)",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.42341734414216026,
+                  "fatigue_warm": -0.11337436239378283
+                },
+                "median_absolute_correlation": 0.26839585326797155,
+                "residual_score": 0.26839585326797155,
+                "sign_consistency": 1.0,
+                "stable": false,
+                "validation_error_reduction": null
+              },
+              {
+                "candidate": "arr(T;theta=1400)*pO2*Df",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.4074524372904346,
+                  "fatigue_warm": -0.12677256771928072
+                },
+                "median_absolute_correlation": 0.2671125025048577,
+                "residual_score": 0.2671125025048577,
+                "sign_consistency": 1.0,
+                "stable": false,
+                "validation_error_reduction": null
+              },
+              {
+                "candidate": "pO2*Df*Df",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.4298316937068609,
+                  "fatigue_warm": -0.10191531047179196
+                },
+                "median_absolute_correlation": 0.2658735020893264,
+                "residual_score": 0.2658735020893264,
+                "sign_consistency": 1.0,
+                "stable": false,
+                "validation_error_reduction": null
+              },
+              {
+                "candidate": "arr(T;theta=1400)*sigma*Df",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.052894535177904295,
+                  "fatigue_warm": -0.33969874909730524
+                },
+                "median_absolute_correlation": 0.19629664213760478,
+                "residual_score": 0.19629664213760478,
+                "sign_consistency": 1.0,
+                "stable": false,
+                "validation_error_reduction": null
+              },
+              {
+                "candidate": "sigma*Df*sat(Df)",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.08899124868357394,
+                  "fatigue_warm": -0.2919381314383299
+                },
+                "median_absolute_correlation": 0.19046469006095193,
+                "residual_score": 0.19046469006095193,
+                "sign_consistency": 1.0,
+                "stable": false,
+                "validation_error_reduction": null
+              },
+              {
+                "candidate": "sigma*Df*Df",
+                "complexity_layer": 3,
+                "correlations_by_condition": {
+                  "fatigue_oxygen": 0.19981309172613335,
+                  "fatigue_warm": -0.2020720437027672
+                },
+                "median_absolute_correlation": 0.2009425677144503,
+                "residual_score": 0.0,
+                "sign_consistency": 0.0,
+                "stable": false,
+                "validation_error_reduction": null
+              }
+            ],
+            "round": 1,
+            "stability_thresholds": {
+              "minimum_absolute_correlation": 0.25,
+              "minimum_sign_consistency": 0.75,
+              "minimum_supporting_condition_count": 2
+            },
+            "stage_name": "training-only residual screening",
+            "validation_admission": {
+              "admitted_candidate": null,
+              "condition_ids": [
+                "fatigue_validation"
+              ],
+              "minimum_error_reduction": 0.000333407380676344,
+              "rule": "candidate_selected_and_validation_error_reduction_exceeds_one_percent_of_current_error",
+              "stage_name": "finite-pool validation admission"
+            }
+          }
+        ]
+      },
+      "fixed_library": {
+        "candidate_names": [
+          "arr(T;theta=1400)*pO2",
+          "arr(T;theta=1400)*pO2*sigma",
+          "pO2",
+          "pO2*sigma",
+          "arr(T;theta=1400)*pO2*sat(Df)"
+        ],
+        "coefficients": {
+          "arr(T;theta=1400)*pO2": 0.0,
+          "arr(T;theta=1400)*pO2*sat(Df)": 0.06744784582357412,
+          "arr(T;theta=1400)*pO2*sigma": 0.0026670462918605385,
+          "pO2": 0.0,
+          "pO2*sigma": -1.3996219717396332e-05
+        },
+        "selected_threshold": 0.290312366506998,
+        "support": [
+          "arr(T;theta=1400)*pO2*sigma",
+          "pO2*sigma",
+          "arr(T;theta=1400)*pO2*sat(Df)"
+        ],
+        "test_normalized_rmse": 0.04197486106046437,
+        "validation_normalized_rmse": 0.0333407380676344
+      },
+      "gates": {
+        "at_most_one_false_interaction": true,
+        "expanded_test_error_within_20_percent_of_e1_reference": true,
+        "fixed_test_error_at_least_50_percent_above_closed_diagnostic": false,
+        "missing_interaction_admitted": false,
+        "structured_cross_condition_residual_evidence": true
+      },
+      "independent_test_evaluation": {
+        "closed_diagnostic_normalized_rmse": 0.029249228172248766,
+        "condition_ids": [
+          "fatigue_test"
+        ],
+        "expanded_library_normalized_rmse": 0.04197486106046437,
+        "fixed_library_normalized_rmse": 0.04197486106046437,
+        "stage_name": "independent test evaluation"
+      },
+      "parameter_selection": {
+        "parameter_name": "arrhenius_theta",
+        "profile_history": [
+          {
+            "median_support_size": 5.5,
+            "selected_training_threshold": 0.1406240424274093,
+            "selection_score": 0.03818205609052137,
+            "theta": 1200.0,
+            "training_cross_validation_error": 0.03268205609052137
+          },
+          {
+            "median_support_size": 8.0,
+            "selected_training_threshold": 0.05682665998058931,
+            "selection_score": 0.02982203506574787,
+            "theta": 1400.0,
+            "training_cross_validation_error": 0.02182203506574787
+          },
+          {
+            "median_support_size": 5.5,
+            "selected_training_threshold": 0.11731622740236235,
+            "selection_score": 0.03279056210968769,
+            "theta": 1600.0,
+            "training_cross_validation_error": 0.02729056210968769
+          },
+          {
+            "median_support_size": 6.0,
+            "selected_training_threshold": 0.09787157995424128,
+            "selection_score": 0.04762959445351415,
+            "theta": 1800.0,
+            "training_cross_validation_error": 0.04162959445351415
+          },
+          {
+            "median_support_size": 7.5,
+            "selected_training_threshold": 0.05682665998058931,
+            "selection_score": 0.06776790731218937,
+            "theta": 2000.0,
+            "training_cross_validation_error": 0.06026790731218937
+          },
+          {
+            "median_support_size": 6.0,
+            "selected_training_threshold": 0.08164979708976347,
+            "selection_score": 0.07007513874962401,
+            "theta": 2200.0,
+            "training_cross_validation_error": 0.064075138749624
+          },
+          {
+            "median_support_size": 7.0,
+            "selected_training_threshold": 0.06811670321370596,
+            "selection_score": 0.06889388036212754,
+            "theta": 2400.0,
+            "training_cross_validation_error": 0.06189388036212754
+          }
+        ],
+        "selected_theta": 1400.0,
+        "selection_data": "training_conditions_only",
+        "selection_rule": "leave_one_training_condition_out_profile_score",
+        "train_ids": [
+          "fatigue_warm",
+          "fatigue_oxygen"
+        ]
+      },
+      "same_seed_closed_library_diagnostic": {
+        "candidate_names": [
+          "arr(T;theta=1400)*pO2",
+          "arr(T;theta=1400)*pO2*sigma",
+          "arr(T;theta=1400)*pO2*Df",
+          "pO2",
+          "pO2*sigma",
+          "arr(T;theta=1400)*pO2*sat(Df)"
+        ],
+        "coefficients": {
+          "arr(T;theta=1400)*pO2": 0.05687439599484844,
+          "arr(T;theta=1400)*pO2*Df": 0.13908824846538564,
+          "arr(T;theta=1400)*pO2*sat(Df)": 0.0,
+          "arr(T;theta=1400)*pO2*sigma": 0.0029648411120545663,
+          "pO2": 0.0,
+          "pO2*sigma": -1.865938338721897e-05
+        },
+        "role": "post-selection closed-library diagnostic on the same noisy seed",
+        "selected_threshold": 0.24219437173720867,
+        "support": [
+          "arr(T;theta=1400)*pO2",
+          "arr(T;theta=1400)*pO2*sigma",
+          "arr(T;theta=1400)*pO2*Df",
+          "pO2*sigma"
+        ],
+        "test_normalized_rmse": 0.029249228172248766,
+        "validation_normalized_rmse": 0.012155970567892145
+      },
+      "seed": 131
     }
-  ]
+  ],
+  "scope": {
+    "admission": "finite-pool validation admission",
+    "claim_boundary": "controlled finite-pool evidence; not unrestricted grammar discovery"
+  }
 }

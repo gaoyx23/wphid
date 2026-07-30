@@ -5,204 +5,183 @@ import sys
 
 import numpy as np
 import pytest
-from scipy.integrate import cumulative_trapezoid
 
 from experiments.e3_missing_interaction import (
+    DEFAULT_E1_METRICS_PATH,
     EXPECTED_MISSING_INTERACTION,
     SEEDS,
+    TEST_IDS,
     run_experiment,
+    run_seed,
 )
 from experiments.e3_missing_interaction_core import (
-    THRESHOLDS,
     TRAIN_IDS,
     VALIDATION_IDS,
-    _candidate_libraries,
     _observations,
 )
-from wphid.discovery.residual import discover_with_expansion
-from wphid.pipeline import _condition_matrix
-from wphid.sparse.stlsq import fit_stlsq
 from wphid.types import Trajectory
-
-
-TASK6_E1_VALIDATION_NRMSE = 0.00025879605792407254
 
 
 @pytest.fixture(scope="module")
 def e3_metrics(tmp_path_factory):
     output_dir = tmp_path_factory.mktemp("e3_missing_interaction")
-    metrics = run_experiment(output_dir=output_dir)
+    metrics = run_experiment(
+        output_dir=output_dir,
+        e1_metrics_path=DEFAULT_E1_METRICS_PATH,
+    )
     persisted = json.loads(
         (output_dir / "metrics.json").read_text(encoding="utf-8")
     )
-    per_seed_dir = output_dir / "per_seed"
-    persisted_per_seed = [
-        json.loads(
-            (per_seed_dir / f"seed_{seed}.json").read_text(encoding="utf-8")
-        )
-        for seed in SEEDS
-    ]
-    return metrics, persisted, persisted_per_seed, output_dir
+    return metrics, persisted, output_dir
 
 
-def test_e3_discovers_missing_canonical_interaction_across_five_seeds(e3_metrics):
-    """Training-only residual ranking plus validation admission must pass E3."""
-    metrics, _, _, _ = e3_metrics
+def test_e3_persists_three_stage_finite_pool_evidence(e3_metrics):
+    """Missing stage labels or quantitative evidence would overstate E3."""
+    metrics, persisted, _ = e3_metrics
 
+    assert persisted == metrics
     assert metrics["aggregate"]["seeds"] == list(SEEDS)
-    assert [result["seed"] for result in metrics["per_seed"]] == list(SEEDS)
+    assert metrics["scope"]["admission"] == "finite-pool validation admission"
+    assert metrics["scope"]["claim_boundary"] == (
+        "controlled finite-pool evidence; not unrestricted grammar discovery"
+    )
     for result in metrics["per_seed"]:
-        same_seed_closed_error = result[
-            "same_seed_closed_library_diagnostic"
-        ]["validation_normalized_rmse"]
-        fixed_error = result["fixed_library"]["validation_normalized_rmse"]
-        expanded_error = result["expanded_library"][
-            "validation_normalized_rmse"
-        ]
-        task6_e1_error = result["task6_e1_reference"][
-            "validation_normalized_rmse"
-        ]
-        admitted = result["expansion"]["admitted_candidates"]
-
-        assert fixed_error >= 1.5 * same_seed_closed_error
-        assert result["expansion"]["rounds"]
-        first_round = result["expansion"]["rounds"][0]
-        assert first_round["residual_ranking"]
-        assert first_round["residual_base_fit"]["selection_data"] == (
+        roles = result["configuration"]["condition_roles"]
+        assert roles == {
+            "residual_screening_and_training": list(TRAIN_IDS),
+            "finite_pool_validation_admission": list(VALIDATION_IDS),
+            "independent_test_evaluation": list(TEST_IDS),
+        }
+        assert result["parameter_selection"]["selection_data"] == (
             "training_conditions_only"
         )
-        for evidence in first_round["residual_ranking"]:
-            assert set(evidence["correlations_by_condition"]) == set(
-                result["configuration"]["train_ids"]
+        assert result["expansion"]["admission_name"] == (
+            "finite-pool validation admission"
+        )
+        assert result["expansion"]["finite_pool"]
+        assert set(result["expansion"]["admitted_candidates"]).issubset(
+            set(result["expansion"]["finite_pool"])
+        )
+        assert result["expansion"]["rounds"]
+        for round_evidence in result["expansion"]["rounds"]:
+            assert round_evidence["stage_name"] == (
+                "training-only residual screening"
             )
-            assert {
-                "median_absolute_correlation",
-                "sign_consistency",
-                "stable",
-                "residual_score",
-                "validation_error_reduction",
-            } <= evidence.keys()
-        assert set(result["configuration"]["validation_ids"]).isdisjoint(
-            first_round["residual_condition_ids"]
+            assert round_evidence["residual_condition_ids"] == list(TRAIN_IDS)
+            assert round_evidence["stability_thresholds"] == {
+                "minimum_absolute_correlation": 0.25,
+                "minimum_sign_consistency": 0.75,
+                "minimum_supporting_condition_count": 2,
+            }
+            assert round_evidence["validation_admission"][
+                "stage_name"
+            ] == "finite-pool validation admission"
+            assert round_evidence["validation_admission"][
+                "condition_ids"
+            ] == list(VALIDATION_IDS)
+            for score in round_evidence["residual_ranking"]:
+                assert {
+                    "correlations_by_condition",
+                    "median_absolute_correlation",
+                    "sign_consistency",
+                    "stable",
+                    "residual_score",
+                    "validation_error_reduction",
+                } <= score.keys()
+                assert set(score["correlations_by_condition"]) == set(
+                    TRAIN_IDS
+                )
+
+        for model_name in (
+            "same_seed_closed_library_diagnostic",
+            "fixed_library",
+            "expanded_library",
+        ):
+            model = result[model_name]
+            assert np.isfinite(model["validation_normalized_rmse"])
+            assert np.isfinite(model["test_normalized_rmse"])
+        assert result["expanded_library"]["test_normalized_rmse"] == pytest.approx(
+            result["independent_test_evaluation"][
+                "expanded_library_normalized_rmse"
+            ]
         )
-        assert EXPECTED_MISSING_INTERACTION in admitted
-        assert expanded_error <= 1.2 * task6_e1_error
-        assert len(
-            set(admitted).difference({EXPECTED_MISSING_INTERACTION})
-        ) <= 1
-        assert all(result["gates"].values())
-
-    assert metrics["aggregate"]["all_seeds_pass"]
-    assert metrics["aggregate"]["passing_seed_count"] == len(SEEDS)
-
-
-def test_expanded_error_gate_uses_fixed_task6_e1_reference(e3_metrics):
-    """Replacing Task6 E1 with a noisy same-seed oracle breaks E3 reporting."""
-    metrics, persisted, _, _ = e3_metrics
-
-    assert persisted == metrics
-    for result in persisted["per_seed"]:
-        expanded_error = result["expanded_library"][
-            "validation_normalized_rmse"
-        ]
-        task6_e1 = result["task6_e1_reference"]
-        persisted_ratio = result["expanded_library"][
-            "validation_nrmse_over_task6_e1"
-        ]
-
-        assert "closed_library" not in result
-        assert task6_e1 == {
-            "source": "Task6 E1",
-            "validation_normalized_rmse": TASK6_E1_VALIDATION_NRMSE,
-        }
-        assert persisted_ratio == pytest.approx(
-            expanded_error / TASK6_E1_VALIDATION_NRMSE
-        )
-        assert persisted_ratio <= 1.2
-        assert result["gates"][
-            "expanded_error_within_20_percent_of_task6_e1"
-        ]
+    detection_count = sum(
+        EXPECTED_MISSING_INTERACTION
+        in result["expansion"]["admitted_candidates"]
+        for result in metrics["per_seed"]
+    )
+    passing_seed_count = sum(
+        all(result["gates"].values()) for result in metrics["per_seed"]
+    )
+    assert metrics["aggregate"]["missing_interaction_detection_rate"] == (
+        detection_count / len(SEEDS)
+    )
+    assert metrics["aggregate"]["passing_seed_count"] == passing_seed_count
+    assert metrics["aggregate"]["e3_gate_pass"] == (
+        passing_seed_count == len(SEEDS)
+    )
+    assert metrics["aggregate"]["overall_phase_decision"] == "NO-GO"
 
 
-def test_e3_writes_lf_json_and_describes_target_only_do_noise(e3_metrics):
-    """Platform newlines or ambiguous noise scope make byte hashes misleading."""
-    metrics, persisted, persisted_per_seed, output_dir = e3_metrics
+def test_e3_loads_e1_reference_and_cannot_override_e1_no_go(tmp_path):
+    """Changing the supplied E1 artifact must change E3's persisted reference."""
+    reference_nrmse = 0.375
+    e1_path = tmp_path / "e1-metrics.json"
+    e1_path.write_text(
+        json.dumps(
+            {
+                "experiment": "e1_closed_library",
+                "aggregate": {
+                    "all_seeds_pass": False,
+                    "gate": {
+                        "metric": "minimum_per_seed_support_f1",
+                        "threshold": 0.9,
+                        "observed": 0.75,
+                        "pass": False,
+                    },
+                    "reference_validation_normalized_rmse": reference_nrmse,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
 
-    assert persisted == metrics
-    assert persisted_per_seed == metrics["per_seed"]
-    artifact_paths = [
-        output_dir / "metrics.json",
-        *[
-            output_dir / "per_seed" / f"seed_{seed}.json"
-            for seed in SEEDS
-        ],
+    metrics = run_experiment(
+        output_dir=tmp_path / "e3",
+        seeds=(SEEDS[0],),
+        e1_metrics_path=e1_path,
+    )
+
+    assert metrics["e1_reference"][
+        "reference_validation_normalized_rmse"
+    ] == reference_nrmse
+    assert not metrics["aggregate"]["e1_gate_pass"]
+    assert metrics["aggregate"]["overall_phase_decision"] == "NO-GO"
+    assert metrics["aggregate"]["overall_phase_decision_rule"] == (
+        "E1 and E3 must both pass; E3 cannot override E1"
+    )
+    ratio = metrics["per_seed"][0]["expanded_library"][
+        "test_nrmse_over_e1_reference"
     ]
-    for artifact_path in artifact_paths:
-        artifact_bytes = artifact_path.read_bytes()
-        assert artifact_bytes.endswith(b"\n")
-        assert b"\r\n" not in artifact_bytes
-    for result in persisted["per_seed"]:
-        assert result["configuration"]["observation_noise"] == {
-            "applied_to": "Do_observation_only",
-            "description": (
-                "target-only Do observation noise; "
-                "t, T, pO2, sigma, and Df are unchanged"
-            ),
-            "distribution": (
-                "independent zero-mean Gaussian per time sample"
-            ),
-            "noise_fraction": 1.0e-4,
-            "scale_per_condition": (
-                "noise_fraction * max(abs(clean Do))"
-            ),
-        }
-        assert result["configuration"]["json_newline"] == "LF"
+    assert ratio == pytest.approx(
+        metrics["per_seed"][0]["expanded_library"]["test_normalized_rmse"]
+        / reference_nrmse
+    )
 
 
-def test_validation_target_cannot_change_training_residual_ranking():
-    """Held-out Do may affect admission, never residual scores or stability."""
-    trajectories = _observations(SEEDS[0])
-    _, base_candidates, expansion_candidates = _candidate_libraries()
-    training_matrices = [
-        _condition_matrix(
-            next(
-                trajectory
-                for trajectory in trajectories
-                if trajectory.condition_id == condition_id
-            ),
-            base_candidates,
-        )
-        for condition_id in TRAIN_IDS
-    ]
-    low_threshold_fit = fit_stlsq(
-        np.vstack([matrix for matrix, _ in training_matrices]),
-        np.concatenate([target for _, target in training_matrices]),
-        float(THRESHOLDS[0]),
-    )
-    validation = next(
-        trajectory
-        for trajectory in trajectories
-        if trajectory.condition_id in VALIDATION_IDS
-    )
-    validation_features = np.column_stack(
-        [
-            candidate.evaluate(validation.states)
-            for candidate in base_candidates
-        ]
-    )
-    validation_only_target = cumulative_trapezoid(
-        validation_features @ low_threshold_fit.coefficients,
-        validation.t,
-        initial=0.0,
-    )
-    perturbed = [
+def _replace_target(
+    trajectories: list[Trajectory],
+    condition_ids: tuple[str, ...],
+    transform,
+) -> list[Trajectory]:
+    return [
         Trajectory(
             t=trajectory.t,
             states={
                 **dict(trajectory.states),
                 "Do": (
-                    validation_only_target
-                    if trajectory.condition_id in VALIDATION_IDS
+                    transform(trajectory)
+                    if trajectory.condition_id in condition_ids
                     else trajectory.states["Do"]
                 ),
             },
@@ -211,29 +190,57 @@ def test_validation_target_cannot_change_training_residual_ranking():
         for trajectory in trajectories
     ]
 
-    baseline = discover_with_expansion(
+
+def test_test_target_cannot_change_theta_threshold_ranking_or_admission():
+    """The independent test target may change only post-selection evaluation."""
+    trajectories = _observations(SEEDS[0])
+    perturbed = _replace_target(
         trajectories,
-        base_candidates,
-        expansion_candidates,
-        TRAIN_IDS,
-        VALIDATION_IDS,
-        THRESHOLDS,
-    )
-    changed_validation = discover_with_expansion(
-        perturbed,
-        base_candidates,
-        expansion_candidates,
-        TRAIN_IDS,
-        VALIDATION_IDS,
-        THRESHOLDS,
+        TEST_IDS,
+        lambda trajectory: (
+            7.0 * np.asarray(trajectory.states["Do"])
+            + 0.2 * trajectory.t**2
+        ),
     )
 
-    baseline_ranking = baseline.diagnostics["expansion_rounds"][0][
-        "residual_ranking"
-    ]
-    changed_ranking = changed_validation.diagnostics["expansion_rounds"][0][
-        "residual_ranking"
-    ]
+    baseline = run_seed(SEEDS[0], trajectories=trajectories)
+    changed = run_seed(SEEDS[0], trajectories=perturbed)
+
+    assert changed["parameter_selection"] == baseline["parameter_selection"]
+    assert changed["fixed_library"]["selected_threshold"] == baseline[
+        "fixed_library"
+    ]["selected_threshold"]
+    assert changed["same_seed_closed_library_diagnostic"][
+        "selected_threshold"
+    ] == baseline["same_seed_closed_library_diagnostic"]["selected_threshold"]
+    assert changed["expanded_library"]["selected_threshold"] == baseline[
+        "expanded_library"
+    ]["selected_threshold"]
+    assert changed["expansion"] == baseline["expansion"]
+    assert changed["fixed_library"]["validation_normalized_rmse"] == baseline[
+        "fixed_library"
+    ]["validation_normalized_rmse"]
+    assert changed["expanded_library"]["validation_normalized_rmse"] == baseline[
+        "expanded_library"
+    ]["validation_normalized_rmse"]
+    assert changed["expanded_library"]["test_normalized_rmse"] != baseline[
+        "expanded_library"
+    ]["test_normalized_rmse"]
+
+
+def test_validation_target_cannot_change_theta_or_training_residual_screening():
+    """Validation may admit a candidate but cannot alter train-only evidence."""
+    trajectories = _observations(SEEDS[0])
+    perturbed = _replace_target(
+        trajectories,
+        VALIDATION_IDS,
+        lambda trajectory: np.asarray(trajectory.states["Do"])[::-1],
+    )
+
+    baseline = run_seed(SEEDS[0], trajectories=trajectories)
+    changed = run_seed(SEEDS[0], trajectories=perturbed)
+
+    assert changed["parameter_selection"] == baseline["parameter_selection"]
     evidence_fields = (
         "candidate",
         "correlations_by_condition",
@@ -242,17 +249,33 @@ def test_validation_target_cannot_change_training_residual_ranking():
         "stable",
         "residual_score",
     )
-    assert [
-        {field: evidence[field] for field in evidence_fields}
-        for evidence in changed_ranking
-    ] == [
-        {field: evidence[field] for field in evidence_fields}
-        for evidence in baseline_ranking
-    ]
+    for changed_round, baseline_round in zip(
+        changed["expansion"]["rounds"],
+        baseline["expansion"]["rounds"],
+        strict=True,
+    ):
+        assert [
+            {field: score[field] for field in evidence_fields}
+            for score in changed_round["residual_ranking"]
+        ] == [
+            {field: score[field] for field in evidence_fields}
+            for score in baseline_round["residual_ranking"]
+        ]
+
+
+def test_e3_writes_lf_compact_json(e3_metrics):
+    """Committed evidence stays deterministic and avoids redundant seed files."""
+    metrics, persisted, output_dir = e3_metrics
+
+    assert persisted == metrics
+    artifact_bytes = (output_dir / "metrics.json").read_bytes()
+    assert artifact_bytes.endswith(b"\n")
+    assert b"\r\n" not in artifact_bytes
+    assert not (output_dir / "per_seed").exists()
 
 
 def test_e3_script_runs_from_outside_repository(tmp_path):
-    """The exact gate entry point must bootstrap both project and source paths."""
+    """The gate entry point resolves its committed E1 artifact explicitly."""
     script = (
         Path(__file__).resolve().parents[2]
         / "experiments"
@@ -268,7 +291,8 @@ def test_e3_script_runs_from_outside_repository(tmp_path):
     )
 
     assert completed.returncode == 0, completed.stderr
-    assert "E3 seeds passing: 5/5" in completed.stdout
+    assert "E3 seeds passing:" in completed.stdout
+    assert "overall phase: NO-GO" in completed.stdout
     persisted = json.loads(
         (
             tmp_path
@@ -277,4 +301,4 @@ def test_e3_script_runs_from_outside_repository(tmp_path):
             / "metrics.json"
         ).read_text(encoding="utf-8")
     )
-    assert persisted["aggregate"]["all_seeds_pass"]
+    assert persisted["aggregate"]["overall_phase_decision"] == "NO-GO"

@@ -1,9 +1,14 @@
 import numpy as np
+import pytest
 
-from wphid.discovery.residual import ResidualBlock, rank_expansions
+from wphid.discovery.residual import (
+    ResidualBlock,
+    discover_with_expansion,
+    rank_expansions,
+)
 from wphid.grammar.atoms import PRESSURE, aging_atoms
 from wphid.grammar.generate import generate_candidates
-from wphid.types import Candidate
+from wphid.types import Candidate, Trajectory
 
 
 TRUE_INTERACTION = "arr(T;theta=1800)*pO2*Df"
@@ -16,6 +21,7 @@ def _candidate(name: str, group: str) -> Candidate:
         dimension=PRESSURE,
         group=group,
         parents=tuple(name.split("*")),
+        coefficient_dimension=(0, 0, 0, 0),
     )
 
 
@@ -72,3 +78,31 @@ def test_ranking_requires_stable_cross_condition_weak_residual_evidence():
     )
     assert not one_condition_score.stable
     assert one_condition_score.median_absolute_correlation < 0.25
+
+
+def test_expansion_rejects_overlap_with_independent_test_conditions():
+    """A condition reused for admission and test would leak into evaluation."""
+    time = np.linspace(0.0, 1.0, 21)
+    trajectories = [
+        Trajectory(
+            t=time,
+            states={
+                "Do": time**2,
+                "base": np.ones_like(time),
+            },
+            condition_id=condition_id,
+        )
+        for condition_id in ("train-a", "train-b", "validation")
+    ]
+
+    with pytest.raises(ValueError, match="pairwise disjoint"):
+        discover_with_expansion(
+            trajectories=trajectories,
+            base_candidates=[_candidate("base", "F")],
+            expansion_candidates=[],
+            train_ids=("train-a", "train-b"),
+            validation_ids=("validation",),
+            test_ids=("validation",),
+            target_dimension=PRESSURE,
+            thresholds=(0.0,),
+        )
