@@ -1,0 +1,16 @@
+{
+  "all_passed": true,
+  "command": "python -m pytest tests/wendy_comparison_recovery_v1/test_recovery_identities.py -q",
+  "tool_chunk": "234cca",
+  "exit_code": 0,
+  "passed": 3,
+  "failed": 0,
+  "elapsed_seconds": 3.3,
+  "source_sha256": {
+    "reproducibility/wendy_comparison_recovery_v1/workflow.py": "f964486896714b8bb5c69dc5cb4b50ee4f2d013fe9279893df6bb5aa6f594a9f",
+    "reproducibility/wendy_comparison_recovery_v1/protocol.json": "8285354a5d2c1de6097344da1097f848a7fac48014b51c61c46d85339a427c63",
+    "tests/wendy_comparison_recovery_v1/test_recovery_identities.py": "c822b37b1957ec4dabce44b8a84aac8be2b7d764e9e6215a57f88b5e098d874e"
+  },
+  "original_math_tests_repeated": 0,
+  "scientific_fits": 0
+}

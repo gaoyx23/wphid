@@ -1,0 +1,50 @@
+{
+  "version": "COUPLED_OBSERVATION_V1_SPARSE_ANALYTIC_SOFTWARE_20261013",
+  "identity": "new sparse raw-observation derivatives and weak support/domain checks; no old completed tests or scientific cases rerun",
+  "output_parent": "artifacts/paper_coupled_observation_v1",
+  "test_path": "tests/coupled_observation_v1/test_observation.py",
+  "wall_cap_seconds": 60,
+  "scientific_inputs": [],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_draws": 0,
+  "scientific_gate_changed": false,
+  "required_completed_records": [
+    {
+      "path": "artifacts/paper_coupled_balance_v1/software_qualification_20261012_attempt01",
+      "assessment_sha256": "917db30fa4e01f2e8a2040f91c70eac8f34c1498d78194e22f6c016ceacc38d4",
+      "freeze_filename": "source-freeze.json",
+      "freeze_receipt_key": "source_freeze_sha256",
+      "passed_key": "software_passed"
+    },
+    {
+      "path": "artifacts/paper_coupled_balance_v1/noise_numerical_r1_qualification_20261012_attempt01",
+      "assessment_sha256": "5a442ba76c81a5e7f94a3e5a931b21960cdaf05c1ee0fe7c6580293465ea0759",
+      "freeze_filename": "source-freeze.json",
+      "freeze_receipt_key": "source_freeze_sha256",
+      "passed_key": "software_passed"
+    },
+    {
+      "path": "artifacts/paper_coupled_balance_v1/saved_assembly_audit_20261013_attempt01",
+      "assessment_sha256": "38d04ef366018e84afc412f1681833dc55b6c907a1527be1047de29564cfd7c3",
+      "freeze_filename": "input-source-freeze.json",
+      "freeze_receipt_key": "input_source_freeze_sha256",
+      "passed_key": "assembly_interface_passed"
+    }
+  ],
+  "source_files": [
+    "src/wphid/coupled_observation_v1/__init__.py",
+    "src/wphid/coupled_observation_v1/linearization.py",
+    "tests/coupled_observation_v1/test_observation.py",
+    "reproducibility/coupled_observation_v1/qualify_software.py",
+    "reproducibility/coupled_observation_v1/software-protocol-20261013.json",
+    "src/wphid/coupled_balance_v1/__init__.py",
+    "src/wphid/coupled_balance_v1/assembler.py",
+    "src/wphid/coupled_balance_v1/operators.py",
+    "src/wphid/coupled_balance_v1/noise.py",
+    "src/wphid/source_geometry_v6/__init__.py",
+    "src/wphid/source_geometry_v6/geometry.py",
+    "reproducibility/source_geometry_v6/qualify_software.py"
+  ],
+  "completion_rule": "new checks pass once after freeze; retain every failed record; finite boundary tangents do not qualify clipped or additive-Gaussian observations"
+}

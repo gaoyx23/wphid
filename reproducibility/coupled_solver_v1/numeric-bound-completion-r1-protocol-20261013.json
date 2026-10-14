@@ -1,0 +1,26 @@
+{
+  "version": "COUPLED_SOLVER_NUMERIC_BOUND_R1_WITHIN_ORIGINAL_BUDGET_20261013",
+  "original_protocol": "reproducibility/coupled_solver_v1/scientific-protocol-20261013.json",
+  "original_output": "artifacts/paper_coupled_solver_v1/scientific_development_20261013_attempt01",
+  "output_root": "artifacts/paper_coupled_solver_v1/scientific_development_numeric_bound_r1_20261013",
+  "fault_identity": "valid unit endpoint maps energy upper 1.8 to 1.8000000000000003; strict physical-box rejection",
+  "scope": "only starts explicitly interrupted by this exact arithmetic fault and only original unspent CPU/call allowance; completed/exhausted fits and original outputs retained",
+  "new_inputs": 0,
+  "new_trajectories": 0,
+  "new_noise_blocks": 0,
+  "new_candidates": 0,
+  "new_initial_fractions": 0,
+  "changed_scores_weights_thresholds": false,
+  "cpu_rule": "continuation cpu cap = max(0, original 15 seconds - old measured candidate-program cpu); old+continuation CPU reported together, original boundary-check overshoot retained",
+  "call_rule": "continuation maximum calls = max(0, original 2000 - old calls)",
+  "minimum_remaining_cpu_to_start": 0.25,
+  "required_error": "all and only declared outer coordinates are required",
+  "sources": [
+    "src/wphid/coupled_solver_v2/__init__.py",
+    "src/wphid/coupled_solver_v2/solver.py",
+    "reproducibility/coupled_solver_v1/numeric_bound_completion_r1.py",
+    "reproducibility/coupled_solver_v1/numeric-bound-completion-r1-protocol-20261013.json"
+  ],
+  "interpretation": "already-viewed development completion after mathematical representation repair, never independent confirmation or a best-tuned external benchmark",
+  "stop": "exactly one numeric correction; no cap extension or additional restart, no other scientific update to pass"
+}

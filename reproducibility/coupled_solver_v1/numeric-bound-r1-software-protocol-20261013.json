@@ -1,0 +1,17 @@
+{
+  "version": "COUPLED_SOLVER_V2_INCLUSIVE_NUMERIC_BOUND_SOFTWARE_20261013",
+  "output_parent": "artifacts/paper_coupled_solver_v2/numeric_bound_software",
+  "test_path": "tests/coupled_solver_v2/test_bounds.py",
+  "wall_cap_seconds": 60,
+  "source_files": [
+    "src/wphid/coupled_solver_v2/__init__.py",
+    "src/wphid/coupled_solver_v2/solver.py",
+    "tests/coupled_solver_v2/test_bounds.py",
+    "reproducibility/coupled_solver_v1/qualify_numeric_bound_r1.py"
+  ],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_blocks": 0,
+  "physical_box_expansion": false,
+  "original_source_and_scientific_results_changed": false
+}

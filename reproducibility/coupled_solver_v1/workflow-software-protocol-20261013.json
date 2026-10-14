@@ -1,0 +1,17 @@
+{
+  "version": "COUPLED_SOLVER_V1_WORKFLOW_NEW_CHECKS_20261013",
+  "output_parent": "artifacts/paper_coupled_solver_v1/workflow_software",
+  "test_path": "tests/coupled_solver_v1/test_workflow.py",
+  "wall_cap_seconds": 60,
+  "source_files": [
+    "tests/coupled_solver_v1/test_workflow.py",
+    "reproducibility/coupled_solver_v1/qualify_workflow.py",
+    "reproducibility/coupled_solver_v1/workflow.py",
+    "reproducibility/coupled_solver_v1/generator.py",
+    "reproducibility/coupled_solver_v1/scientific-protocol-20261013.json",
+    "src/wphid/coupled_solver_v1/model.py"
+  ],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_blocks": 0
+}

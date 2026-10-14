@@ -1,0 +1,29 @@
+{
+  "version": "COUPLED_SOLVER_V1_NEW_SOFTWARE_20261013",
+  "output_parent": "artifacts/paper_coupled_solver_v1/software",
+  "test_path": "tests/coupled_solver_v1/test_solver.py",
+  "wall_cap_seconds": 120,
+  "required_completed_records": [
+    {
+      "path": "artifacts/paper_coupled_balance_v1/software_qualification_20261012_attempt01",
+      "assessment_sha256": "917db30fa4e01f2e8a2040f91c70eac8f34c1498d78194e22f6c016ceacc38d4",
+      "freeze_filename": "source-freeze.json",
+      "freeze_receipt_key": "source_freeze_sha256",
+      "passed_key": "software_passed"
+    }
+  ],
+  "source_files": [
+    "src/wphid/coupled_solver_v1/__init__.py",
+    "src/wphid/coupled_solver_v1/model.py",
+    "src/wphid/coupled_solver_v1/solver.py",
+    "src/wphid/coupled_solver_v1/uncertainty.py",
+    "tests/coupled_solver_v1/test_solver.py",
+    "reproducibility/coupled_solver_v1/generator.py",
+    "reproducibility/coupled_solver_v1/qualify_software.py",
+    "reproducibility/coupled_solver_v1/software-protocol-20261013.json"
+  ],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_draws": 0,
+  "criterion_identity": "fixed reference measurement metric, not parameter-dependent exact likelihood; no jitter or arbitrary regularizer"
+}

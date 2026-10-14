@@ -1,0 +1,23 @@
+{
+  "version": "SOURCE_GEOMETRY_V6_SOFTWARE_ONLY_20261012",
+  "identity": "artificial software qualification, not estimator adoption",
+  "output_parent": "artifacts/paper_source_geometry_v6",
+  "test_path": "tests/source_geometry_v6/test_geometry.py",
+  "wall_cap_seconds": 60,
+  "fixed_rtol": 1e-10,
+  "scientific_inputs": [],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_draws": 0,
+  "scientific_gate_changed": false,
+  "development_authorized_by_software_pass": false,
+  "frozen_versions_modified": false,
+  "completion_rule": "all artificial checks pass; freeze code identity before tests and retain failure",
+  "source_files": [
+    "src/wphid/source_geometry_v6/__init__.py",
+    "src/wphid/source_geometry_v6/geometry.py",
+    "tests/source_geometry_v6/test_geometry.py",
+    "reproducibility/source_geometry_v6/qualify_software.py",
+    "reproducibility/source_geometry_v6/software-protocol.json"
+  ]
+}

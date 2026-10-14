@@ -1,0 +1,16 @@
+{
+  "all_passed": true,
+  "returncode": 0,
+  "source_sha256": {
+    "reproducibility/wendy_comparison_resume_v3/complete.py": "7b8d44a2c1236690d18fbf6235e7fdacff92f051b14e3ab9cc9f62e4c788f1da",
+    "reproducibility/wendy_comparison_resume_v3/launch.ps1": "5bb357053a994480d4005de15f79b6d853dfae55e62cbed35e3a91319fb6df5a",
+    "reproducibility/wendy_comparison_resume_v3/protocol.json": "d0c83db830532f094ec58554fcc275cb9dff89e9efca87254c6fb4026c8f6766",
+    "reproducibility/wendy_comparison_resume_v3/qualification-stdout.txt": "76d6f590e62813f317252d29235f0627266ff714bb4ef5d125124fa231d232cb",
+    "reproducibility/wendy_comparison_resume_v3/qualify.py": "366c3a0b8ec91073f003d18359d3ee7812fde522dbd6a3f9ee62d464475f4251",
+    "tests/wendy_comparison_resume_v3/test_orchestration.py": "0fba20481b3a920d7d2b3d3b595910cf73148a3fb846cae41bc4254394dcf2b4"
+  },
+  "new_parameter_fits": 0,
+  "new_noise_or_integrations": 0,
+  "actual_cwd": "C:\\Users\\高艺艺\\Desktop\\Research\\.worktrees\\algorithm-dev",
+  "intended_import": "C:\\Users\\高艺艺\\Desktop\\Research\\.worktrees\\algorithm-dev\\src\\wphid\\__init__.py"
+}

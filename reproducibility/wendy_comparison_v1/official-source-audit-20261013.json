@@ -1,0 +1,71 @@
+{
+  "algorithm": "official nonlinear WENDy.jl",
+  "repository": "https://github.com/nrummel/WENDy.jl",
+  "commit": "edaaab7392adf8b307a4a607c4210a910db41076",
+  "commit_date_utc": "2026-06-16T16:50:49Z",
+  "retrieved_date": "2026-10-13",
+  "version": "1.1.0",
+  "paper": "https://arxiv.org/abs/2502.08881",
+  "files": [
+    {
+      "path": "Project.toml",
+      "sha256": "5ccb3004a864899007595aad01d629c885c5fec5526e1e96f6d099322892557b",
+      "bytes": 1477
+    },
+    {
+      "path": "README.md",
+      "sha256": "bcbca5adb0c1524abc5972dc828a5779e6c571184297a93db9a35eaa72aa1b12",
+      "bytes": 2306
+    },
+    {
+      "path": "src/wendyProblems.jl",
+      "sha256": "9cfe74080b1e46ac9d6ee6e2e3a047ecc21620aa51b8f019b17cf418f09b3301",
+      "bytes": 6669
+    },
+    {
+      "path": "src/wendyDataTypes.jl",
+      "sha256": "ad50bd6385f07ec64f7fa98fa8062ee5bf7f06c5f272982a0dc2eaa083ea986a",
+      "bytes": 10540
+    },
+    {
+      "path": "src/wendyNonlinearEquations.jl",
+      "sha256": "06fa91c7022cba8b158693ae086eff0cccd60d508c054e8d1b5f6ac53d9c7e58",
+      "bytes": 5640
+    },
+    {
+      "path": "src/wendyNonlinearMethods.jl",
+      "sha256": "e370f41ba912ae700cf4414c3c65d73c261ad61cd314921d5d0ea11d4705b8a3",
+      "bytes": 10160
+    },
+    {
+      "path": "src/wendyOptim.jl",
+      "sha256": "a10127348f2d6a19e685675fb3f02ef98ed0df76e41b68f1782b09d9a6e48624",
+      "bytes": 14218
+    },
+    {
+      "path": "src/wendySymbolics.jl",
+      "sha256": "2f60c2da035955dfe61237be30213364c596903e08b38d91964a12f7a6e31003",
+      "bytes": 2717
+    },
+    {
+      "path": "src/wendyNoise.jl",
+      "sha256": "7049cb287fa0668a4f191f0ae9accf0f116e7feacfc97f222f275e803436334e",
+      "bytes": 2298
+    }
+  ],
+  "official_scientific_runs": 0,
+  "runtime_status": "No local Julia runtime; source inspection and network retrieval successful after read-only escalation; no installation attempted because compatibility/resource gate below fails independently",
+  "qualification_blockers": [
+    "Official constructor builds ODE temporal weak V,Vp and b=-Vp*X, not supplied axisymmetric PDE tensor weak residual",
+    "No public supplied PDE weak covariance/Jacobian contract; custom internal injection would be a new adaptation requiring qualification",
+    "Full method-of-lines state dimension is 3*25*25=1875 per condition; current official dense Hessian buffers scale as K*D*(M+1)*D*J^2",
+    "Known shared support already has J=15 unknowns; with K=1 and M+1=25, each of the two principal second-derivative-L arrays requires 158203125000 bytes, jointly 316406250000 bytes (~294.68 GiB), exceeding local ~15.75 GB RAM before other buffers",
+    "Fixed control sensor noise/clipping and supplied forcing contract require explicit adaptation; no author-native full-PDE result claimed"
+  ],
+  "suitable_future_paths": [
+    "Author-approved sparse PDE covariance/Hessian adapter with analytic cross observation and parameter derivatives",
+    "Separately declared low-dimensional ODE benchmark with WPHID equivalent model, data/noise/support/starts/parameter boxes; not this archived PDE matching experiment"
+  ],
+  "supplemental_implementation": "src/wphid/wendy_comparison_v1/gaussian_weak.py",
+  "supplemental_official_equivalence_claim": false
+}

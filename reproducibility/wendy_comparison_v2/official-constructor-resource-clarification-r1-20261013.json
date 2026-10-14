@@ -1,0 +1,21 @@
+{
+  "version": "WENDY_OFFICIAL_CONSTRUCTOR_RESOURCE_CHECK_R1_20261013",
+  "source_commit": "edaaab7392adf8b307a4a607c4210a910db41076",
+  "extra_source_url": "https://raw.githubusercontent.com/nrummel/WENDy.jl/edaaab7392adf8b307a4a607c4210a910db41076/src/wendyMethods.jl",
+  "extra_source_sha256": "856c329a18b67ce54d8f165ddb16f82cc7accc9e64c23f2e06611022c8b4c83d",
+  "retrieval": "Read-only network source retrieval succeeded; first console rendering failed due GBK Unicode encoding, repeated encoding-safe source read succeeded with same byte hash",
+  "constructor_chain": [
+    "src/wendyProblems.jl:WENDyProblem public constructor always constructs SecondOrderCostFunction from WeakNLL, GradientWeakNLL, HesianWeakNLL",
+    "src/wendyMethods.jl:HesianWeakNLL(data,params) dispatches nonlinear-in-parameters data to NonlinearHesianWeakNLL",
+    "src/wendyNonlinearMethods.jl:NonlinearHesianWeakNLL constructor eagerly allocates _second_derivative_L and second_derivative_L dense buffers of dimensions K,D,M+1,D,J,J and K*D,(M+1)*D,J,J",
+    "src/wendyOptim.jl:solve chooses optimizer after WENDyProblem already exists; choosing WLS or IRLS does not bypass public problem construction"
+  ],
+  "allocation_eager_for_inspected_public_nonlinear_constructor": true,
+  "skip_hessian_public_constructor_option_found": false,
+  "scope": "Inspected default public nonlinear WENDyProblem route applied directly to full method-of-lines state, not a universal lower bound for every possible WENDy-inspired or custom internal implementation",
+  "memory_probe": {"K_lower_bound":1,"D":1875,"M_plus_1":25,"J_shared_known_support":15,"bytes_each_principal_buffer":158203125000,"bytes_two_buffers":316406250000,"GiB_two_buffers":294.67628337442875},
+  "alternative_scope": "A customized sparse or first-order-only internal adapter may avoid these buffers, but would change implementation/provenance and require its own PDE/noise qualification; no such official adapter executed here",
+  "primary_qualification_gap": "PDE weak operator and observation/noise contract adaptation remain unresolved independently of Julia setup and resource estimate",
+  "official_parameter_fits":0,
+  "existing_frozen_source_audit_retained":true
+}

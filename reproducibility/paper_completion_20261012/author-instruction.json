@@ -1,0 +1,12 @@
+{
+  "version": "WPHID_ORDERED_PAPER_COMPLETION_INSTRUCTION_20261012_V1",
+  "user_instruction": "现在按照顺序帮我逐步完善，每完善一个内容再向我汇报并开启下一个",
+  "referenced_plan": "The immediately preceding ten-item implementation sequence in this chat",
+  "scope": "Complete each authorized item, report it, then continue; bounded scientific development and necessary software checks under frozen protocols are included",
+  "first_scientific_protocol": "reproducibility/precision_update_v4/development-protocol.json",
+  "existing_finished_experiments_may_be_rerun": false,
+  "failed_batch_may_be_extended_until_pass": false,
+  "main_directory_writes_authorized": false,
+  "public_release_or_submission_final_author_approval": false,
+  "scientific_success_not_assumed": true
+}

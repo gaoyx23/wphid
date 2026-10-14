@@ -1,0 +1,10 @@
+{
+  "input_csv_sha256": "000d77be435188eb8b123fb8a742e86276f8408e026b366cca396b65de8df488",
+  "plot_sha256": {
+    "artifacts/paper_comparison_resume_v4/final_evidence/development-comparison.svg": "510b6c3acff4659f180f90532356293c726b5f5f4fc4b2b2fc8ac8ec0844dbbd",
+    "artifacts/paper_comparison_resume_v4/final_evidence/development-comparison.png": "529ebf01ab8cc0eb45a263f799d18eb928ef39845645cd949ce14daeb076a48e",
+    "artifacts/paper_comparison_resume_v4/final_evidence/fresh_conditional_comparison-comparison.svg": "46a1fa008a2ec6f5679bba0e102c284dd2a23b5e8be7ebe67b093dbf7e989e67",
+    "artifacts/paper_comparison_resume_v4/final_evidence/fresh_conditional_comparison-comparison.png": "132b0d94c49a8f16d113e1c3453ea6011909ac7b85307722ff1a3a12bc6e0509"
+  },
+  "new_fits": 0
+}

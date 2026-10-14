@@ -1,0 +1,6 @@
+Captured output from one completed wrapper software qualification run.
+Command: python -m pytest tests/wendy_comparison_v2/test_fresh_identity.py -q
+Tool chunk: ba459d
+Exit code: 0
+...                                                                      [100%]
+3 passed in 2.86s

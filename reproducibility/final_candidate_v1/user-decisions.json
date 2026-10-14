@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-11",
+  "scientific_execution": {
+    "explicit_user_reply": "允许必要的新实验，按固定方案依次推进",
+    "authorized_scope": "Necessary new matched comparisons, component attribution and final qualification in independent versions and outputs",
+    "supersedes_earlier_no_new_experiment_instruction": true,
+    "completed_experiments_may_be_rerun": false,
+    "main_directory_may_be_modified": false
+  },
+  "author": {
+    "name_zh": "高艺轩",
+    "name_en": "Yixuan Gao",
+    "sole_author": true,
+    "corresponding_author": true,
+    "affiliation_zh": "清华大学",
+    "affiliation_en": "Tsinghua University",
+    "email": "gaoyx23@mails.tsinghua.edu.cn",
+    "competing_interests": "none, explicitly stated by author",
+    "specific_funding": "none, explicitly stated by author",
+    "data_may_be_public": true,
+    "code_publication_license": null,
+    "publication_completed": false
+  }
+}

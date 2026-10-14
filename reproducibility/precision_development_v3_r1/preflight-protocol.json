@@ -1,0 +1,94 @@
+{
+  "version": "WPHID_CORRELATED_INPUT_MOMENT_PREFLIGHT_20261012_V3_R1",
+  "purpose": "Determine whether a distinct Gram/cross-moment noise correction warrants new conditional development; not precision confirmation",
+  "output_root": "artifacts/paper_precision_development_v3/moment_preflight_20261012_r1",
+  "prior_root": "artifacts/paper_final_candidate_v1/scientific_confirmation_20261011",
+  "V2_root": "artifacts/paper_precision_development_v2/conditional_development_20261011",
+  "fixed_seeds": [
+    9101101,
+    9101102,
+    9101103,
+    9101104,
+    9101105,
+    9101106
+  ],
+  "roles": [
+    "shared",
+    "partial",
+    "independent"
+  ],
+  "saved_points": 18,
+  "selection": "First six Q1 blocks, exactly the subset used in completed V2, without outcome selection",
+  "known_structure_scope": "Saved Q1 family and active destinations/partition supplied; this is conditional method development",
+  "train_conditions": [
+    "nominal_low_damage",
+    "oxygen_high_low_damage",
+    "oxygen_low_low_damage",
+    "oxygen_high_high_damage",
+    "oxygen_low_high_damage",
+    "mixed"
+  ],
+  "heldout_conditions": [
+    "hot_oxygen_low",
+    "cool_oxygen_high"
+  ],
+  "family": "arrhenius_oxygen_damage",
+  "window_shape": [
+    15,
+    15,
+    15
+  ],
+  "stride_shape": [
+    5,
+    5,
+    5
+  ],
+  "noise_model": "Independent additive Gaussian error per node and field; supplied forcing treated as exact; sigma estimated as 0.0005 times each observed training-field RMS",
+  "noise_fraction": 0.0005,
+  "nonzero_acquisition_clipping": "Retain as failed preflight; local Gaussian moment calculation is not applicable without a clipping model",
+  "mean_correction": "Subtract the nodewise second-order Taylor mean shift in nonlinear reaction columns",
+  "new_correction": "Subtract linearized column-error Gram and column/target cross moments in the quadratic normal equations",
+  "distinction": "Not the old low-order quadrature correction, mean-only diagnostic, fixed covariance weighting, parameter-dependent Gaussian likelihood, component search, test enrichment, or state reconstruction",
+  "minimum_corrected_gram_relative_eigenvalue": 1e-10,
+  "finite_difference_step_unit_box": 0.00001,
+  "local_response_radius_unit_box": 0.1,
+  "screen_gate": {
+    "all_18_points_assessable": true,
+    "changed_roles": [
+      "partial",
+      "independent"
+    ],
+    "minimum_material_points_of_12": 6,
+    "material_amplitude_fractional_shift": 0.05,
+    "material_internal_parameter_unit_box_shift": 0.02,
+    "material_response_must_be_within_local_radius": true,
+    "meaning": "Prospective practical screen for further study, not an accuracy/adoption or statistical significance gate"
+  },
+  "budget": {
+    "maximum_process_cpu_seconds": 900,
+    "maximum_wall_seconds": 1200,
+    "threads": 1,
+    "device": "CPU",
+    "dtype": "float64"
+  },
+  "new_observations": 0,
+  "new_noise_draws": 0,
+  "new_physical_trajectory_integrations": 0,
+  "new_nonlinear_parameter_optimizations": 0,
+  "conditioned_linear_solves_counted_separately": true,
+  "truth_read_or_used_to_choose_direction": false,
+  "heldout_used_to_define_scales_or_select_direction": false,
+  "stopping": "Stop after these 18 points. If screen fails, do not launch corrected-risk fits or noise/weight/threshold scans. A passed screen requires a separately frozen development protocol before any nonlinear fit.",
+  "existing_grades_or_sources_changed": false,
+  "negative_corrected_risk": "Allowed as an unbiased-risk estimate; no logarithm, positive floor, or relabeling as likelihood",
+  "indefinite_corrected_gram": "Record failure; no eigenvalue clipping or regularization tuned to pass",
+  "configuration_revision": {
+    "reason": "V3 first attempt used hot_oxygen_low in training instead of mixed. Saved-scale identity check blocked all 18 before any moment/profile/gradient calculation; this is a configuration defect, not scientific rejection of corrected risk.",
+    "prior_attempt_preserved": "artifacts/paper_precision_development_v3/moment_preflight_20261011",
+    "mathematics_changed": false,
+    "source_noise_budget_gates_changed": false,
+    "training_split_restored_from_frozen_Q1": true,
+    "prior_new_nonlinear_fits": 0,
+    "prior_corrected_risk_points_computed": 0
+  }
+}

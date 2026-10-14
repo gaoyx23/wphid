@@ -1,0 +1,26 @@
+{
+  "version": "COUPLED_BALANCE_V1_SHARED_NOISE_SOFTWARE_ONLY_20261012",
+  "identity": "first-order shared observation software qualification; no calibrated scientific noise or bias correction",
+  "output_parent": "artifacts/paper_coupled_balance_v1",
+  "test_path": "tests/coupled_balance_v1/test_noise.py",
+  "wall_cap_seconds": 60,
+  "scientific_inputs": [],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_draws": 0,
+  "scientific_gate_changed": false,
+  "development_authorized_by_software_pass": false,
+  "source_files": [
+    "src/wphid/coupled_balance_v1/noise.py",
+    "src/wphid/coupled_balance_v1/__init__.py",
+    "src/wphid/coupled_balance_v1/operators.py",
+    "src/wphid/coupled_balance_v1/assembler.py",
+    "tests/coupled_balance_v1/test_noise.py",
+    "reproducibility/coupled_balance_v1/qualify_noise.py",
+    "reproducibility/coupled_balance_v1/noise-software-protocol.json",
+    "src/wphid/source_geometry_v6/__init__.py",
+    "src/wphid/source_geometry_v6/geometry.py",
+    "reproducibility/source_geometry_v6/qualify_software.py"
+  ],
+  "completion_rule": "run only new noise checks; frozen balance checks/results unchanged; retain domain/rank failures; no hidden jitter or clipping"
+}

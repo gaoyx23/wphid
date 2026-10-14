@@ -1,0 +1,23 @@
+{
+  "version": "WPHID_NEW_ADOPTED_VERSION_CONFIRMATION_ENTRY_20261012",
+  "status": "dependencies_audited_not_ready",
+  "scientific_confirmation_ready": false,
+  "adopted_source_freeze_sha256": null,
+  "actual_precision_adoption": false,
+  "complete_open_method_development_qualified": false,
+  "recent_matched_scientific_comparison_qualified": false,
+  "V4_assessment": {
+    "file": "artifacts/paper_precision_update_v4/conditional_development_20261012/assessment.json",
+    "sha256": "d637e97d569d6b7384a0c51f9ca5ce3f8d5c9cb91966a7c5c3ee20894b4a2e94",
+    "adoption_gate_passed": false
+  },
+  "V5_assessment": {
+    "file": "artifacts/paper_observation_moments_v5/conditional_development_20261012/assessment.json",
+    "sha256": "3449e18b9d738dab2ad0daea88161f5a7252e2d39cab3cf8d25ca59aeb63239d",
+    "adoption_gate_passed": false
+  },
+  "new_confirmation_inputs": 0,
+  "new_confirmation_estimates": 0,
+  "old_confirmation_repeated": false,
+  "public_release_or_submission_ready": false
+}

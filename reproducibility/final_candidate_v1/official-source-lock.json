@@ -1,0 +1,44 @@
+{
+  "version": "ADAM_SINDY_OFFICIAL_SOURCE_LOCK_20261011_V1",
+  "retrieval_date": "2026-10-11",
+  "repository": "https://github.com/siva-viknesh/ADAM-SINDy",
+  "commit_sha1": "1b301baa6e7b4a90a255466fd0a2cbf3d10bb200",
+  "tree_sha1": "fd91ee5869e0bcf53bbbf692505e6024e13d2da3",
+  "commit_date": "2026-04-13T17:37:05Z",
+  "verification": "Read official GitHub commit API and both commit-addressed raw files; no external code executed or copied",
+  "legacy_identity_correction": "The 20261009 review classified 1b301baa6e7b4a90a255466fd0a2cbf3d10bb200 as a directory tree. The commit API now establishes it as the commit; the actual tree is recorded separately. Historical records are retained.",
+  "files": {
+    "4_Chemical_reaction/ADAM_SINDy_Chemical_Kinetics.ipynb": {
+      "blob_sha1": "c7677a0dad89a9f10a0bffe3aa4e792862ddeca0",
+      "sha256": "6963d0091ad0a002d1862cb84c8ebbf68a48b2b74bae37c7792ca79e7a9b83ce"
+    },
+    "6_Wildfire_Dynamics_PDE/ADAM_SINDy_Wildfire_PDE.ipynb": {
+      "blob_sha1": "29adffcbeca7013508489a14551668c29e3c493c",
+      "sha256": "db1768295f76f11ba0c7dee116193f3523e5ccf48fa725414790b7d4228a498e"
+    }
+  },
+  "chemical_reference_settings": {
+    "epochs": 40000,
+    "learning_rate": 0.01,
+    "scheduler_step": 3000,
+    "scheduler_multiplier": 0.5,
+    "optimizer_betas": [0.9, 0.99],
+    "optimizer_epsilon": 1e-15,
+    "gamma_initialization": "standard normal, torch seed 42",
+    "training_amplitude_tolerance": 0.005,
+    "plotting_threshold_distinct_from_training_tolerance": 0.0005,
+    "loss_norm": "matrix_norm(ord=1), induced matrix norm; not entrywise sum across all equations"
+  },
+  "new_adapter_changes": [
+    "Same weak observations and fixed weak projection as WPHID instead of native derivative targets",
+    "Known family, topology and parameter partition; not native end-to-end discovery",
+    "Bounded nonlinear parameters represented on the common unit box",
+    "Signed per-equation coefficients initialized by training-only OLS at each common parameter start",
+    "Mandatory base coefficients unpenalized; mechanism amplitudes have entrywise weighted L1 penalty",
+    "Fixed lambda=1 with trainable Gamma; no unused Lambda optimizer",
+    "Amplitude tolerance 0.005 applied to training-scaled dimensionless amplitudes",
+    "Nonlinear parameters never thresholded",
+    "CPU float64, no WPHID post-fit refinement"
+  ],
+  "scientific_performance_verified": false
+}

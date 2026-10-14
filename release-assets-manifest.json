@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-14",
+  "repository": "https://github.com/gaoyx23/wphid",
+  "source_branch": "release/20261014",
+  "suggested_Release_tag": "wphid-20261014",
+  "status_at_preparation": "assets_prepared_locally_not_uploaded",
+  "assets": [
+    {"file": "wphid-data-code-closeout-20261014.zip", "bytes": 749917403, "sha256": "3b7be0951d6e97ff10f8875b6b8169d041a385df07ebe8e8c8fac11b1a044b4f"},
+    {"file": "wphid-github-source-candidate-20261014.zip", "bytes": 1457083, "sha256": "bdff188ddaa9e1a48b81d4f65f64f98c9c57816bb0c038dd0347e33a5bb85b8d"}
+  ],
+  "new_scientific_runs": 0,
+  "manuscript_public_deposition": false,
+  "journal_submission": false
+}

@@ -1,0 +1,23 @@
+{
+  "version": "WPHID_GAUSSIAN_WEAK_COMPARISON_DIRECTIONAL_FAMILY_CLARIFICATION_R1_20261013",
+  "parent_protocol_file": "reproducibility/wendy_comparison_v2/conditional-independent-protocol-20261013.json",
+  "parent_protocol_sha256": "955ee9830530c031c81b97e4a8ad24a4684b5729be205459d6480ccf4a022a9e",
+  "parent_file_retained_unchanged": true,
+  "declared_before_any_Gaussian_development_truth_scoring": true,
+  "reason": "Make directional hypothesis family explicit; previous description ambiguously mixed rolewise directions and both winner directions",
+  "programs": ["WPHID","corrected_conditional_ADAM","conditional_Gaussian_weak_quasi_likelihood"],
+  "pairwise_program_pairs": [["WPHID","corrected_conditional_ADAM"],["WPHID","conditional_Gaussian_weak_quasi_likelihood"],["corrected_conditional_ADAM","conditional_Gaussian_weak_quasi_likelihood"]],
+  "directions_per_pair": 2,
+  "family_hypotheses": 6,
+  "independent_unit": "one fresh noise seed block, including all three roles",
+  "block_score": "maximum normalized case score across shared/partial/independent roles; any missing or invalid role makes that program block unassessable",
+  "directional_win": "both complete blocks assessable, loser block score positive finite, and winner block score <=0.9 times loser; missing/invalid/zero loser/ties count as nonwins",
+  "denominator_per_direction": 18,
+  "familywise_alpha": 0.05,
+  "Bonferroni_alpha_each": 0.008333333333333333,
+  "directional_advantage_gate": "at least15/18 block wins and winning program reaction precision pass count no lower in each of the three roles",
+  "rolewise_comparisons": "descriptive only under this six-direction family, no additional significance claims",
+  "parent_WPHID_ADAM_separate_family": "its separately declared two-direction14/18 gate remains unchanged; report provenance and test family separately",
+  "development_entry_gate": "unchanged from parent protocol; computability plus at leastone all6assessable role with4/6precision and >=20%median improvement, and correctedADAMcomputabilitypassed",
+  "new_fits_or_data": 0
+}

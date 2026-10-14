@@ -1,0 +1,14 @@
+{
+  "command": "python -m pytest tests/wendy_comparison_v2/test_fresh_identity.py -q",
+  "tool_chunk": "ba459d",
+  "exit_code": 0,
+  "passed": 3,
+  "failed": 0,
+  "elapsed_seconds": 2.86,
+  "source_sha256": {
+    "reproducibility/wendy_comparison_v2/run_fresh_conditional.py": "4435fc5e5bdfbe8c965c8a6a380b495bf0d1a3f0f9be2fdb9dee99f9ee69be57",
+    "tests/wendy_comparison_v2/test_fresh_identity.py": "d61da1beeff746b57d4dfd619d6da29d2a8a0e5fa79bc7c4eccc606b06af229e"
+  },
+  "scientific_fits": 0,
+  "scope": "Identity and no-control/no-truth estimator input guards; estimator mathematics qualified independently by seven retained V1 tests"
+}

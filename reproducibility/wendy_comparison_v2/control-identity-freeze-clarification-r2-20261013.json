@@ -1,0 +1,12 @@
+{
+  "version": "WPHID_GAUSSIAN_FRESH_CONTROL_IDENTITY_CLARIFICATION_R2_20261013",
+  "retained_protocol_sha256": "955ee9830530c031c81b97e4a8ad24a4684b5729be205459d6480ccf4a022a9e",
+  "retained_directional_clarification_sha256": "f195beb733718d2f3aeb02c321278913afe948dcb36c702c3a7ea5aa6ec1dc18",
+  "declared_before_any_Gaussian_development_truth_scoring": true,
+  "reason": "Control fitted parameters are not estimator inputs; avoid unnecessary serialization while binding every comparison identity",
+  "before_first_fresh_Gaussian_fit": "Freeze all fresh public observation byte hashes, Gaussian implementation/source hashes, WPHID/ADAM control source hashes and exact job IDs/input hashes; independently verify parent public source/input freeze",
+  "control_completed_fit_byte_hashes": "Freeze after all 108 parent control records and all54Gaussian records exist, before any three-program comparative truth assessment",
+  "control_parameters_read_by_Gaussian_worker": false,
+  "unchanged": "Development entry gate, estimator, starts, budgets, candidates, source/noise law, heldout rule,18seed blocks, six-direction statistical family and precision gates",
+  "new_fits_or_data":0
+}

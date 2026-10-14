@@ -1,0 +1,23 @@
+{
+  "version": "WPHID_GAUSSIAN_FRESH_PATH_RESUME_V3_20261013",
+  "authorization": "User continues all missing experiments; previously declared development entry gate passed",
+  "parent": "artifacts/paper_comparison_resume_v2/paired_confirmation",
+  "development": "artifacts/paper_comparison_resume_v1/gaussian_development",
+  "output": "artifacts/paper_comparison_resume_v2/gaussian_fresh_confirmation",
+  "original_wrapper": "reproducibility/wendy_comparison_v2/run_fresh_conditional.py",
+  "scientific_changes": false,
+  "new_gaussian_fits": 54,
+  "additional_noise_or_integrations": 0,
+  "workers": 4,
+  "checkpoint_seconds": 2,
+  "retained_solver_cpu_cap_seconds": 600,
+  "official_WENDy": false,
+  "control_parameters_are_estimator_inputs": false,
+  "comparative_assessment_requires_all_108_controls": true,
+  "scientific_retry_or_tuning": false,
+  "declaration_sha256": {
+    "reproducibility/wendy_comparison_v2/conditional-independent-protocol-20261013.json": "955ee9830530c031c81b97e4a8ad24a4684b5729be205459d6480ccf4a022a9e",
+    "reproducibility/wendy_comparison_v2/independent-directional-family-clarification-r1-20261013.json": "f195beb733718d2f3aeb02c321278913afe948dcb36c702c3a7ea5aa6ec1dc18",
+    "reproducibility/wendy_comparison_v2/control-identity-freeze-clarification-r2-20261013.json": "572bd9a710c65ec464e8217f012a0b9ecaf6222063785ac8a63d22d05ce26452"
+  }
+}

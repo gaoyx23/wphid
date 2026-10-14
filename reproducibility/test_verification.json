@@ -1,0 +1,165 @@
+{
+  "command": "python -m pytest -q",
+  "date": "2026-10-07",
+  "duration_seconds": 583.58,
+  "passed": 539,
+  "skipped": 1,
+  "result": "PASS",
+  "targeted_followup": {
+    "command": "python -m pytest tests/discovery/test_adequacy.py tests/integration/test_paper_r15_to_r22_nozzle_recovery.py tests/integration/test_paper_r23_to_r27_observation_boundaries.py tests/integration/test_paper_r28_r29_targeted_noise_improvements.py tests/integration/test_paper_r30_paired_transport_confirmation.py tests/integration/test_paper_r31_unified_noisy_confirmation.py tests/integration/test_r32_independent_nozzle_gas_solver.py tests/integration/test_paper_r32_cross_solver_confirmation.py tests/integration/test_paper_r33_anisotropic_open_set_audit.py tests/integration/test_paper_r34_darcy_forchheimer_open_set_audit.py tests/integration/test_paper_r35_guarded_transport_decision.py tests/integration/test_paper_r36_guarded_five_mechanism_confirmation.py tests/integration/test_paper_r37_one_percent_guarded_boundary.py tests/weak/test_bell_shell.py tests/test_nozzle_observations.py tests/truth/test_reusable_nozzle.py -q",
+    "date": "2026-09-22",
+    "duration_seconds": 16.67,
+    "passed": 38,
+    "result": "PASS"
+  },
+  "latest_observation_and_geometry_followup": {
+    "command": "python -m pytest tests/unit/test_transport_eiv_fit.py tests/integration/test_paper_r59_asynchronous_observation_validation.py tests/integration/test_paper_r60_r61_sparse_observation_boundary.py tests/integration/test_paper_r62_sparse_noise_boundary.py tests/integration/test_paper_r64_minimum_spatial_noise_boundary.py tests/integration/test_paper_r65_throat_focused_sensor_layout.py tests/integration/test_paper_r66_throat_focused_noise_limit.py tests/integration/test_paper_r67_heldout_bell_geometry.py tests/integration/test_paper_r68_two_sided_bell_geometry.py tests/integration/test_paper_r69_to_r71_sensor_diagnostics.py tests/integration/test_paper_r73_r74_multiscale_sparse_transport.py tests/integration/test_paper_r76_r77_orthogonal_eiv_transport.py tests/integration/test_paper_r79_r80_cross_geometry_guarded_eiv.py tests/integration/test_paper_r81_to_r83_eiv_refit_decoupling.py tests/integration/test_paper_r84_r85_corrected_cross_geometry.py",
+    "date": "2026-09-26",
+    "duration_seconds": 7.24,
+    "passed": 30,
+    "result": "PASS"
+  },
+  "latest_parameter_followup": {
+    "command": "python -m pytest tests/test_nozzle_observations.py tests/weak/test_bell_shell.py tests/unit/test_transport_eiv_fit.py tests/integration/test_paper_r81_to_r83_eiv_refit_decoupling.py tests/integration/test_paper_r84_r85_corrected_cross_geometry.py tests/integration/test_paper_r86_to_r92_parameter_evidence.py -q",
+    "date": "2026-09-27",
+    "duration_seconds": 4.37,
+    "passed": 25,
+    "result": "PASS"
+  },
+  "latest_truth_observation_domain_shift_followup": {
+    "command": "python -m pytest tests/integration/test_paper_assets.py tests/integration/test_paper_r94_independent_thermal_benchmark.py tests/integration/test_paper_r95_layered_surface_qualification.py tests/integration/test_paper_r97_layered_surface_confirmation.py tests/integration/test_paper_r98_engineering_observability_audit.py tests/integration/test_paper_r99_passive_cooldown_acoustic_observability.py tests/integration/test_paper_r100_geometry_material_defect_transfer.py tests/integration/test_paper_r100_to_r107_domain_shift_evidence.py tests/test_engineering_observations.py tests/truth/test_csic_surface.py -q",
+    "date": "2026-09-27",
+    "passed": 17,
+    "result": "PASS"
+  },
+  "latest_thermoelastic_audit_followup": {
+    "command": "python -m pytest tests/integration/test_paper_assets.py tests/truth/test_axisymmetric_thermoelastic.py tests/integration/test_paper_r108_axisymmetric_thermoelastic_audit.py -q",
+    "date": "2026-09-27",
+    "passed": 14,
+    "result": "PASS"
+  },
+  "latest_external_fea_audit_followup": {
+    "command": "python -m pytest tests/validation/test_external_fea.py tests/integration/test_paper_r108_axisymmetric_thermoelastic_audit.py tests/integration/test_paper_r109_external_fea_contract_preflight.py tests/integration/test_paper_r110_external_axisymmetric_fea_audit.py tests/integration/test_paper_assets.py -q",
+    "date": "2026-09-28",
+    "passed": 20,
+    "result": "PASS"
+  },
+  "latest_orthotropic_attachment_followup": {
+    "command": "python -m pytest tests/validation/test_external_fea.py tests/integration/test_paper_r109_external_fea_contract_preflight.py tests/integration/test_paper_r110_external_axisymmetric_fea_audit.py tests/integration/test_paper_r111_orthotropic_compliant_attachment_sensitivity.py -q",
+    "date": "2026-09-28",
+    "passed": 20,
+    "result": "PASS"
+  },
+  "latest_explicit_flange_attachment_followup": {
+    "command": "python -m pytest tests/validation/test_external_fea.py tests/integration/test_paper_r109_external_fea_contract_preflight.py tests/integration/test_paper_r110_external_axisymmetric_fea_audit.py tests/integration/test_paper_r111_orthotropic_compliant_attachment_sensitivity.py tests/integration/test_paper_r112_explicit_sliding_flange_archetype.py -q",
+    "date": "2026-09-28",
+    "duration_seconds": 3.39,
+    "passed": 25,
+    "result": "PASS"
+  },
+  "latest_r112_artifact_cleanup_followup": {
+    "command": "python -m pytest tests/validation/test_external_fea.py tests/integration/test_paper_r112_explicit_sliding_flange_archetype.py -q",
+    "date": "2026-09-28",
+    "duration_seconds": 2.53,
+    "passed": 14,
+    "result": "PASS"
+  },
+  "latest_dlr_pressure_fixture_followup": {
+    "command": "python -m pytest tests/validation/test_external_fea.py tests/integration/test_paper_r112_explicit_sliding_flange_archetype.py tests/integration/test_paper_r113_dlr_pressure_fixture_benchmark.py -q",
+    "date": "2026-09-28",
+    "duration_seconds": 2.56,
+    "passed": 19,
+    "result": "PASS"
+  },
+  "latest_structural_model_uncertainty_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r114_structural_model_uncertainty_audit.py -q",
+    "date": "2026-09-28",
+    "duration_seconds": 0.80,
+    "passed": 4,
+    "result": "PASS"
+  },
+  "latest_strong_directional_development_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r115_to_r117_strong_directional_development.py tests/integration/test_paper_r56_to_r58_strong_topology_guard.py -q",
+    "date": "2026-09-28",
+    "duration_seconds": 0.66,
+    "passed": 11,
+    "result": "PASS"
+  },
+  "latest_conditioning_and_centering_followup": {
+    "command": "python -m pytest tests/discovery/test_conditioning.py tests/integration/test_paper_r115_to_r117_strong_directional_development.py tests/sparse/test_stlsq.py tests/sparse/test_subset.py -q",
+    "date": "2026-09-28",
+    "duration_seconds": 3.16,
+    "passed": 25,
+    "result": "PASS"
+  },
+  "latest_engineering_forward_and_coupled_truth_followup": {
+    "command": "python -m pytest tests/truth/test_reusable_nozzle.py tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/integration/test_paper_r115_to_r117_strong_directional_development.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-28",
+    "duration_seconds": 25.77,
+    "passed": 28,
+    "result": "PASS"
+  },
+  "latest_passive_observation_and_holdout_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-29",
+    "duration_seconds": 22.94,
+    "passed": 21,
+    "result": "PASS"
+  },
+  "latest_focused_observation_transfer_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-29",
+    "duration_seconds": 24.43,
+    "passed": 22,
+    "result": "PASS"
+  },
+  "latest_material_nuisance_profile_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-29",
+    "duration_seconds": 21.13,
+    "passed": 24,
+    "result": "PASS"
+  },
+  "latest_material_profiled_candidate_forward_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-29",
+    "duration_seconds": 24.63,
+    "passed": 27,
+    "result": "PASS"
+  },
+  "latest_correlated_noise_confirmation_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-29",
+    "duration_seconds": 24.76,
+    "passed": 28,
+    "result": "PASS"
+  },
+  "latest_replicated_joint_scoring_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-29",
+    "duration_seconds": 23.58,
+    "passed": 33,
+    "result": "PASS"
+  },
+  "latest_offgrid_continuous_profile_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-30",
+    "duration_seconds": 24.92,
+    "passed": 37,
+    "result": "PASS"
+  },
+  "latest_solver_ensemble_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py tests/truth/test_reusable_nozzle.py tests/discovery/test_conditioning.py -q",
+    "date": "2026-09-30",
+    "duration_seconds": 23.76,
+    "passed": 41,
+    "result": "PASS"
+  },
+  "latest_process_variation_and_state_drift_followup": {
+    "command": "python -m pytest tests/integration/test_paper_r121_to_r123_engineering_forward.py -q",
+    "date": "2026-10-07",
+    "duration_seconds": 1.96,
+    "passed": 48,
+    "result": "PASS"
+  }
+}

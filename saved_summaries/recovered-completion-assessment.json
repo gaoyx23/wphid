@@ -1,0 +1,557 @@
+{
+  "version": "COMPARISON_COMPLETION_RECOVERED_V2_20261013",
+  "completed_scientific_assessment": {
+    "version": "COMPARISON_COMPLETION_CONSOLIDATED_20261013_V1",
+    "selection_declaration_sha256": "dccbbe8b0290600d9bf24b721be911a8423c905e98e2b9a4d4429ed486a12218",
+    "bound_receipts": {
+      "artifacts/paper_comparison_resume_v2/paired_confirmation/development-assessment.json": "1d6229ea3d3dd8e5f75d451a21fc035d2db2505cd99c915122a1d8e6350c684b",
+      "artifacts/paper_comparison_resume_v2/paired_confirmation/development-execution-complete.json": "b2bf2cddf41ec7a26b6bb5502bce327656460b9887083084f2d3af867de68ef7",
+      "artifacts/paper_comparison_resume_v1/gaussian_development/assessment.json": "61ba7e2ad017cc91a262f971c749345c968b056aff2e66486a8875fff4e11251",
+      "artifacts/paper_comparison_resume_v1/gaussian_development/execution-complete.json": "88e67d5bb4beab57ff894b67ca4b53b37d4f6a7ee156f1a9591ae62da26db4e6",
+      "artifacts/paper_comparison_resume_v2/paired_confirmation/fresh-assessment.json": "e52a38427527fb43f2ed2c22ee9565e00afbae865d2c3598553138f307db365f",
+      "artifacts/paper_comparison_resume_v2/paired_confirmation/fresh-execution-complete.json": "73c7a4cef970dd2b60091271dc22f38d7f5785851615b9805f45295c87e4d65b",
+      "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/assessment.json": "5a6b691cba1a1db3bcf3f40db74c85f5325efb854b889925a87e36e38f588a73",
+      "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/execution-complete.json": "3f5e780cb16dd62d631c5310386f5e6adfaf042e77293e7bac31f3831f966448",
+      "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/control-fit-identities.json": "c8888ffb683d911e9af15cb320aa7e63b1d36b1408977f3ecd8c4f319b23474b",
+      "artifacts/paper_comparison_resume_v1/gaussian_development/independent-entry-decision.json": "cc12c452229eac88e9b951804f95dd41fb2a233b309e643ddc52c1e2148e4a9f",
+      "artifacts/paper_comparison_resume_v4/final_evidence/comparison-cases.csv": "000d77be435188eb8b123fb8a742e86276f8408e026b366cca396b65de8df488"
+    },
+    "development_adam": {
+      "shared": {
+        "wphid": {
+          "n": 6,
+          "assessable": 6,
+          "precision_passes": 6,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 0,
+          "median_case_score": 0.0766408930063339,
+          "worst_case_score": 0.23457273949305804,
+          "median_maximum_parameter_relative_error": 0.006389328015967876,
+          "median_maximum_amplitude_relative_error": 0.019160223251583473,
+          "median_cpu_seconds": 7.25
+        },
+        "adam": {
+          "n": 6,
+          "assessable": 6,
+          "precision_passes": 6,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 6,
+          "median_case_score": 0.0680814754476976,
+          "worst_case_score": 0.22016716151514718,
+          "median_maximum_parameter_relative_error": 0.0064940102818647275,
+          "median_maximum_amplitude_relative_error": 0.0170203688619244,
+          "median_cpu_seconds": 600.0
+        }
+      },
+      "partial": {
+        "wphid": {
+          "n": 6,
+          "assessable": 6,
+          "precision_passes": 1,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 0,
+          "median_case_score": 1.2687853593967806,
+          "worst_case_score": 4.752960959963633,
+          "median_maximum_parameter_relative_error": 0.1000434949110788,
+          "median_maximum_amplitude_relative_error": 0.30510188165269114,
+          "median_cpu_seconds": 34.5859375
+        },
+        "adam": {
+          "n": 6,
+          "assessable": 6,
+          "precision_passes": 1,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 6,
+          "median_case_score": 1.2687675743979954,
+          "worst_case_score": 4.74335080527224,
+          "median_maximum_parameter_relative_error": 0.09997836089871173,
+          "median_maximum_amplitude_relative_error": 0.30510103848669545,
+          "median_cpu_seconds": 600.015625
+        }
+      },
+      "independent": {
+        "wphid": {
+          "n": 6,
+          "assessable": 6,
+          "precision_passes": 0,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 0,
+          "median_case_score": 3.508719760608604,
+          "worst_case_score": 7.778721606148694,
+          "median_maximum_parameter_relative_error": 0.22093477779215015,
+          "median_maximum_amplitude_relative_error": 0.877179940152151,
+          "median_cpu_seconds": 107.234375
+        },
+        "adam": {
+          "n": 6,
+          "assessable": 6,
+          "precision_passes": 0,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 6,
+          "median_case_score": 3.5021218929333795,
+          "worst_case_score": 7.143022254389154,
+          "median_maximum_parameter_relative_error": 0.21683314844775847,
+          "median_maximum_amplitude_relative_error": 0.8755304732333449,
+          "median_cpu_seconds": 600.0234375
+        }
+      }
+    },
+    "development_adam_computability": {
+      "passed": true,
+      "assessable_per_role": {
+        "shared": 6,
+        "partial": 6,
+        "independent": 6
+      },
+      "thrown_numeric_model_failures": 0,
+      "precision_is_separate": true
+    },
+    "development_gaussian": {
+      "shared": {
+        "n": 6,
+        "assessable": 6,
+        "precision_pass": 6,
+        "control_precision_pass": 6,
+        "numeric_model_failure_count": 0,
+        "median_case_score": 0.057509680881368375,
+        "median_control_case_score": 0.0766408930063339,
+        "budget_exhausted": 6
+      },
+      "partial": {
+        "n": 6,
+        "assessable": 6,
+        "precision_pass": 0,
+        "control_precision_pass": 1,
+        "numeric_model_failure_count": 0,
+        "median_case_score": 4.418758926001249,
+        "median_control_case_score": 1.2687853593967806,
+        "budget_exhausted": 6
+      },
+      "independent": {
+        "n": 6,
+        "assessable": 6,
+        "precision_pass": 0,
+        "control_precision_pass": 0,
+        "numeric_model_failure_count": 0,
+        "median_case_score": 4.373908222089536,
+        "median_control_case_score": 3.508719760608604,
+        "budget_exhausted": 6
+      }
+    },
+    "development_gaussian_computability": true,
+    "gaussian_independent_entry": {
+      "gates": {
+        "Gaussian_computability": true,
+        "Gaussian_promising_role": true,
+        "corrected_ADAM_computability": true
+      },
+      "role_checks": {
+        "shared": {
+          "all_six_assessable": true,
+          "precision_at_least_four": true,
+          "median_reduction_at_least_twenty_percent": true,
+          "Gaussian_median_case_score": 0.057509680881368375,
+          "WPHID_median_case_score": 0.0766408930063339,
+          "passed": true
+        },
+        "partial": {
+          "all_six_assessable": true,
+          "precision_at_least_four": false,
+          "median_reduction_at_least_twenty_percent": false,
+          "Gaussian_median_case_score": 4.418758926001249,
+          "WPHID_median_case_score": 1.2687853593967806,
+          "passed": false
+        },
+        "independent": {
+          "all_six_assessable": true,
+          "precision_at_least_four": false,
+          "median_reduction_at_least_twenty_percent": false,
+          "Gaussian_median_case_score": 4.373908222089536,
+          "WPHID_median_case_score": 3.508719760608604,
+          "passed": false
+        }
+      },
+      "entered_fresh_Gaussian_comparison": true,
+      "fresh_Gaussian_fits_authorized_by_gate": 54,
+      "new_Gaussian_fits_in_this_decision": 0,
+      "new_noise_draws": 0,
+      "new_trajectory_integrations": 0,
+      "failed_gates": [],
+      "protocol_sha256": "955ee9830530c031c81b97e4a8ad24a4684b5729be205459d6480ccf4a022a9e",
+      "directional_clarification_sha256": "f195beb733718d2f3aeb02c321278913afe948dcb36c702c3a7ea5aa6ec1dc18",
+      "control_identity_clarification_sha256": "572bd9a710c65ec464e8217f012a0b9ecaf6222063785ac8a63d22d05ce26452",
+      "development_assessment_sha256": "61ba7e2ad017cc91a262f971c749345c968b056aff2e66486a8875fff4e11251",
+      "Adam_development_assessment_sha256": "1d6229ea3d3dd8e5f75d451a21fc035d2db2505cd99c915122a1d8e6350c684b",
+      "recovery_source_freeze_sha256": "1c887d6eb6fed44255dbff5a30d5846f3f9fe8ed5581444f6e8a230448424efa",
+      "decision_source_sha256": "54b3e4292ee7b665d3042face1aa92fddd5b3a6b0285a3c7424b5d9689bfc527",
+      "status": "ready_for_frozen_fresh_packets_and_source_qualification",
+      "official_WENDy": false,
+      "main_open_search_adoption": false
+    },
+    "fresh_gaussian_directional_family": [
+      {
+        "winner": "WPHID",
+        "loser": "corrected_conditional_ADAM",
+        "block_wins": 0,
+        "denominator": 18,
+        "one_sided_binomial_p": 1.0,
+        "required_wins": 15,
+        "Bonferroni_alpha": 0.008333333333333333,
+        "precision_counts": {
+          "shared": {
+            "WPHID": 18,
+            "corrected_conditional_ADAM": 18
+          },
+          "partial": {
+            "WPHID": 2,
+            "corrected_conditional_ADAM": 2
+          },
+          "independent": {
+            "WPHID": 5,
+            "corrected_conditional_ADAM": 5
+          }
+        },
+        "precision_rate_gate": true,
+        "passed": false
+      },
+      {
+        "winner": "corrected_conditional_ADAM",
+        "loser": "WPHID",
+        "block_wins": 0,
+        "denominator": 18,
+        "one_sided_binomial_p": 1.0,
+        "required_wins": 15,
+        "Bonferroni_alpha": 0.008333333333333333,
+        "precision_counts": {
+          "shared": {
+            "corrected_conditional_ADAM": 18,
+            "WPHID": 18
+          },
+          "partial": {
+            "corrected_conditional_ADAM": 2,
+            "WPHID": 2
+          },
+          "independent": {
+            "corrected_conditional_ADAM": 5,
+            "WPHID": 5
+          }
+        },
+        "precision_rate_gate": true,
+        "passed": false
+      },
+      {
+        "winner": "WPHID",
+        "loser": "conditional_Gaussian_weak_quasi_likelihood",
+        "block_wins": 12,
+        "denominator": 18,
+        "one_sided_binomial_p": 0.1189422607421875,
+        "required_wins": 15,
+        "Bonferroni_alpha": 0.008333333333333333,
+        "precision_counts": {
+          "shared": {
+            "WPHID": 18,
+            "conditional_Gaussian_weak_quasi_likelihood": 18
+          },
+          "partial": {
+            "WPHID": 2,
+            "conditional_Gaussian_weak_quasi_likelihood": 0
+          },
+          "independent": {
+            "WPHID": 5,
+            "conditional_Gaussian_weak_quasi_likelihood": 0
+          }
+        },
+        "precision_rate_gate": true,
+        "passed": false
+      },
+      {
+        "winner": "conditional_Gaussian_weak_quasi_likelihood",
+        "loser": "WPHID",
+        "block_wins": 4,
+        "denominator": 18,
+        "one_sided_binomial_p": 0.9962310791015625,
+        "required_wins": 15,
+        "Bonferroni_alpha": 0.008333333333333333,
+        "precision_counts": {
+          "shared": {
+            "conditional_Gaussian_weak_quasi_likelihood": 18,
+            "WPHID": 18
+          },
+          "partial": {
+            "conditional_Gaussian_weak_quasi_likelihood": 0,
+            "WPHID": 2
+          },
+          "independent": {
+            "conditional_Gaussian_weak_quasi_likelihood": 0,
+            "WPHID": 5
+          }
+        },
+        "precision_rate_gate": false,
+        "passed": false
+      },
+      {
+        "winner": "corrected_conditional_ADAM",
+        "loser": "conditional_Gaussian_weak_quasi_likelihood",
+        "block_wins": 13,
+        "denominator": 18,
+        "one_sided_binomial_p": 0.048126220703125,
+        "required_wins": 15,
+        "Bonferroni_alpha": 0.008333333333333333,
+        "precision_counts": {
+          "shared": {
+            "corrected_conditional_ADAM": 18,
+            "conditional_Gaussian_weak_quasi_likelihood": 18
+          },
+          "partial": {
+            "corrected_conditional_ADAM": 2,
+            "conditional_Gaussian_weak_quasi_likelihood": 0
+          },
+          "independent": {
+            "corrected_conditional_ADAM": 5,
+            "conditional_Gaussian_weak_quasi_likelihood": 0
+          }
+        },
+        "precision_rate_gate": true,
+        "passed": false
+      },
+      {
+        "winner": "conditional_Gaussian_weak_quasi_likelihood",
+        "loser": "corrected_conditional_ADAM",
+        "block_wins": 4,
+        "denominator": 18,
+        "one_sided_binomial_p": 0.9962310791015625,
+        "required_wins": 15,
+        "Bonferroni_alpha": 0.008333333333333333,
+        "precision_counts": {
+          "shared": {
+            "conditional_Gaussian_weak_quasi_likelihood": 18,
+            "corrected_conditional_ADAM": 18
+          },
+          "partial": {
+            "conditional_Gaussian_weak_quasi_likelihood": 0,
+            "corrected_conditional_ADAM": 2
+          },
+          "independent": {
+            "conditional_Gaussian_weak_quasi_likelihood": 0,
+            "corrected_conditional_ADAM": 5
+          }
+        },
+        "precision_rate_gate": false,
+        "passed": false
+      }
+    ],
+    "fresh_conditional_comparison": {
+      "shared": {
+        "wphid": {
+          "n": 18,
+          "assessable": 18,
+          "precision_passes": 18,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 0,
+          "median_case_score": 0.1666348679319138,
+          "worst_case_score": 0.26397835472351666,
+          "median_maximum_parameter_relative_error": 0.00764953027307767,
+          "median_maximum_amplitude_relative_error": 0.04165871698297845,
+          "median_cpu_seconds": 13.53125
+        },
+        "adam": {
+          "n": 18,
+          "assessable": 18,
+          "precision_passes": 18,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 18,
+          "median_case_score": 0.169520073296901,
+          "worst_case_score": 0.2646751289117323,
+          "median_maximum_parameter_relative_error": 0.007933213853945971,
+          "median_maximum_amplitude_relative_error": 0.04238001832422525,
+          "median_cpu_seconds": 600.0
+        }
+      },
+      "partial": {
+        "wphid": {
+          "n": 18,
+          "assessable": 18,
+          "precision_passes": 2,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 0,
+          "median_case_score": 2.1297293433029263,
+          "worst_case_score": 11.733094255267014,
+          "median_maximum_parameter_relative_error": 0.12057468107049577,
+          "median_maximum_amplitude_relative_error": 0.5324323358257316,
+          "median_cpu_seconds": 62.5390625
+        },
+        "adam": {
+          "n": 18,
+          "assessable": 18,
+          "precision_passes": 2,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 18,
+          "median_case_score": 2.129724459549033,
+          "worst_case_score": 11.688857659803361,
+          "median_maximum_parameter_relative_error": 0.1205680997052617,
+          "median_maximum_amplitude_relative_error": 0.5324311148872582,
+          "median_cpu_seconds": 600.015625
+        }
+      },
+      "independent": {
+        "wphid": {
+          "n": 18,
+          "assessable": 18,
+          "precision_passes": 5,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 0,
+          "median_case_score": 3.4473168888223427,
+          "worst_case_score": 5.626237838101451,
+          "median_maximum_parameter_relative_error": 0.24350149215449413,
+          "median_maximum_amplitude_relative_error": 0.8618292222055857,
+          "median_cpu_seconds": 191.21875
+        },
+        "adam": {
+          "n": 18,
+          "assessable": 18,
+          "precision_passes": 5,
+          "failed_or_invalid": 0,
+          "budget_exhausted": 18,
+          "median_case_score": 3.433303431099746,
+          "worst_case_score": 5.3094182327262125,
+          "median_maximum_parameter_relative_error": 0.24325413076672428,
+          "median_maximum_amplitude_relative_error": 0.8583258577749365,
+          "median_cpu_seconds": 600.03125
+        }
+      }
+    },
+    "original_directional_advantage": {
+      "wphid_wins": 0,
+      "denominator": 18,
+      "one_sided_binomial_p": 1.0,
+      "required_wins": 13,
+      "precision_rate_gate": true,
+      "passed": false,
+      "not_a_full_discovery_or_engineering_adoption_gate": true
+    },
+    "symmetric_predeclared_advantage": {
+      "wphid": {
+        "wins": 0,
+        "denominator": 18,
+        "one_sided_binomial_p": 1.0,
+        "precision_rate_gate": true,
+        "familywise_threshold": 0.025,
+        "passed": false
+      },
+      "adam": {
+        "wins": 0,
+        "denominator": 18,
+        "one_sided_binomial_p": 1.0,
+        "precision_rate_gate": true,
+        "familywise_threshold": 0.025,
+        "passed": false
+      }
+    },
+    "task_specific_decisions": {
+      "shared": {
+        "precision_passes": {
+          "wphid": 18,
+          "adam": 18
+        },
+        "qualified_for_provisional_conditional_role": [
+          "wphid",
+          "adam"
+        ],
+        "decision": "both_qualified_compare_accuracy_and_cost"
+      },
+      "partial": {
+        "precision_passes": {
+          "wphid": 2,
+          "adam": 2
+        },
+        "qualified_for_provisional_conditional_role": [],
+        "decision": "no_qualified_precise_recovery"
+      },
+      "independent": {
+        "precision_passes": {
+          "wphid": 5,
+          "adam": 5
+        },
+        "qualified_for_provisional_conditional_role": [],
+        "decision": "no_qualified_precise_recovery"
+      }
+    },
+    "new_development_fits": 36,
+    "old_wphid_controls_reused_not_refit": 18,
+    "new_fresh_fits": 162,
+    "new_noise_packets": 54,
+    "new_physical_integrations": 0,
+    "official_wendy_scientific_runs": 0,
+    "official_wendy_status": "PDE operator/noise adaptation and official dense runtime resource qualification missing; transparent supplemental comparator completed",
+    "full_method_adoption": false,
+    "full_estimator_independent_engineering_confirmation": "not_entered_no_adopted_complete_version",
+    "original_eight_package_precision_count": "6/8",
+    "main_directory_adoption_or_writes": false,
+    "no_completed_old_experiment_reruns": true
+  },
+  "administrative_cost_and_scope": {
+    "comparison_selected_complete_attempts": 198,
+    "archived_WPHID_development_controls_reused": 18,
+    "new_endpoint_fits": 198,
+    "unique_final_confirmation_input_packets": 54,
+    "paired_second_recovery_byte_reuses": 105,
+    "paired_second_recovery_new_retained_attempts": 3,
+    "first_paired_interruption_lost_nominal_interval_seconds": [
+      0,
+      2400
+    ],
+    "first_Gaussian_interruption_lost_nominal_interval_seconds": [
+      0,
+      1200
+    ],
+    "second_paired_interruption": {
+      "observed_lower_CPU_seconds": 1189.6250000000018,
+      "nominal_allowance_upper_CPU_seconds": 1800,
+      "last_checkpoint_utc": "2026-10-13T15:15:40.564197+00:00",
+      "unobserved_gap_and_overshoot_separate": true,
+      "exact_lost_CPU_or_model_state_available": false,
+      "not_an_algorithm_failure": true
+    },
+    "actual_lost_work_has_unobserved_gap_or_between_call_overshoot": true,
+    "candidate_cumulative_600_CPU_budget_preserved_claim": false,
+    "fixed_retained_attempt_nominal_CPU_cap_seconds": 600,
+    "one_complete_scored_attempt_per_job": true,
+    "lost_models_unavailable_and_not_selected": true,
+    "administrative_interruption_is_algorithm_failure": false,
+    "Gaussian_development_selected_solver_CPU_seconds": 10816.890625,
+    "Gaussian_confirmation_selected_solver_CPU_seconds": 32449.34375,
+    "Gaussian_confirmation_preparation_CPU_seconds": 8.71875,
+    "paired_selected_worker_CPU_seconds": 37254.171875,
+    "solver_timing_is_full_end_to_end_minimum_cost_claim": false,
+    "WPHID_and_ADAM_objectives_identical": false
+  },
+  "bound_evidence_sha256": {
+    "artifacts/paper_comparison_resume_v2/paired_confirmation/fresh-assessment.json": "e52a38427527fb43f2ed2c22ee9565e00afbae865d2c3598553138f307db365f",
+    "artifacts/paper_comparison_resume_v2/paired_confirmation/fresh-execution-complete.json": "73c7a4cef970dd2b60091271dc22f38d7f5785851615b9805f45295c87e4d65b",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/assessment.json": "5a6b691cba1a1db3bcf3f40db74c85f5325efb854b889925a87e36e38f588a73",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/execution-complete.json": "3f5e780cb16dd62d631c5310386f5e6adfaf042e77293e7bac31f3831f966448",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/control-fit-identities.json": "c8888ffb683d911e9af15cb320aa7e63b1d36b1408977f3ecd8c4f319b23474b",
+    "artifacts/paper_comparison_resume_v1/gaussian_development/saved-fit-replay-audit.json": "332c50d7754dbfab918b244b80f5cb40f179b6c00173df5701736945cd31cecf",
+    "artifacts/paper_comparison_resume_v1/gaussian_development/administrative-cost-audit.json": "c20ac9f4423ca30719225e3037a5701b420179013b90c91abf6f6b09c80d242b",
+    "artifacts/paper_comparison_resume_v2/paired_confirmation/recovery-v2-plan.json": "fde83bb96b2b4970c1f5306779515bb3bd7257a461141e2ee589a17ba517e591",
+    "artifacts/paper_comparison_resume_v2/paired_confirmation/saved-point-replay-r1.json": "b380eb59b487611dc78b152006b774b7b03a3ff5d3961cdbcdc00a6365c8010d",
+    "artifacts/paper_comparison_resume_v2/paired_confirmation/administrative-assessment-context-r1.json": "b2d2f75a64f25d682cc6caf468748d50dd4a218078597daaa4fc724ea59c7fc5",
+    "artifacts/paper_comparison_resume_v2/paired_confirmation/final-integrity-audit.json": "acf853901bf594ec3a48339480c788a8d26f1e9938aafa38be8902b3c83a69a3",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/saved-fit-replay-audit.json": "684b359018afb264012c132d6eae311c7fbf104b9db4535f6b5b62b8f63045d7",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/administrative-cost-audit.json": "381875550a0d8bc14879f150b19613091bf8ad92c5b2b8557157179fb8a1bf9c",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/all-stages-complete.json": "fd56bf0413b8c996132797329322f3a9688b5a6c9e7d124ae2f08833c38987b5",
+    "artifacts/paper_comparison_resume_v4/final_evidence/completion-assessment.json": "2ba329e8ca14420bd8c057a14b9684375a110cb2d0ba49833ca625cb95f4c795",
+    "artifacts/paper_comparison_resume_v4/final_evidence/administrative-cost-and-scope.json": "ec7f662de74aaf5c5dac77f79ed6b75d3565a12ecb95fe441a7aa143c8dc9ed0"
+  },
+  "consolidator_source_sha256": "650259f9e86055d0bc2112451cd57b48bd2e9ba6442eff28536a302e1a6d641d",
+  "original_collector_source_sha256": "668fc8b4c0b9327eac6f05b45d476fe175aa8e73f5454d89a416ff0ab8027847",
+  "gitattributes_sha256": "3789df7c521c8a9a06d554dec1f3483502ed456d47a106205a26fce7e9d87ef2",
+  "all_required_scientific_comparisons_complete": true,
+  "official_WENDy_runtime_comparison_complete": false,
+  "official_WENDy_scientific_runs": 0,
+  "full_open_estimator_adopted": false,
+  "base_task_specific_decisions_scope": "Predeclared WPHID/ADAM conditional role decisions only; not three-program rankings",
+  "scientific_precision_scope": "Same-fit reaction nonlinear parameters and active amplitudes; not all base physical coefficients",
+  "main_directory_writes": false,
+  "new_fits_or_noise_from_consolidation": 0
+}

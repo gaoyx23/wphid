@@ -1,0 +1,36 @@
+{
+  "comparison_selected_complete_attempts": 198,
+  "archived_WPHID_development_controls_reused": 18,
+  "new_endpoint_fits": 198,
+  "unique_final_confirmation_input_packets": 54,
+  "paired_second_recovery_byte_reuses": 105,
+  "paired_second_recovery_new_retained_attempts": 3,
+  "first_paired_interruption_lost_nominal_interval_seconds": [
+    0,
+    2400
+  ],
+  "first_Gaussian_interruption_lost_nominal_interval_seconds": [
+    0,
+    1200
+  ],
+  "second_paired_interruption": {
+    "observed_lower_CPU_seconds": 1189.6250000000018,
+    "nominal_allowance_upper_CPU_seconds": 1800,
+    "last_checkpoint_utc": "2026-10-13T15:15:40.564197+00:00",
+    "unobserved_gap_and_overshoot_separate": true,
+    "exact_lost_CPU_or_model_state_available": false,
+    "not_an_algorithm_failure": true
+  },
+  "actual_lost_work_has_unobserved_gap_or_between_call_overshoot": true,
+  "candidate_cumulative_600_CPU_budget_preserved_claim": false,
+  "fixed_retained_attempt_nominal_CPU_cap_seconds": 600,
+  "one_complete_scored_attempt_per_job": true,
+  "lost_models_unavailable_and_not_selected": true,
+  "administrative_interruption_is_algorithm_failure": false,
+  "Gaussian_development_selected_solver_CPU_seconds": 10816.890625,
+  "Gaussian_confirmation_selected_solver_CPU_seconds": 32449.34375,
+  "Gaussian_confirmation_preparation_CPU_seconds": 8.71875,
+  "paired_selected_worker_CPU_seconds": 37254.171875,
+  "solver_timing_is_full_end_to_end_minimum_cost_claim": false,
+  "WPHID_and_ADAM_objectives_identical": false
+}

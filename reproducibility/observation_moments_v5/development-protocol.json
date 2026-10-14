@@ -1,0 +1,48 @@
+{
+  "version": "WPHID_COMMON_OBSERVATION_MOMENT_CONDITIONAL_DEVELOPMENT_20261012_V5",
+  "output_root": "artifacts/paper_observation_moments_v5/conditional_development_20261012",
+  "preflight_source_root": "artifacts/paper_precision_development_v3/moment_preflight_20261012_r1",
+  "fixed_seeds": [9101101, 9101102, 9101103, 9101104, 9101105, 9101106],
+  "roles": ["shared", "partial", "independent"],
+  "variants_in_fixed_order": ["uncorrected", "corrected"],
+  "new_conditional_fits": 36,
+  "reused_V1_grades": 18,
+  "new_inputs_or_noise": 0,
+  "scope": "Previously assessed development inputs; one supplied family, active destinations and partition. Necessary conditional precision qualification before open candidate investment, not complete-method confirmation.",
+  "reason_for_new_definition": "V4 fixed-step corrected-risk branch stopped. V5 fits a distinct fixed overidentified whole-product moment square with a positive square Gram, rather than repeating V4 updates.",
+  "common_moments": "25 fixed anchors per condition and destination: constant, nine three-field base columns, nine family centers and six parameter-box axis anchors. Physical reference units T=1000, O=1, D=0.5; no outcome-selected anchors or random moment pruning.",
+  "field_units": [1000.0, 1.0, 1.0],
+  "fixed_weight": "Identity in the declared common moment coordinates; not an optimal covariance or likelihood, and not a claim of independent weak moments.",
+  "noise": "Reuse saved V3-R1 observed-training-RMS sigma proxy, independent additive Gaussian raw node/field errors with no acquisition clipping; whole-product correction includes curvature and cross derivatives.",
+  "training_split": "Exactly the frozen V3-R1 six training and two heldout conditions; scale hash asserted before execution.",
+  "preflight": {
+    "points": "First fixed seed, all three roles, without accuracy or truth selection",
+    "nonlinear_fits": 0,
+    "all_three_linear_maps_full_rank": true,
+    "all_three_profile_tangents_full_rank": true,
+    "minimum_unit_box_tangent_singular_value_ratio": 0.0001,
+    "cpu_seconds": 120.0,
+    "wall_seconds": 180.0,
+    "meaning": "Numerical eligibility only; not a parameter precision or information-optimality gate"
+  },
+  "optimization": {
+    "starts_unit_box": [0.5, 0.25, 0.75],
+    "maximum_objective_evaluations_all_starts": 1200,
+    "cpu_seconds_per_fit": 45.0,
+    "wall_seconds_per_fit": 60.0,
+    "rank_tolerance": 1e-12,
+    "heldout_used_for_fit_or_noise_calibration": false
+  },
+  "budget": {"cpu_seconds_all_fits": 1800.0, "wall_seconds_all_fits": 2400.0, "threads": 1, "device": "CPU", "dtype": "float64"},
+  "scoring": "Seal all 36 attempts before grading; preserve incomplete/budget fits in the denominator. Reuse old V1 grades, never rescore old estimates. Grade actual parameters with original 12/18/18/25 percent gates, bases separate.",
+  "adoption_gate": {
+    "all_36_fits_completed_and_assessable": true,
+    "precision_passes_corrected_minimum": {"shared": 6, "partial": 5, "independent": 5},
+    "maximum_median_paired_case_score_ratio_vs_uncorrected": {"partial": 0.8, "independent": 0.8},
+    "maximum_median_paired_case_score_ratio_vs_V1": {"partial": 0.8, "independent": 0.8},
+    "all_36_saved_model_replays_pass": true,
+    "resource_gate": true
+  },
+  "stopping": "One fixed preflight and one fixed paired batch only. On failure preserve results; no anchor/weight/noise/start/radius search, no extra blocks, no open confirmation or engineering confirmation using this version.",
+  "old_results_and_original_eight_package_grades_changed": false
+}

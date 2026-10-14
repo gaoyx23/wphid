@@ -1,0 +1,15 @@
+{
+  "version": "COUPLED_SOLVER_V1_ARCHIVAL_INVERSION_R1_SOFTWARE_20261013",
+  "output_parent": "artifacts/paper_coupled_solver_v1/noise_replay_software",
+  "test_path": "tests/coupled_solver_v1/test_noise_replay.py",
+  "wall_cap_seconds": 60,
+  "source_files": [
+    "tests/coupled_solver_v1/test_noise_replay.py",
+    "reproducibility/coupled_solver_v1/archive_clean_from_noise_replay.py",
+    "reproducibility/coupled_solver_v1/archive_clean_r1.py",
+    "reproducibility/coupled_solver_v1/qualify_noise_replay.py"
+  ],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_blocks": 0
+}

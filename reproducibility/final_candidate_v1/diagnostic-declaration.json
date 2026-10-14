@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-11",
+  "status": "declared_before_confirmation_truth_assessment",
+  "source_sha256": "39e06bd02729bccee3130b43099c9d59db2fc40a613ef142eea95120e7d39c8e",
+  "inputs": "All saved Q1/Q2 fits and all Q3 training-selected fits, including failures/null records",
+  "point_selection": "Immutable previously selected training point; no truth-based choice",
+  "quantities": [
+    "unit-box model tangent projected off linear nuisance columns",
+    "singular values and numerical rank at that point",
+    "noisy-state-conditioned reaction action errors for train and frozen holdout"
+  ],
+  "new_fitting_or_observation_generation": false,
+  "calibrated_confidence_or_global_identifiability": false
+}

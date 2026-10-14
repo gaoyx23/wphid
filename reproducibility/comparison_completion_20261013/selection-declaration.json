@@ -1,0 +1,31 @@
+{
+  "version": "TASK_SPECIFIC_METHOD_SELECTION_20261013_V1",
+  "declared_before_fresh_comparison_inputs_or_fits": true,
+  "authority": "User requests complete missing comparisons and choose the better-performing method",
+  "fresh_comparison_protocol": "reproducibility/matched_completion_v1/protocol.json",
+  "development_results": "Diagnostic only, no independent superiority or precision adoption",
+  "precision_endpoints": {"theta": 0.12, "oxygen_order": 0.18, "damage_order": 0.18, "active_reaction_amplitude": 0.25},
+  "role_specific_practical_use": {
+    "roles": ["shared", "partial", "independent"],
+    "denominator_per_role": 18,
+    "minimum_precision_passes_for_provisional_task_use": 15,
+    "qualification_is_for_known_family_topology_partition_only": true,
+    "both_below_threshold": "No qualified precise-recovery method selected for this role",
+    "only_one_reaches_threshold": "Prefer that program provisionally within the declared conditional role, disclose other method's failed counts",
+    "both_reach_threshold": "Compare pass counts, paired parameter errors, frozen heldout residuals and actual CPU; comparable accuracy permits choosing lower-cost program without claiming universal precision superiority"
+  },
+  "symmetric_paired_error_claim": {
+    "eligible_data": "Fresh independent paired blocks only; all 18 remain in denominator",
+    "block_score": "Maximum of all three role case scores",
+    "directional_win": "Both programs assessable in all roles, competitor score positive, own score <= 0.9 competitor score; all failures, zeros and ties nonwins",
+    "two_directions_family": ["wphid", "adam_known_support_v2"],
+    "one_sided_binomial_null": 0.5,
+    "bonferroni_alpha_per_direction": 0.025,
+    "required_wins_per_direction": 14,
+    "precision_rate_gate": "Own precision pass count at least competitor count in each role",
+    "scope": "Conditional adapted solver only; not native ADAM or full mechanism discovery"
+  },
+  "gaussian_quasi_likelihood_baseline": "Fixed development comparator; no official WENDy label or independent superiority inferred",
+  "full_method_adoption": "Still requires same-fit open structure and parameter precision, null/near-equivalent controls and a compatible adopted-version confirmation protocol; conditional comparison alone cannot close this gate",
+  "prohibited": ["post-result tuning", "new-noise redraw", "completed fit rerun", "cross-task ranking", "treat both methods failing as useful equivalence", "main-directory automatic adoption"]
+}

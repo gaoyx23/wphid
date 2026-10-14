@@ -11,3 +11,6 @@
 *.jpeg binary
 *.docx binary
 
+# Frozen protocols hash exact file bytes. Preserve original line endings in
+# snapshots/worktrees rather than silently rewriting sources or JSON evidence.
+* -text

@@ -1,0 +1,13 @@
+{
+  "declared_utc": "2026-10-10 19:13:47 UTC",
+  "source": "reproducibility/final_candidate_v1/diagnose_adaptation_scale.py",
+  "source_sha256": "cabe1c76d52fbb9c937051b81311ff6444e1c826f519ce27c47abb3d37899b29",
+  "confirmation_accuracy_assessment_exists_at_declaration": false,
+  "run_only_after_completed_estimates_and_assessment": true,
+  "purpose": "Check whether the fixed training-scaled amplitude threshold permits the declared physical amplitude precision band",
+  "unit": "all 54 Q1 ADAM estimates, with failures retained",
+  "new_inputs_or_parameter_fits": 0,
+  "confirmation_threshold_tuning": false,
+  "frozen_primary_gate_or_budget_change": false,
+  "does_not_establish_native_ADAM_performance_or_WPHID_superiority": true
+}

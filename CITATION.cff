@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "Please cite this dated research software and its final article when available."
+type: software
+title: "WPHID: mechanism-level joint weak profiling for nonlinear multiphysics identification"
+authors:
+  - family-names: Gao
+    given-names: Yixuan
+    affiliation: Tsinghua University
+version: "reference-2026-10-14"
+license: MIT
+abstract: "Finite mechanism hypotheses, joint weak profiling and declared parameter-sharing partitions, with saved synthetic recovery and failure evidence."

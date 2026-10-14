@@ -1,0 +1,20 @@
+{
+  "record_version": "GPU_AUTHORIZATION_20261011_V1",
+  "user_statement": "如果需要可以用gpu",
+  "authorization_scope": "Optional GPU use when useful for subsequent authorized work; no requirement to change the current fixed confirmation protocol.",
+  "observed_hardware": {
+    "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "reported_memory_mib": 8188,
+    "driver_version": "576.80",
+    "query": "nvidia-smi --query-gpu=name,memory.total,driver_version --format=csv,noheader"
+  },
+  "current_confirmation": {
+    "protocol": "scientific-protocol.json",
+    "compute_configuration": "Retain the predeclared CPU float64 execution and budgets for Q1, Q2 and Q3.",
+    "gpu_estimates_started": 0,
+    "frozen_source_or_results_changed": false,
+    "completed_experiments_rerun": false
+  },
+  "future_gpu_use": "Requires a separately recorded implementation qualification and compute configuration; it cannot retroactively alter this CPU confirmation or its comparison endpoints.",
+  "frozen_user_decisions_preserved": true
+}

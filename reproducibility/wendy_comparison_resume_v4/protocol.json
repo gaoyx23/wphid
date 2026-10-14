@@ -1,0 +1,19 @@
+{
+  "version": "WPHID_GAUSSIAN_ORDERLY_RESUME_V4_20261014",
+  "authorization": "User explicitly resumed all experiments on October14 after orderly battery pause",
+  "old_output": "artifacts/paper_comparison_resume_v2/gaussian_fresh_confirmation",
+  "output": "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation",
+  "pause_receipt": "artifacts/paper_comparison_pause_20261014/paused-state.json",
+  "retained_source_freeze_sha256": "b01477e0d4ed802e51ff1eddb9be2ffa7c138fc3acd431e80ca847d413a5ea6e",
+  "completed_byte_reuses": 20,
+  "new_never_started_fits": 34,
+  "unique_scientific_endpoints": 54,
+  "scientific_kernel_or_gates_changed": false,
+  "workers": 4,
+  "checkpoint_seconds": 2,
+  "nominal_retained_solver_cpu_cap_seconds": 600,
+  "lost_model_or_CPU_at_orderly_pause": 0,
+  "scientific_retry_or_tuning": false,
+  "new_noise_draws_or_trajectory_integrations": 0,
+  "official_WENDy": false
+}

@@ -1,0 +1,41 @@
+{
+  "version": "COMPARISON_COMPLETION_ORDERLY_RESUME_V4_20261014",
+  "bound_evidence_sha256": {
+    "artifacts/paper_comparison_pause_20261014/paused-state.json": "d08d56687d39d1e2c9e62ec019613d0ad6608e65abba865e5307f19cb038072c",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/recovery-source-freeze.json": "666209f58cae5105cd142514ae75b268ea1fd1a2a340c2b3cdb84093f66053f4",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/administrative-resume-context.json": "6dba61bbe42c54c60000826b6c8bcbedc1f6c8284ef76dff00882adfab189bc5",
+    "artifacts/paper_comparison_resume_v4/gaussian_fresh_confirmation/all-stages-complete.json": "fd56bf0413b8c996132797329322f3a9688b5a6c9e7d124ae2f08833c38987b5",
+    "artifacts/paper_comparison_resume_v4/final_evidence/recovered-completion-assessment.json": "33e3d3dd9761641e466a270e5e155ba899466d1bfc133f2effa2570c0726fa5d",
+    "artifacts/paper_comparison_resume_v4/final_evidence/plot-receipt.json": "cdeadbfc6907d0fd03369b86519f56c86fa8ee42598d7adfb67185928eedd113",
+    "artifacts/paper_comparison_resume_v4/final_evidence/three-program-role-summary.json": "a6709fcc7ed76039c8abf488b6ba481942765010b6d1dc1a49dbf329738b84eb"
+  },
+  "resume_context": {
+    "version": "WPHID_GAUSSIAN_ORDERLY_RESUME_V4_20261014",
+    "selected_unique_endpoint_denominator": 54,
+    "completed_byte_reuses": 20,
+    "new_retained_resume_fits": 34,
+    "original_study_fresh_Gaussian_fits": 54,
+    "cost_receipt_new_retained_fits_field_scope": "entire original fresh confirmation study;20 reused here and34 newly completed here",
+    "new_retained_resume_solver_cpu_seconds": 20427.65625,
+    "new_retained_resume_preparation_cpu_seconds": 4.890625,
+    "lost_model_or_CPU_at_orderly_pause": 0,
+    "scientific_retry_or_tuning": false,
+    "new_noise_or_integrations": 0,
+    "original20_endpoint_bytes_unchanged": true,
+    "all54_scored_only_after_completion": true,
+    "cost_sha256": "381875550a0d8bc14879f150b19613091bf8ad92c5b2b8557157179fb8a1bf9c",
+    "recovery_source_freeze_sha256": "666209f58cae5105cd142514ae75b268ea1fd1a2a340c2b3cdb84093f66053f4"
+  },
+  "study_unique_new_endpoint_fits": 198,
+  "study_archived_WPHID_controls_reused": 18,
+  "study_scored_records": 216,
+  "this_resume_new_Gaussian_fits": 34,
+  "this_resume_exact_completed_byte_reuses": 20,
+  "orderly_pause_lost_model_or_CPU": 0,
+  "postprocessing_new_fits_noise_or_integrations": 0,
+  "source_sha256": "b73c7f0312a32269888754b3800d37f21a1f74ae3980333f02663dce15f61530",
+  "previous_postprocessing_source_sha256": "650259f9e86055d0bc2112451cd57b48bd2e9ba6442eff28536a302e1a6d641d",
+  "full_open_estimator_adopted": false,
+  "official_WENDy_scientific_runs": 0,
+  "all_predeclared_locally_executable_scientific_comparisons_complete": true
+}

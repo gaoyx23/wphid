@@ -1,0 +1,86 @@
+{
+  "version": "SOURCE_GEOMETRY_V6_SAVED_INPUT_AUDIT_20261012",
+  "identity": "saved array eligibility and raw-extrema correspondence only; no new performance or confirmation",
+  "main_root_read_only": "C:/Users/gyx/Desktop/Research",
+  "output_root": "artifacts/paper_source_geometry_v6/saved_input_audit_20261012_attempt01",
+  "wall_cap_seconds": 60,
+  "baseline_manifest": "reproducibility/workspace-baseline-manifest.json",
+  "historical_result": "artifacts/paper_r100_geometry_material_defect_transfer/development.json",
+  "case_manifest": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/manifest.json",
+  "required_fields": [
+    "T",
+    "pO2",
+    "pH2O",
+    "pProducts",
+    "carbon",
+    "crack",
+    "stress"
+  ],
+  "inputs": [
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/nominal_900s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1696165,
+      "sha256": "9e60b0946ecc346685c87cce492833c840dea23cd50cc8df043da4f96e1845cd",
+      "mission": "nominal_900s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/nominal_900s.npz",
+        "bytes": 1696165,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_thermal_750s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1419118,
+      "sha256": "ddd565a96cb466fce96c4a6009dc1cbe9e8b051f4fa780c94596d801e16d8602",
+      "mission": "high_thermal_750s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_thermal_750s.npz",
+        "bytes": 1419118,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_steam_900s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1702182,
+      "sha256": "c11ad744bc7c61d3b21fe761388edcaeeb11033ded796c00e123616a0bde3d17",
+      "mission": "high_steam_900s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_steam_900s.npz",
+        "bytes": 1702182,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/ground_postfire_cooldown_600s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1190617,
+      "sha256": "11a798d9309b0768087be3d5ba0df9512f799900ee63ec15ab21dd97876a555e",
+      "mission": "ground_postfire_cooldown_600s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/ground_postfire_cooldown_600s.npz",
+        "bytes": 1190617,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    }
+  ],
+  "source_files": [
+    "reproducibility/source_geometry_v6/audit_saved_inputs.py",
+    "reproducibility/source_geometry_v6/saved-input-audit-protocol.json",
+    "reproducibility/workspace-baseline-manifest.json",
+    "experiments/paper_r100_geometry_material_defect_transfer.py",
+    "src/wphid/truth/reusable_nozzle.py",
+    "src/wphid/truth/reusable_tps.py",
+    "artifacts/paper_r100_geometry_material_defect_transfer/development.json",
+    "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/manifest.json"
+  ],
+  "no_generator_import_or_call": true,
+  "no_array_copy_or_write": true,
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_draws": 0,
+  "scientific_gate_changed": false,
+  "stop_rule": "identity, missing field, nonfinite or raw-extrema mismatch retains attempt and forbids regeneration"
+}

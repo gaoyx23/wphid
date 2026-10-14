@@ -1,0 +1,88 @@
+{
+  "fresh_noise_blocks": 18,
+  "public_observation_packets": 54,
+  "given_family_active_support_and_partition": true,
+  "precision_scope": "Same-fit nonlinear reaction parameters and active amplitudes; base coefficients not gated",
+  "descriptive_summary_only_no_new_hypothesis_tests": true,
+  "source_CSV_sha256": "000d77be435188eb8b123fb8a742e86276f8408e026b366cca396b65de8df488",
+  "roles": {
+    "shared": {
+      "wphid": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 18,
+        "median_case_score_among_assessable": 0.1666348679319138,
+        "median_solver_CPU_seconds_among_recorded": 13.53125,
+        "budget_exhausted": 0
+      },
+      "adam": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 18,
+        "median_case_score_among_assessable": 0.169520073296901,
+        "median_solver_CPU_seconds_among_recorded": 600.0,
+        "budget_exhausted": 18
+      },
+      "gaussian_quasi_likelihood": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 18,
+        "median_case_score_among_assessable": 0.07925827691160037,
+        "median_solver_CPU_seconds_among_recorded": 600.703125,
+        "budget_exhausted": 18
+      }
+    },
+    "partial": {
+      "wphid": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 2,
+        "median_case_score_among_assessable": 2.1297293433029263,
+        "median_solver_CPU_seconds_among_recorded": 62.5390625,
+        "budget_exhausted": 0
+      },
+      "adam": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 2,
+        "median_case_score_among_assessable": 2.129724459549033,
+        "median_solver_CPU_seconds_among_recorded": 600.015625,
+        "budget_exhausted": 18
+      },
+      "gaussian_quasi_likelihood": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 0,
+        "median_case_score_among_assessable": 4.420188024085489,
+        "median_solver_CPU_seconds_among_recorded": 600.7265625,
+        "budget_exhausted": 18
+      }
+    },
+    "independent": {
+      "wphid": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 5,
+        "median_case_score_among_assessable": 3.4473168888223427,
+        "median_solver_CPU_seconds_among_recorded": 191.21875,
+        "budget_exhausted": 0
+      },
+      "adam": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 5,
+        "median_case_score_among_assessable": 3.433303431099746,
+        "median_solver_CPU_seconds_among_recorded": 600.03125,
+        "budget_exhausted": 18
+      },
+      "gaussian_quasi_likelihood": {
+        "denominator": 18,
+        "assessable": 18,
+        "reaction_parameters_and_amplitudes_precision_passes": 0,
+        "median_case_score_among_assessable": 4.371639688606264,
+        "median_solver_CPU_seconds_among_recorded": 600.875,
+        "budget_exhausted": 18
+      }
+    }
+  }
+}

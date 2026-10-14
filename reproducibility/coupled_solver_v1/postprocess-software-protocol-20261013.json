@@ -1,0 +1,17 @@
+{
+  "version": "COUPLED_SOLVER_V1_NEW_PHYSICAL_ENDPOINT_AND_NOISE_INVERSION_CHECKS_20261013",
+  "output_parent": "artifacts/paper_coupled_solver_v1/postprocess_software",
+  "test_path": "tests/coupled_solver_v1/test_physical_endpoints.py",
+  "wall_cap_seconds": 60,
+  "source_files": [
+    "reproducibility/coupled_solver_v1/physical_endpoints.py",
+    "tests/coupled_solver_v1/test_physical_endpoints.py",
+    "reproducibility/coupled_solver_v1/archive_clean_from_noise_replay.py",
+    "tests/coupled_solver_v1/test_noise_replay.py",
+    "reproducibility/coupled_solver_v1/qualify_postprocess.py"
+  ],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_blocks": 0,
+  "scientific_gates_changed": false
+}

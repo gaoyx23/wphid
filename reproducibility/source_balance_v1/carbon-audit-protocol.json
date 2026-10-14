@@ -1,0 +1,113 @@
+{
+  "version": "SOURCE_BALANCE_V1_CLOSED_CARBON_DIAGNOSTIC_20261012",
+  "identity": "one fixed saved-model compatibility and local geometry audit; no refitting, parameter grading or new confirmation",
+  "main_root_read_only": "C:/Users/gyx/Desktop/Research",
+  "output_root": "artifacts/paper_source_balance_v1/closed_carbon_audit_20261012_attempt01",
+  "wall_cap_seconds": 60,
+  "baseline_manifest": "reproducibility/workspace-baseline-manifest.json",
+  "prior_input_completion": "artifacts/paper_source_geometry_v6/saved_input_audit_20261012_attempt01/execution-complete.json",
+  "saved_model": {
+    "path": "artifacts/paper_r21_fullfield_nonlinear_parameter_recovery/metrics.json",
+    "sha256": "a9c2096567368245fed0c2cf28b7332e0a4108e71f656835035888132aeb0e28",
+    "selector": "results.chemistry pooled fit",
+    "selection_reason": "fixed all-condition fit; no truth, fold score or new output selects model",
+    "previous_completion": "results.chemistry.success=true; seven saved parameters; source and result read"
+  },
+  "inputs": [
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/nominal_900s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1696165,
+      "sha256": "9e60b0946ecc346685c87cce492833c840dea23cd50cc8df043da4f96e1845cd",
+      "mission": "nominal_900s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/nominal_900s.npz",
+        "bytes": 1696165,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_thermal_750s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1419118,
+      "sha256": "ddd565a96cb466fce96c4a6009dc1cbe9e8b051f4fa780c94596d801e16d8602",
+      "mission": "high_thermal_750s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_thermal_750s.npz",
+        "bytes": 1419118,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_steam_900s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1702182,
+      "sha256": "c11ad744bc7c61d3b21fe761388edcaeeb11033ded796c00e123616a0bde3d17",
+      "mission": "high_steam_900s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_steam_900s.npz",
+        "bytes": 1702182,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/ground_postfire_cooldown_600s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1190617,
+      "sha256": "11a798d9309b0768087be3d5ba0df9512f799900ee63ec15ab21dd97876a555e",
+      "mission": "ground_postfire_cooldown_600s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/ground_postfire_cooldown_600s.npz",
+        "bytes": 1190617,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    }
+  ],
+  "window_samples": 17,
+  "stride_samples": 8,
+  "temporal_test": "1-xi^2 on each fixed window, zero endpoints",
+  "quadrature": "composite Simpson; uniform odd-numbered node windows",
+  "gas_constant": 8.314462618,
+  "parameter_units": [
+    100000,
+    100000,
+    1,
+    1,
+    1
+  ],
+  "nuisance_modes": [
+    "two global reaction amplitudes",
+    "two amplitudes per condition, same global kinetics"
+  ],
+  "whitener": "identity; purely local geometry, not covariance/Fisher information or independent weak samples",
+  "compatibility_relative_residual_limit": 0.1,
+  "compatibility_limit_is_precision_gate": false,
+  "frozen_dependency_hashes": [
+    {
+      "path": "src/wphid/source_geometry_v6/__init__.py",
+      "sha256": "6a1731ecb96185832b752431296172f9330d0ca3b7cac3a758688c6eba816f0d"
+    },
+    {
+      "path": "src/wphid/source_geometry_v6/geometry.py",
+      "sha256": "64a004eadef1e9d93f55d78ba45bb49aa2877ee0f5328b22415b7d81ea74566b"
+    }
+  ],
+  "source_files": [
+    "reproducibility/source_balance_v1/closed_carbon_audit.py",
+    "reproducibility/source_balance_v1/carbon-audit-protocol.json",
+    "src/wphid/source_geometry_v6/__init__.py",
+    "src/wphid/source_geometry_v6/geometry.py",
+    "src/wphid/truth/reusable_nozzle.py",
+    "experiments/paper_r21_fullfield_nonlinear_parameter_recovery.py",
+    "artifacts/paper_r21_fullfield_nonlinear_parameter_recovery/metrics.json",
+    "reproducibility/workspace-baseline-manifest.json",
+    "reproducibility/source_geometry_v6/saved-input-audit-protocol.json",
+    "artifacts/paper_source_geometry_v6/saved_input_audit_20261012_attempt01/assessment.json",
+    "artifacts/paper_source_geometry_v6/saved_input_audit_20261012_attempt01/execution-complete.json"
+  ],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_draws": 0,
+  "original_eight_package_count": "6/8",
+  "stop_rule": "one bounded audit; retain incompatibility/rank results; do not change window, model, threshold, sources or add missions to pass; no adoption or confirmation authorized"
+}

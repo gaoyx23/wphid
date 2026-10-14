@@ -1,0 +1,159 @@
+{
+  "version": "COUPLED_SOLVER_V1_FIXED_SCIENTIFIC_DEVELOPMENT_20261013",
+  "authorization": "2026-10-13 current chat: complete method freeze, fixed development/matched comparison, adoption decision and conditional confirmation, then report",
+  "output_root": "artifacts/paper_coupled_solver_v1/scientific_development_20261013_attempt01",
+  "no_completed_experiment_rerun": true,
+  "main_directory_read_only": true,
+  "scope": "five balances with observed crack/stress drivers; not all seven-field mechanism recovery, real instruments or old independent confirmation",
+  "observation_contract": {
+    "identity": "NEW_CONTROL_BOUNDED_INDEPENDENT_SENSOR_LAW_V1",
+    "temperature_sigma_K": 5,
+    "carbon_loss_relative_sigma": 0.1,
+    "relative_sigma": {
+      "pO2": 0.01,
+      "pH2O": 0.01,
+      "pProducts": 0.01,
+      "crack": 0.1,
+      "stress": 0.02
+    },
+    "load_relative_sigma": 0.01,
+    "fixed_initial_fields": "all seven first snapshots given exactly and identically to both methods; raw coordinates retained",
+    "initial_loads": "same declared sensor law as other loads, not made fixed",
+    "reconstruction": false,
+    "clipping": false,
+    "variance": "known sensor law; observation-only plug-in used only for first-order covariance diagnostics; no clean truth used in inverse weights",
+    "distribution": "independent bounded uniforms with unit variance; zero variance at zero signal follows the explicit law",
+    "domain_failure_rule": "retain and stop that case; no redraw or repair"
+  },
+  "reference_metric_sigma": {
+    "carbon": 0.005,
+    "pO2": 200,
+    "pH2O": 10000,
+    "pProducts": 1000,
+    "T": 5
+  },
+  "estimation_criterion": "single fixed reference measurement metric constructed from storage maps and predeclared nominal resolutions; full overlap correlation; not actual residual covariance, optimal GLS, parameter-dependent QL or exact MLE; no weights/anchors scanned; no jitter or ridge",
+  "data": {
+    "grid": [
+      3,
+      2
+    ],
+    "time_samples": 241,
+    "duration_seconds": 600,
+    "window_samples": 33,
+    "stride_samples": 26,
+    "mission_count": 3,
+    "generator": "independent continuous finite-volume BDF; no inverse assembler or manufactured compensating forcing",
+    "solver_rtol": 1e-8,
+    "solver_atol": 1e-9,
+    "source_roles": [
+      "both_shared",
+      "both_free",
+      "both_independent",
+      "oxygen_only",
+      "steam_only",
+      "null",
+      "both_oxygen_heat",
+      "near_equivalent"
+    ],
+    "noise_blocks_per_role": 2,
+    "noise_seed_root": 202610130100,
+    "physical_trajectory_count": 24,
+    "observation_block_count": 16
+  },
+  "candidate_space": "12 explicit models from coupled_solver_v1.model:candidate_space, not full Cartesian product; all permitted coefficients and all declared outer coordinates open; no truth-selected prior",
+  "shared_prior": {
+    "heat_capacity_knots_K": [
+      293.15,
+      1873.15
+    ],
+    "ambient_temperature_K": 300,
+    "geometry": "public declared Hermite shell",
+    "physical_signs": "nonnegative source/storage/transport/boundary scales; heat capacity contrast [0,2]",
+    "parameter_bounds": "parameter_box(candidate) fixed in source; no truth-centered initializations"
+  },
+  "budgets": {
+    "worker_processes": 4,
+    "threads_per_worker": 1,
+    "device": "CPU",
+    "dtype": "float64",
+    "cpu_seconds_per_program_candidate": 15,
+    "profile_max_calls": 2000,
+    "profile_max_iterations": 400,
+    "adam_max_calls": 40000,
+    "initial_fractions": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "adam_learning_rate": 0.01,
+    "adam_betas": [
+      0.9,
+      0.99
+    ],
+    "adam_epsilon": 1e-15,
+    "scheduler_step": 3000,
+    "scheduler_multiplier": 0.5,
+    "interpretation": "equal CPU ceilings, not convergence guarantee; all truncation/failures retained; no best-epoch Adam or profile refinement"
+  },
+  "selection": {
+    "score": "fixed_metric_quadratic + total_declared_parameter_count * log(number_of_weak_rows)",
+    "identity": "heuristic common complexity score, not calibrated BIC under the actual sensor law",
+    "competition_score_gap": 2,
+    "candidate_failures": "remain in denominator; no selected estimate if all fail"
+  },
+  "precision": {
+    "activation_energy_relative": 0.12,
+    "pressure_order_relative": 0.18,
+    "carbon_order_relative": 0.18,
+    "relative_rate_relative": 0.25,
+    "active_source_response_relative": 0.25,
+    "material_transport_boundary_combinations": "all errors and local inactive directions reported separately; not silently declared precisely recovered",
+    "same_fit": true
+  },
+  "adoption_gate": {
+    "positive_same_fit_source_structure_and_precision": "at least 10/12 positive role-noise blocks (shared/free/independent/oxygen/steam/wrong-heat); independent role not converted to shared truth",
+    "null_selected": "2/2",
+    "near_equivalent_competition": "2/2; descriptive threshold, not confidence",
+    "source_component_gain": "both of the 2 same-observation true-shared pairs have assessable shared/free reaction scores; shared <= 0.8 * free and shared precise; failures nonwins",
+    "matched_external": "both complete programs receive identical inputs and priors; WPHID positive precision count not lower, assessable selected score median ratio <=1.1; a bounded descriptive gate, not formal noninferiority or native best-tuned ADAM advantage",
+    "stop": "evaluate once, retain failure; no additional data, weights, restarts, noise draws, candidates or changed precision thresholds"
+  },
+  "confirmation_if_adopted": {
+    "independent_control": "same frozen programs/candidates on new 660s natural trajectories, 1 new noise block per role, seed root 202610130900; fixed material point; does not prove continuum coverage",
+    "engineering": "read-only old four saved R100 arrays as engineering compatibility challenge, explicitly already viewed and not independent experimental confirmation",
+    "gate_rule": "if development adoption fails, both phases recorded as not run by dependency; no wasted confirmation"
+  },
+  "external_adapter": {
+    "source_lock": "reproducibility/final_candidate_v1/official-source-lock.json",
+    "identity": "conditional ADAM-SINDy optimization with analytic CPU gradients of common weak objective, common enumeration, supplied support per fit and zero within-support sparsity; not native end-to-end author code",
+    "objective_scale": "mean fixed-metric squared residual",
+    "no_postfit_profile": true
+  },
+  "source_files": [
+    "src/wphid/coupled_solver_v1/__init__.py",
+    "src/wphid/coupled_solver_v1/model.py",
+    "src/wphid/coupled_solver_v1/solver.py",
+    "src/wphid/coupled_solver_v1/uncertainty.py",
+    "src/wphid/coupled_candidates_v1/__init__.py",
+    "src/wphid/coupled_candidates_v1/model.py",
+    "src/wphid/coupled_candidates_v1/physical.py",
+    "src/wphid/coupled_balance_v1/assembler.py",
+    "src/wphid/coupled_balance_v1/operators.py",
+    "src/wphid/coupled_balance_v1/noise.py",
+    "src/wphid/coupled_balance_v1/packet_geometry.py",
+    "src/wphid/coupled_observation_v1/linearization.py",
+    "src/wphid/coupled_likelihood_v1/objective.py",
+    "src/wphid/source_geometry_v6/geometry.py",
+    "reproducibility/coupled_solver_v1/generator.py",
+    "reproducibility/coupled_solver_v1/workflow.py",
+    "reproducibility/coupled_solver_v1/scientific-protocol-20261013.json",
+    "reproducibility/final_candidate_v1/official-source-lock.json"
+  ],
+  "preserved_state": {
+    "original_eight_packages": "6/8",
+    "V4_V5": "stopped, not adopted",
+    "old_789_confirmation": "original version identity; not inherited",
+    "paper_and_main_decisions": "not automatically overwritten"
+  }
+}

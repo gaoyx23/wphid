@@ -1,0 +1,110 @@
+{
+  "version": "COUPLED_BALANCE_V1_SAVED_ASSEMBLY_AUDIT_20261013",
+  "identity": "one fixed matrix assembly audit on already-viewed saved synthetic inputs; no parameter/nuisance fitting or engineering compatibility claim",
+  "main_root_read_only": "C:/Users/gyx/Desktop/Research",
+  "output_root": "artifacts/paper_coupled_balance_v1/saved_assembly_audit_20261013_attempt01",
+  "wall_cap_seconds": 120,
+  "baseline_manifest": "reproducibility/workspace-baseline-manifest.json",
+  "prior_array_completion": "artifacts/paper_source_geometry_v6/saved_input_audit_20261012_attempt01/execution-complete.json",
+  "case_manifest": {
+    "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/manifest.json",
+    "sha256": "507f1ef92f0d75cb6d4ae621b806344bc2e160f83fbb09fe56818885b4c47ae4",
+    "use": "geometry only; material metadata not input"
+  },
+  "saved_model": {
+    "path": "artifacts/paper_r21_fullfield_nonlinear_parameter_recovery/metrics.json",
+    "sha256": "a9c2096567368245fed0c2cf28b7332e0a4108e71f656835035888132aeb0e28",
+    "selector": "results.chemistry pooled fit; no scoring fields select point"
+  },
+  "inputs": [
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/nominal_900s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1696165,
+      "sha256": "9e60b0946ecc346685c87cce492833c840dea23cd50cc8df043da4f96e1845cd",
+      "mission": "nominal_900s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/nominal_900s.npz",
+        "bytes": 1696165,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_thermal_750s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1419118,
+      "sha256": "ddd565a96cb466fce96c4a6009dc1cbe9e8b051f4fa780c94596d801e16d8602",
+      "mission": "high_thermal_750s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_thermal_750s.npz",
+        "bytes": 1419118,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_steam_900s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1702182,
+      "sha256": "c11ad744bc7c61d3b21fe761388edcaeeb11033ded796c00e123616a0bde3d17",
+      "mission": "high_steam_900s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/high_steam_900s.npz",
+        "bytes": 1702182,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    },
+    {
+      "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/ground_postfire_cooldown_600s.npz",
+      "read_location": "main_read_only",
+      "bytes": 1190617,
+      "sha256": "11a798d9309b0768087be3d5ba0df9512f799900ee63ec15ab21dd97876a555e",
+      "mission": "ground_postfire_cooldown_600s",
+      "baseline_entry": {
+        "path": "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/ground_postfire_cooldown_600s.npz",
+        "bytes": 1190617,
+        "reason": "large/generated payload; retained in main directory"
+      }
+    }
+  ],
+  "required_balance_qualifications": [
+    "artifacts/paper_coupled_balance_v1/software_qualification_20261012_attempt01",
+    "artifacts/paper_coupled_balance_v1/noise_numerical_r1_qualification_20261012_attempt01"
+  ],
+  "window_samples": 17,
+  "stride_samples": 8,
+  "coordinate_absolute_tolerance": 1e-12,
+  "numerical_rank_rtol": 1e-10,
+  "candidate": {
+    "role": "unmodulated isotropic linear-transport declared point, not claimed native truth model",
+    "gas_direction_ratio": 1,
+    "steam_diffusivity_ratio": 1,
+    "product_diffusivity_ratio": 1,
+    "forchheimer_product": 0,
+    "thermal_direction_ratio": 1,
+    "gas_modulation": 1,
+    "thermal_modulation": 1,
+    "pressure_barrier": 1,
+    "heat_capacity_knots_K": [
+      293.15,
+      1873.15
+    ],
+    "ambient_temperature_assumption_K": 300,
+    "ambient_temperature_role": "declared synthetic boundary assumption from archived R100/default mission source, not measured field or material calibration"
+  },
+  "source_files": [
+    "src/wphid/coupled_balance_v1/packet_geometry.py",
+    "src/wphid/coupled_balance_v1/__init__.py",
+    "src/wphid/coupled_balance_v1/operators.py",
+    "src/wphid/coupled_balance_v1/assembler.py",
+    "reproducibility/coupled_balance_v1/audit_saved_assembly.py",
+    "reproducibility/coupled_balance_v1/saved-assembly-protocol-20261013.json",
+    "artifacts/paper_r100_geometry_material_defect_transfer/truth_scoring_only/reference_bartz/manifest.json",
+    "artifacts/paper_r21_fullfield_nonlinear_parameter_recovery/metrics.json",
+    "reproducibility/workspace-baseline-manifest.json"
+  ],
+  "new_fits": 0,
+  "new_trajectories": 0,
+  "new_noise_draws": 0,
+  "scientific_gate_changed": false,
+  "stop_rule": "one fixed assembly point and windows; retain rank/domain/input failure; no added point, mesh smoothing, noise draw, truth loading, model fit or regeneration to pass"
+}

@@ -1,0 +1,51 @@
+{
+  "version": "WPHID_FINAL_CANDIDATE_IMPLEMENTATION_V1",
+  "date": "2026-10-11",
+  "status": "hand_written_software_fixtures_passed",
+  "software_tests_passed": 27,
+  "failures": 0,
+  "research_runs_started": 0,
+  "scientific_recovery_cases": 0,
+  "historical_results_rescored": false,
+  "default_estimator_changed": false,
+  "source_sha256": {
+    "src/wphid/final_candidate_v1/__init__.py": "1e4a0794d29f4a9b6dea3007ac1643832c82eb403eb6ba8b663843ee1c3888d4",
+    "src/wphid/final_candidate_v1/adam_adapter.py": "f07fdb8027d87a8f67c4c3f8e532a0a69c05f47b8d6b88c8970d53a35a79d78f",
+    "src/wphid/final_candidate_v1/observations.py": "9dce24fcdc0482e5cd5c3925791732373cf3bf1dcb7a1e00b81f3ae9b73ffed2",
+    "src/wphid/final_candidate_v1/pipeline.py": "0064df2ba2c48c5744f58e4d412e57559f2f6603b51145d91e76eae532929a79",
+    "src/wphid/final_candidate_v1/problem.py": "a1ac78cd238e9db5a0cee64d00104aa3921ffd6a6f445a57fe4f61ad71df582c",
+    "src/wphid/final_candidate_v1/solver.py": "9e90597b0b89c8226d86f35e7b7e808b51de17b2314b85de3493527e20fee4c6",
+    "tests/final_candidate_v1/test_pipeline.py": "fa6989102c99a16aafa4b2ff1ae1dcd446e6871ccc0e8ceb52a6c9088e297d1a",
+    "reproducibility/final_candidate_v1/qualify_software.py": "ec320bf99897a30574fd52128512c9aa50206524df881cab5ccfe694d491576b",
+    "reproducibility/final_candidate_v1/official-source-lock.json": "24b37ab8a9bcb32e2a444a494d58f14c990624a9f04442bbd480d8bbb6b15e81",
+    "reproducibility/final_candidate_v1/execution-plan.json": "6bfbc356b6c76cd97fc0cd58f7027ec3ae6ecda81ddf210b95365b4139a544a2"
+  },
+  "frozen_reference_sha256": {
+    "src/wphid/discovery/network_profiled.py": "9b3367a76c90837caa9b39bc7d2e4f15fe8b96a5b21ebc5d96b4a3b2aeda9ee4",
+    "experiments/paper_h3_joint_family_topology_partition.py": "d19b0f9fd60b08539315450da32d863335d27ecc605f9ab4fcfc932e108b70f7",
+    "experiments/paper_h3_v6_identifiability_tier.py": "2018f98687c9861bc44f70232801548d60b3de032ece6ef9ffa90cb7ae5a1c52",
+    "experiments/paper_h1_heterogeneous_three_class_network.py": "30254ea84fd4f49a883b44e78badc52c46511f9eaca7167b286aab377446b944",
+    "src/wphid/weak/axisymmetric.py": "199f7299527a8842f2d45f49a5c3656a492d970e14f24620a3b6386714ef79ea",
+    "src/wphid/weak/axisymmetric_library.py": "3d2d879b90dee00faefb8da4e89bbddf2cb9494c20566a20d267ccd908aa858c",
+    ".gitattributes": "3789df7c521c8a9a06d554dec1f3483502ed456d47a106205a26fce7e9d87ef2"
+  },
+  "runtime_lock_sha256": "a9da53928e742f5b4fd79c4334678f747fbe5855dc369fa3423190d74e38a450",
+  "requirements_lock_sha256": "ba6df28e8a05f4ec040ff666508e1f2df9fc59330692dbda4d8d39193929381b",
+  "pytest_xml_sha256": "cd53bcca888d83be5facab08c7d4541d6997121b13a7c21e24ad212e06b7c0ba",
+  "scope": [
+    "training/heldout isolation",
+    "common null/nonempty final score",
+    "active partition counting and separate mechanism bindings",
+    "signed physical coefficient mapping",
+    "fixed prediction without heldout coefficient refits",
+    "same differentiable weak atoms",
+    "NumPy/torch gradient consistency",
+    "legacy weak projector interoperability",
+    "objective/backward budget accounting and retained failures",
+    "own-objective Adam terminal selection"
+  ],
+  "scientific_precision_qualification_established": false,
+  "matched_ADAM_performance_established": false,
+  "complete_final_estimator_qualified": false,
+  "candidate_reporting_gates_calibrated": false
+}
